@@ -1,0 +1,52 @@
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        header {
+            background: #226ee8;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: #f4f4f4;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: #b85ef4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        section {
+            padding: 50px 20px;
+        }
+
+        footer {
+            background: #2471ee;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+    
