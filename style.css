@@ -6,12 +6,18 @@
 
         header {
             background: #226ee8;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
             color: white;
-            padding: 15px 30px;
+            padding: 12px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
 
         nav a {
             color: white;
@@ -42,6 +48,36 @@
         section {
             padding: 50px 20px;
         }
+
+        .contacto {
+            text-align: center;
+            padding: 80px 20px;
+            background: #f4f4f4;
+        }
+
+        #contacto {
+            text-align: center;
+        }
+
+        #contacto form {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        #contacto input,
+        #contacto textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #contacto label {
+            font-weight: bold;
+        }
+
+
 
         footer {
             background: #2471ee;
