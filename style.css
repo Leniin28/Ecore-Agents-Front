@@ -12,7 +12,7 @@
             width: 100%;
             box-sizing: border-box;
             color: white;
-            padding: 12px 30px;
+            padding: 2px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -28,7 +28,7 @@
         .hero {
             text-align: center;
             padding: 80px 20px;
-            background: #f4f4f4;
+            background: #88b4f7;
         }
 
         .hero h1 {
@@ -39,10 +39,28 @@
             display: inline-block;
             margin-top: 20px;
             padding: 12px 25px;
-            background: #b85ef4;
+            background: #2037e4;
             color: white;
             text-decoration: none;
             border-radius: 5px;
+        }
+
+        .catalogo {
+            text-align: center;
+            padding: 80px 20px;
+            background: #f4f4f4;
+        }
+
+        .producto  {
+            text-align: center;
+            padding: 80px 20px;
+            background: #f4f4f4;
+        }
+
+        .producto2 {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
         }
 
         section {
@@ -52,7 +70,7 @@
         .contacto {
             text-align: center;
             padding: 80px 20px;
-            background: #f4f4f4;
+            background: #ffffff;
         }
 
         #contacto {

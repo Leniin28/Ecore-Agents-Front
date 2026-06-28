@@ -17,7 +17,7 @@
 
         <nav>
             <a href="#inicio">Inicio</a>
-            <a href="#catalogo">Catálogo</a>
+            <a href="catalogo.html">Catálogo</a>
             <a href="#Mision">Misión</a>
             <a href="#Historia">Historia</a>
             <a href="#contacto">Contacto</a>
@@ -28,57 +28,53 @@
 
     <section id="inicio" class="hero">
         <h1>Bienvenido a Ecore Agents</h1>
-        <p>Crea tu propio Agente de atencion al cliente</p>
+        <p>Automatiza la atención inicial, gestiona conversaciones desde un inbox 
+            centralizado y escala a operadores humanos cuando lo necesites.</p>
 
-        <a href="#catalogo" class="btn">
+        <a href="catalogo.html" class="btn">
             Ver Agentes
         </a>
     </section>
 
-    <section id="catalogo">
-        <h2>Catálogo</h2>
+    <section id="catalogo" class="catalogo">
+        <h2>¿Qué hace la plataforma?</h2>
 
         <div>
-            <h3>Agente Inicio</h3>
-            <p>- Responde mensajes
-            <br>- Comprende audios
-            <br>- Recordatorios
-            <br>- Personalizable
-            <br>- Inventario/Catalogo
-            <br>
-            <br> 5 millones de Tokens Semanales
-
-            </p>
+            <h3>Respuesta automática inicial</h3>
+            <p>El agente de IA responde las consultas más frecuentes sin intervención humana, las 24 horas.</p>
+            
         </div>
 
         <div>
-            <h3>Agente Plus</h3>
-             <p>- Responde mensajes
-            <br>- Comprende audios
-            <br>- Recordatorios
-            <br>- Personalizable
-            <br>- Inventario/Catalogo
-            <br>- Agenda citas
-            <br>
-            <br> 8 millones de Tokens Semanales
-
-            </p>
+            <h3>Inbox para operadores</h3>
+            <p>Panel web centralizado para que tu equipo vea y gestione conversaciones en tiempo real.</p>
         </div>
 
         <div>
-            <h3>Agente Avanzado</h3>
-            <p>- Responde mensajes
-            <br>- Comprende audios
-            <br>- Recordatorios
-            <br>- Personalizable
-            <br>- Inventario/Catalogo
-            <br>- Agenda citas
-            <br>- Responde llamadas
-            <br>
-            <br> 12 millones de Tokens Semanales
-
-            </p>
+            <h3>Panel cliente móvil </h3>
+            <p>Vista optimizada para propietarios y empleados del negocio, accesible desde el teléfono.</p>
         </div>
+
+         <div>
+            <h3>Agentes configurables </h3>
+            <p>Cada negocio tiene su propio agente con instrucciones, modelo y comportamiento personalizados.</p>
+        </div>
+
+
+        <select onchange="cambiarPagina(this.value)">
+            <option value="">Seleccione una opción</option>
+            <option value="catalogo.html">Agente Inicio</option>
+            <option value="catalogo.html">Agente Plus</option>
+            <option value="contacto.html">Agente Avanzado</option>
+        </select>
+
+        <script>
+        function cambiarPagina(url) {
+            if (url) {
+                window.location.href = url;
+            }
+        }
+        </script>
     </section>
 
     <section id="contacto" class="contacto">
@@ -86,6 +82,9 @@
 
         <form id="formContacto">
             <label for="nombre">Nombre:</label><br>
+            <input type="text" id="nombre" required><br><br>
+
+            <label for="correo">correo:</label><br>
             <input type="text" id="nombre" required><br><br>
 
             <label for="mensaje">Duda o problema:</label><br>
@@ -101,12 +100,6 @@
         </div>
 
     </section>
-
-    <section>
-        <h1>Ubicación</h1>
-        <img src="">
-    </section>
-
 
 
     <section id="Mision">
