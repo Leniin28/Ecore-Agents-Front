@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil | ECore Agents</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h2>ECore Agents</h2>
+        </div>
+
+        <nav aria-label="Navegación principal">
+            <a href="index.html#home">Inicio</a>
+            <a href="index.html#about">Nosotros</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="index.html#contact">Contacto</a>
+            <a href="profile.html" aria-current="page">Perfil</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="profile-page">
+            <div class="profile-container">
+                <h1>Mi perfil</h1>
+
+                <div class="profile-grid">
+                    <section class="profile-card">
+                        <h2>Mis datos</h2>
+                        <dl class="profile-data">
+                            <dt>Nombre</dt>
+                            <dd id="profile-name"></dd>
+                            <dt>Correo</dt>
+                            <dd id="profile-email"></dd>
+                        </dl>
+                    </section>
+
+                    <section class="profile-card">
+                        <h2>Mis planes contratados</h2>
+                        <p>Aún no hay planes contratados (simulado).</p>
+                    </section>
+
+                    <section class="profile-card">
+                        <h2>Historial</h2>
+                        <p>El historial estará disponible en próximos bloques.</p>
+                    </section>
+                </div>
+
+                <button type="button" id="logout-button" class="button logout-button">Cerrar sesión</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

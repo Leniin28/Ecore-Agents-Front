@@ -1,78 +1,93 @@
 <!DOCTYPE html>
-<html lang="">
-    <head>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogo Ecore Agents</title>
-
+    <title>Catálogo de agentes IA | ECore Agents</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
-
 <body>
     <header>
-        <div class="Logotipo">
-            <h2>Logotipo</h2>
+        <div class="logo">
+            <h2>ECore Agents</h2>
         </div>
 
-        <nav>
-            <a href="index.html">Inicio</a>
-            <a href="catalogo.html">Catálogo</a>
-            <a href="login.html">Iniciar Sesión</a>
-            
+        <nav aria-label="Navegación principal">
+            <a href="index.html#home">Inicio</a>
+            <a href="index.html#about">Nosotros</a>
+            <a href="catalogo.html" aria-current="page">Catálogo</a>
+            <a href="index.html#contact">Contacto</a>
+            <a href="register.html">Registro</a>
+            <a href="login.html">Iniciar sesión</a>
         </nav>
     </header>
 
-    <section id="catalogo" class="catalogo">
-
-
-        <h2>Catálogo</h2>
-
-        <div class="producto">
-            <h3>Agente Inicio</h3>
-            <p>- Responde mensajes
-            <br>- Comprende audios
-            <br>- Recordatorios
-            <br>- Personalizable
-            <br>- Inventario/Catalogo
-            <br>
-            <br> 5 millones de Tokens Semanales
-
+    <main>
+        <section class="catalog">
+            <h1>Catálogo de agentes IA</h1>
+            <p class="catalog-intro">
+                Elige el plan que mejor se adapte a las necesidades de atención de tu negocio.
             </p>
-        </div>
 
-        <div class="producto2">
-            <h3>Agente Plus</h3>
-             <p>- Responde mensajes
-            <br>- Comprende audios
-            <br>- Recordatorios
-            <br>- Personalizable
-            <br>- Inventario/Catalogo
-            <br>- Agenda citas
-            <br>
-            <br> 8 millones de Tokens Semanales
+            <div class="plan-grid">
+                <article class="plan-card">
+                    <div class="plan-header">
+                        <h2>Agente Inicio</h2>
+                        <span class="plan-badge">Básico</span>
+                    </div>
+                    <p class="plan-price">$499 <span>MXN/mes</span></p>
+                    <p>Una opción práctica para negocios que comienzan a automatizar su atención.</p>
+                    <ul class="plan-features">
+                        <li>Responde mensajes</li>
+                        <li>Comprende audios</li>
+                        <li>Envía recordatorios</li>
+                        <li>Agente personalizable</li>
+                        <li>5 millones de tokens semanales</li>
+                    </ul>
+                    <a href="plan-start.html" class="button">Ver detalle</a>
+                </article>
 
-            </p>
-        </div>
+                <article class="plan-card plan-card-featured">
+                    <div class="plan-header">
+                        <h2>Agente Plus</h2>
+                        <span class="plan-badge">Popular</span>
+                    </div>
+                    <p class="plan-price">$999 <span>MXN/mes</span></p>
+                    <p>Mayor capacidad y herramientas para negocios con atención constante.</p>
+                    <ul class="plan-features">
+                        <li>Responde mensajes y audios</li>
+                        <li>Envía recordatorios</li>
+                        <li>Gestiona inventario o catálogo</li>
+                        <li>Agenda citas</li>
+                        <li>8 millones de tokens semanales</li>
+                    </ul>
+                    <a href="plan-plus.html" class="button">Ver detalle</a>
+                </article>
 
-        <div class="producto">
-            <h3>Agente Avanzado</h3>
-            <p>- Responde mensajes
-            <br>- Comprende audios
-            <br>- Recordatorios
-            <br>- Personalizable
-            <br>- Inventario/Catalogo
-            <br>- Agenda citas
-            <br>- Responde llamadas
-            <br>
-            <br> 12 millones de Tokens Semanales
+                <article class="plan-card">
+                    <div class="plan-header">
+                        <h2>Agente Avanzado</h2>
+                        <span class="plan-badge">Completo</span>
+                    </div>
+                    <p class="plan-price">$1,799 <span>MXN/mes</span></p>
+                    <p>La solución más completa para operaciones con diferentes canales de atención.</p>
+                    <ul class="plan-features">
+                        <li>Responde mensajes y audios</li>
+                        <li>Gestiona inventario o catálogo</li>
+                        <li>Agenda citas</li>
+                        <li>Responde llamadas</li>
+                        <li>12 millones de tokens semanales</li>
+                    </ul>
+                    <a href="plan-advanced.html" class="button">Ver detalle</a>
+                </article>
+            </div>
 
-            </p>
-        </div>
+            <a href="index.html" class="back-link">Volver al inicio</a>
+        </section>
+    </main>
 
-
+    <footer>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+    </footer>
 </body>
-
-
-
 </html>

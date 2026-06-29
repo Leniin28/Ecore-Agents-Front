@@ -4,125 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECore Agents</title>
-
     <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
-
     <header>
-        <div class="Logotipo">
-            <h2>Logotipo</h2>
+        <div class="logo">
+            <h2>ECore Agents</h2>
         </div>
 
-        <nav>
-            <a href="#inicio">Inicio</a>
+        <nav aria-label="Navegación principal">
+            <a href="#home">Inicio</a>
+            <a href="#about">Nosotros</a>
             <a href="catalogo.html">Catálogo</a>
-            <a href="#Mision">Misión</a>
-            <a href="#Historia">Historia</a>
-            <a href="#contacto">Contacto</a>
-            <a href="login.html">Iniciar Sesión</a>
-            
+            <a href="#contact">Contacto</a>
+            <a href="register.html">Registro</a>
+            <a href="login.html">Iniciar sesión</a>
         </nav>
     </header>
 
-    <section id="inicio" class="hero">
-        <h1>Bienvenido a Ecore Agents</h1>
-        <p>Automatiza la atención inicial, gestiona conversaciones desde un inbox 
-            centralizado y escala a operadores humanos cuando lo necesites.</p>
+    <main>
+        <section id="home" class="hero">
+            <h1>Bienvenido a ECore Agents</h1>
+            <p>
+                Automatiza la atención inicial, gestiona conversaciones desde un inbox
+                centralizado y escala a operadores humanos cuando lo necesites.
+            </p>
+            <a href="catalogo.html" class="button">Ver agentes</a>
+        </section>
 
-        <a href="catalogo.html" class="btn">
-            Ver Agentes
-        </a>
-    </section>
+        <section id="about" class="about">
+            <h2>Nosotros</h2>
 
-    <section id="catalogo" class="catalogo">
-        <h2>¿Qué hace la plataforma?</h2>
+            <div class="about-content">
+                <article>
+                    <h3>Nuestra historia</h3>
+                    <p>
+                        ECore Agents nace de la necesidad de mejorar la atención al cliente,
+                        reducir tiempos de respuesta y facilitar la gestión de conversaciones.
+                    </p>
+                </article>
 
-        <div>
-            <h3>Respuesta automática inicial</h3>
-            <p>El agente de IA responde las consultas más frecuentes sin intervención humana, las 24 horas.</p>
-            
-        </div>
+                <article>
+                    <h3>Nuestra misión</h3>
+                    <p>
+                        Ayudar a los negocios a automatizar su atención al cliente mediante
+                        agentes de IA personalizables para WhatsApp.
+                    </p>
+                </article>
 
-        <div>
-            <h3>Inbox para operadores</h3>
-            <p>Panel web centralizado para que tu equipo vea y gestione conversaciones en tiempo real.</p>
-        </div>
+                <article>
+                    <h3>Qué ofrecemos</h3>
+                    <p>
+                        Agentes configurables, respuestas automáticas, gestión centralizada
+                        de conversaciones y apoyo para escalar la atención a operadores humanos.
+                    </p>
+                </article>
+            </div>
 
-        <div>
-            <h3>Panel cliente móvil </h3>
-            <p>Vista optimizada para propietarios y empleados del negocio, accesible desde el teléfono.</p>
-        </div>
+            <p class="online-service">
+                Nuestro servicio funciona completamente en línea, por lo que no contamos con
+                una ubicación física de atención al público.
+            </p>
+        </section>
 
-         <div>
-            <h3>Agentes configurables </h3>
-            <p>Cada negocio tiene su propio agente con instrucciones, modelo y comportamiento personalizados.</p>
-        </div>
+        <section id="contact" class="contact">
+            <h2>Contacto</h2>
 
+            <div class="contact-content">
+                <form id="contact-form">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" name="name" required>
 
-        <select onchange="cambiarPagina(this.value)">
-            <option value="">Seleccione una opción</option>
-            <option value="catalogo.html">Agente Inicio</option>
-            <option value="catalogo.html">Agente Plus</option>
-            <option value="contacto.html">Agente Avanzado</option>
-        </select>
+                    <label for="email">Correo:</label>
+                    <input type="email" id="email" name="email" required>
 
-        <script>
-        function cambiarPagina(url) {
-            if (url) {
-                window.location.href = url;
-            }
-        }
-        </script>
-    </section>
+                    <label for="message">Mensaje:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
 
-    <section id="contacto" class="contacto">
-        <h2>Contacto</h2>
+                    <button type="submit" class="button">Enviar</button>
+                    <p id="contact-message" class="form-message" role="status" aria-live="polite"></p>
+                </form>
 
-        <form id="formContacto">
-            <label for="nombre">Nombre:</label><br>
-            <input type="text" id="nombre" required><br><br>
-
-            <label for="correo">correo:</label><br>
-            <input type="text" id="nombre" required><br><br>
-
-            <label for="mensaje">Duda o problema:</label><br>
-            <textarea id="mensaje" rows="5" required></textarea><br><br>
-
-            <button type="submit" class="btn">
-                Enviar
-            </button>
-        </form>
-
-        <div>
-            <a href="">Whatsapp</a> <br> <a href="">Facebook</a> <a href="">Instagram</a> 
-        </div>
-
-    </section>
-
-
-    <section id="Mision">
-        <h1>Nuestra Misión</h1>
-        <p>
-            Lograr que nuestros clientes pueden automatizar la atención al cliente en sus negocios con la personalización de sus propio Agentes tipo ChatBot con IA vía Whatsapp.
-        </p>
-
-    </section>
-
-    <section id="Historia">
-        <h1>Nuestra Historia</h1>
-
-        <p>
-            Somos una empresa que nacio a partir de la necesidad de encontrar una forma automatizable dirigida a la atención al cliente para reducir tiempos, costos y sobre todo aumentar la 
-            efectividad, eficiencia y eficacia de nuestras conversaciones con nuestros clientes.
-        </p>
-
-    </section>
+                <aside class="social-links" aria-label="Redes sociales">
+                    <h3>Redes sociales</h3>
+                    <a href="#">Instagram</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">WhatsApp</a>
+                </aside>
+            </div>
+        </section>
+    </main>
 
     <footer>
-        <p>&copy; 2026 Ecore. Todos los derechos reservados.</p>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
     </footer>
-
+    <script src="script.js"></script>
 </body>
 </html>

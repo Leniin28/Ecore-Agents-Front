@@ -16,13 +16,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            z-index: 10;
         }
 
-
-        nav a {
+        nav a,
+        .nav-link-disabled {
             color: white;
             text-decoration: none;
             margin-left: 20px;
+        }
+
+        .nav-link-disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
         }
 
         .hero {
@@ -35,7 +41,7 @@
             font-size: 2.5rem;
         }
 
-        .btn {
+        .button {
             display: inline-block;
             margin-top: 20px;
             padding: 12px 25px;
@@ -43,56 +49,347 @@
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
         }
 
-        .catalogo {
+        .about {
             text-align: center;
-            padding: 80px 20px;
             background: #f4f4f4;
         }
 
-        .producto  {
-            text-align: center;
-            padding: 80px 20px;
-            background: #f4f4f4;
+        .about-content {
+            max-width: 900px;
+            margin: 30px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
-        .producto2 {
-            text-align: center;
-            padding: 80px 20px;
+        .about-content article {
+            padding: 20px;
             background: white;
+            border-radius: 5px;
+        }
+
+        .online-service {
+            max-width: 700px;
+            margin: 30px auto 0;
+        }
+
+        .catalog {
+            text-align: center;
+            padding: 100px 20px 80px;
+            background: #f4f4f4;
+        }
+
+        .catalog h1 {
+            font-size: 2.3rem;
+            margin-bottom: 10px;
+        }
+
+        .catalog-intro {
+            max-width: 650px;
+            margin: 0 auto 35px;
+        }
+
+        .plan-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .plan-card {
+            padding: 28px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .plan-card-featured {
+            border-color: #226ee8;
+        }
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .plan-header h2 {
+            margin: 0;
+        }
+
+        .plan-badge {
+            padding: 5px 9px;
+            background: #dce9ff;
+            color: #174f9f;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .plan-price {
+            margin: 22px 0 8px;
+            color: #2037e4;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .plan-price span {
+            color: #444;
+            font-size: 1rem;
+            font-weight: normal;
+        }
+
+        .plan-features {
+            padding-left: 20px;
+            line-height: 1.7;
+            flex-grow: 1;
+        }
+
+        .plan-card .button {
+            align-self: stretch;
+            text-align: center;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 35px;
+            color: #2037e4;
+            font-weight: bold;
         }
 
         section {
             padding: 50px 20px;
+            scroll-margin-top: 70px;
         }
 
-        .contacto {
+        .contact {
             text-align: center;
             padding: 80px 20px;
             background: #ffffff;
         }
 
-        #contacto {
-            text-align: center;
+        .contact-content {
+            max-width: 800px;
+            margin: 30px auto 0;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            text-align: left;
         }
 
-        #contacto form {
-            max-width: 500px;
-            margin: auto;
+        #contact-form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
         }
 
-        #contacto input,
-        #contacto textarea {
+        #contact-form input,
+        #contact-form textarea {
             width: 100%;
+            box-sizing: border-box;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
         }
 
-        #contacto label {
+        #contact-form label {
             font-weight: bold;
+        }
+
+        .form-message,
+        .quote-message {
+            margin: 5px 0 0;
+            color: #18733c;
+            font-weight: bold;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .social-links a {
+            color: #2037e4;
+        }
+
+        .plan-detail {
+            padding: 100px 20px 80px;
+            background: #f4f4f4;
+        }
+
+        .plan-detail-card {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .plan-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .plan-detail-header h1 {
+            margin: 0;
+        }
+
+        .plan-detail-description {
+            line-height: 1.6;
+        }
+
+        .plan-detail-content {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 30px;
+        }
+
+        .feature-list {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        .ideal-for {
+            padding: 20px;
+            background: #edf4ff;
+            border-radius: 6px;
+        }
+
+        .ideal-for h2 {
+            margin-top: 0;
+        }
+
+        .quote-message {
+            min-height: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 18px;
+            color: #2037e4;
+            border: 1px solid #2037e4;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .auth-page,
+        .profile-page {
+            min-height: calc(100vh - 160px);
+            padding: 100px 20px 80px;
+            background: #f4f4f4;
+        }
+
+        .auth-card,
+        .profile-container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 35px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .auth-card h1,
+        .profile-container h1 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .auth-form label {
+            font-weight: bold;
+        }
+
+        .auth-form input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .auth-message {
+            min-height: 20px;
+            margin: 5px 0 0;
+            color: #18733c;
+            font-weight: bold;
+        }
+
+        .message-error {
+            color: #b42318;
+        }
+
+        .auth-link {
+            margin: 20px 0 0;
+            text-align: center;
+        }
+
+        .auth-link a {
+            color: #2037e4;
+        }
+
+        .profile-container {
+            max-width: 850px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .profile-card {
+            padding: 22px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .profile-card h2 {
+            margin-top: 0;
+        }
+
+        .profile-data {
+            margin: 0;
+        }
+
+        .profile-data dt {
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        .profile-data dd {
+            margin: 4px 0 0;
+        }
+
+        .logout-button {
+            background: #b42318;
         }
 
 
@@ -103,4 +400,50 @@
             text-align: center;
             padding: 15px;
         }
-    
+
+        @media (max-width: 900px) {
+            .plan-grid {
+                max-width: 500px;
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            header {
+                position: static;
+                flex-direction: column;
+                padding: 10px 20px 20px;
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            nav a,
+            .nav-link-disabled {
+                margin-left: 0;
+            }
+
+            .about-content,
+            .contact-content,
+            .plan-detail-content,
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .plan-detail-card {
+                padding: 25px;
+            }
+
+            .auth-card,
+            .profile-container {
+                padding: 25px;
+            }
+
+            .plan-detail-header {
+                flex-direction: column;
+            }
+        }
