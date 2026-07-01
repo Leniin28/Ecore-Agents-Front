@@ -8,64 +8,80 @@
 </head>
 <body>
     <header>
-        <div class="logo">
-            <h2>ECore Agents</h2>
-        </div>
-
+        <div class="logo"><h2>ECore Agents</h2></div>
         <nav aria-label="Navegación principal">
             <a href="index.html#home">Inicio</a>
             <a href="index.html#about">Nosotros</a>
-            <a href="catalogo.html">Catálogo</a>
+            <a href="catalogo.html" aria-current="page">Catálogo</a>
             <a href="index.html#contact">Contacto</a>
             <a href="register.html">Registro</a>
             <a href="login.html">Iniciar sesión</a>
         </nav>
     </header>
 
-    <main>
+    <main class="plan-page plan-page-start">
         <section class="plan-detail">
             <article class="plan-detail-card">
                 <div class="plan-detail-header">
                     <div>
+                        <span class="section-eyebrow">Atención esencial</span>
                         <h1>Agente Inicio</h1>
                         <p class="plan-price">$499 <span>MXN/mes</span></p>
                     </div>
                     <span class="plan-badge">Básico</span>
                 </div>
 
-                <p class="plan-detail-description">
-                    Plan inicial para negocios que quieren automatizar respuestas frecuentes por WhatsApp.
-                </p>
+                <p class="plan-detail-description">Ideal para negocios que quieren responder dudas frecuentes y mostrar información básica por WhatsApp.</p>
 
                 <div class="plan-detail-content">
                     <div>
-                        <h2>Características</h2>
+                        <h2>Qué incluye</h2>
                         <ul class="feature-list">
-                            <li>Respuestas básicas</li>
+                            <li>Responde mensajes con IA</li>
+                            <li>Catálogo básico de productos o servicios</li>
+                            <li>Preguntas frecuentes</li>
                             <li>Horarios e información del negocio</li>
-                            <li>Mensajes de contacto</li>
-                            <li>Configuración inicial sencilla</li>
+                            <li>Personalización básica del agente</li>
+                            <li>Historial conversacional básico</li>
+                            <li>Escalamiento manual a humano</li>
                         </ul>
                     </div>
-
                     <aside class="ideal-for">
+                        <span class="ideal-icon" aria-hidden="true">01</span>
                         <h2>Ideal para</h2>
-                        <p>Negocios pequeños que reciben dudas repetidas.</p>
+                        <p>Negocios pequeños con bajo volumen de mensajes que desean ofrecer respuestas rápidas y consistentes sin complicar su operación.</p>
                     </aside>
                 </div>
 
-                <button type="button" class="button quote-button" data-message-target="quote-message">
-                    Agregar a cotización
-                </button>
+                <section class="visual-examples" aria-labelledby="examples-title">
+                    <div class="section-heading-left">
+                        <span class="section-eyebrow">Así se vería</span>
+                        <h2 id="examples-title">Ejemplos visuales</h2>
+                    </div>
+                    <div class="demo-grid demo-grid-single">
+                        <article class="demo-card chat-demo">
+                            <div class="demo-card-header">
+                                <span class="status-dot"></span>
+                                <strong>Chat básico por WhatsApp</strong>
+                            </div>
+                            <div class="chat-window">
+                                <div class="chat-bubble chat-bubble-client"><span>Cliente</span>¿Cuál es su horario?</div>
+                                <div class="chat-bubble chat-bubble-agent"><span>Agente IA</span>Atendemos de lunes a sábado de 9:00 a 6:00.</div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <div class="plan-actions">
+                    <button type="button" class="button quote-button" data-message-target="quote-message">Agregar a cotización</button>
+                    <a href="catalogo.html" class="back-button">← Regresar al catálogo</a>
+                </div>
                 <p id="quote-message" class="quote-message" role="status" aria-live="polite"></p>
-                <a href="catalogo.html" class="back-button">Regresar al catálogo</a>
             </article>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
-    </footer>
+    <footer><p>&copy; 2026 ECore. Todos los derechos reservados.</p></footer>
     <script src="script.js"></script>
 </body>
 </html>

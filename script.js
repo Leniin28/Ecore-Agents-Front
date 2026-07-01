@@ -14,7 +14,11 @@ function showQuoteMessage(event) {
     const messageId = event.currentTarget.dataset.messageTarget;
     const quoteMessage = document.getElementById(messageId);
 
-    quoteMessage.textContent = "Plan agregado a cotización (simulado).";
+    if (!quoteMessage) {
+        return;
+    }
+
+    quoteMessage.textContent = "Plan agregado a cotización (simulado). Te contactaremos para personalizarlo.";
 }
 
 const quoteButtons = document.querySelectorAll(".quote-button");
@@ -22,6 +26,47 @@ const quoteButtons = document.querySelectorAll(".quote-button");
 quoteButtons.forEach(function (quoteButton) {
     quoteButton.addEventListener("click", showQuoteMessage);
 });
+
+const planCatalog = document.getElementById("plan-catalog");
+const filterButtons = document.querySelectorAll(".filter-button");
+const catalogFilterStatus = document.getElementById("catalog-filter-status");
+
+const filterLabels = {
+    all: "Mostrando todos los planes",
+    basic: "Mostrando el plan de atención básica",
+    "follow-up": "Mostrando el plan de seguimiento",
+    advanced: "Mostrando el plan de automatización avanzada"
+};
+
+function filterPlans(event) {
+    if (!planCatalog) {
+        return;
+    }
+
+    const selectedFilter = event.currentTarget.dataset.filter;
+    const planCards = planCatalog.querySelectorAll(".plan-card[data-category]");
+
+    filterButtons.forEach(function (filterButton) {
+        const isSelected = filterButton === event.currentTarget;
+        filterButton.classList.toggle("is-active", isSelected);
+        filterButton.setAttribute("aria-pressed", String(isSelected));
+    });
+
+    planCards.forEach(function (planCard) {
+        const shouldShow = selectedFilter === "all" || planCard.dataset.category === selectedFilter;
+        planCard.classList.toggle("is-hidden", !shouldShow);
+    });
+
+    if (catalogFilterStatus) {
+        catalogFilterStatus.textContent = filterLabels[selectedFilter] || filterLabels.all;
+    }
+}
+
+if (planCatalog) {
+    filterButtons.forEach(function (filterButton) {
+        filterButton.addEventListener("click", filterPlans);
+    });
+}
 
 const USER_STORAGE_KEY = "ecoreUser";
 const SESSION_STORAGE_KEY = "ecoreSession";

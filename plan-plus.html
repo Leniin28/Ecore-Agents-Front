@@ -8,65 +8,89 @@
 </head>
 <body>
     <header>
-        <div class="logo">
-            <h2>ECore Agents</h2>
-        </div>
-
+        <div class="logo"><h2>ECore Agents</h2></div>
         <nav aria-label="Navegación principal">
             <a href="index.html#home">Inicio</a>
             <a href="index.html#about">Nosotros</a>
-            <a href="catalogo.html">Catálogo</a>
+            <a href="catalogo.html" aria-current="page">Catálogo</a>
             <a href="index.html#contact">Contacto</a>
             <a href="register.html">Registro</a>
             <a href="login.html">Iniciar sesión</a>
         </nav>
     </header>
 
-    <main>
+    <main class="plan-page plan-page-plus">
         <section class="plan-detail">
             <article class="plan-detail-card">
                 <div class="plan-detail-header">
                     <div>
+                        <span class="section-eyebrow">Seguimiento inteligente</span>
                         <h1>Agente Plus</h1>
                         <p class="plan-price">$999 <span>MXN/mes</span></p>
                     </div>
                     <span class="plan-badge">Popular</span>
                 </div>
 
-                <p class="plan-detail-description">
-                    Plan para negocios que necesitan atención más completa y mejor organización de clientes.
-                </p>
+                <p class="plan-detail-description">Ideal para negocios que reciben más mensajes y necesitan organizar clientes, audios y seguimientos.</p>
+                <p class="detail-inherits"><strong>Incluye todo lo de Agente Inicio</strong> y suma herramientas para comprender mejor a cada cliente y mantener conversaciones activas.</p>
 
                 <div class="plan-detail-content">
                     <div>
-                        <h2>Características</h2>
+                        <h2>Qué incluye</h2>
                         <ul class="feature-list">
-                            <li>Catálogo de servicios</li>
-                            <li>Preguntas frecuentes</li>
-                            <li>Clasificación de clientes</li>
-                            <li>Alertas básicas</li>
-                            <li>Respuestas más personalizadas</li>
+                            <li>Transcripción de audios recibidos</li>
+                            <li>Respuestas más personalizadas según el contexto</li>
+                            <li>Catálogo avanzado de productos o servicios</li>
+                            <li>Clasificación de clientes: interesado, duda, compra o soporte</li>
+                            <li>Recordatorios automáticos por WhatsApp</li>
+                            <li>Seguimiento de conversaciones inconclusas</li>
+                            <li>Etiquetas para organizar clientes</li>
+                            <li>Sugerencias de mejora para el contexto del agente</li>
+                            <li>Historial conversacional extendido</li>
+                            <li>Reporte básico de actividad</li>
                         </ul>
                     </div>
-
                     <aside class="ideal-for">
+                        <span class="ideal-icon" aria-hidden="true">02</span>
                         <h2>Ideal para</h2>
-                        <p>Negocios con más volumen de mensajes.</p>
+                        <p>Negocios con mensajes frecuentes que necesitan organizar prospectos, responder audios y dar seguimiento sin perder oportunidades.</p>
                     </aside>
                 </div>
 
-                <button type="button" class="button quote-button" data-message-target="quote-message">
-                    Agregar a cotización
-                </button>
+                <section class="visual-examples" aria-labelledby="examples-title">
+                    <div class="section-heading-left">
+                        <span class="section-eyebrow">Más contexto, mejor seguimiento</span>
+                        <h2 id="examples-title">Ejemplos visuales</h2>
+                    </div>
+                    <div class="demo-grid">
+                        <article class="demo-card audio-demo">
+                            <div class="demo-card-header"><strong>Audio recibido</strong><span class="demo-time">0:06</span></div>
+                            <div class="audio-wave" aria-hidden="true">
+                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                            <p><strong>Transcripción:</strong> Hola, quiero saber el precio del servicio.</p>
+                        </article>
+                        <article class="demo-card reminder-demo">
+                            <div class="notification-icon" aria-hidden="true">✓</div>
+                            <div>
+                                <span class="client-tag">Cliente interesado</span>
+                                <h3>Seguimiento automático</h3>
+                                <p>Recordatorio enviado por WhatsApp.</p>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <div class="plan-actions">
+                    <button type="button" class="button quote-button" data-message-target="quote-message">Agregar a cotización</button>
+                    <a href="catalogo.html" class="back-button">← Regresar al catálogo</a>
+                </div>
                 <p id="quote-message" class="quote-message" role="status" aria-live="polite"></p>
-                <a href="catalogo.html" class="back-button">Regresar al catálogo</a>
             </article>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
-    </footer>
+    <footer><p>&copy; 2026 ECore. Todos los derechos reservados.</p></footer>
     <script src="script.js"></script>
 </body>
 </html>

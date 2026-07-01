@@ -24,70 +24,97 @@
 
     <main>
         <section class="catalog">
-            <h1>Catálogo de agentes IA</h1>
-            <p class="catalog-intro">
-                Elige el plan que mejor se adapte a las necesidades de atención de tu negocio.
-            </p>
+            <div class="catalog-heading">
+                <span class="section-eyebrow">Planes para cada etapa</span>
+                <h1>Un agente IA que crece con tu negocio</h1>
+                <p class="catalog-intro">
+                    Comienza respondiendo dudas, mejora el seguimiento de tus clientes o automatiza toda tu atención por WhatsApp.
+                </p>
+            </div>
 
-            <div class="plan-grid">
-                <article class="plan-card">
+            <div class="catalog-filters" role="group" aria-label="Filtrar planes por necesidad">
+                <button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true">Todos</button>
+                <button type="button" class="filter-button" data-filter="basic" aria-pressed="false">Atención básica</button>
+                <button type="button" class="filter-button" data-filter="follow-up" aria-pressed="false">Seguimiento</button>
+                <button type="button" class="filter-button" data-filter="advanced" aria-pressed="false">Automatización avanzada</button>
+            </div>
+
+            <p class="catalog-filter-status" id="catalog-filter-status" aria-live="polite">Mostrando todos los planes</p>
+
+            <div class="plan-grid" id="plan-catalog">
+                <article class="plan-card plan-card-start" data-category="basic">
+                    <div class="plan-tier">Para comenzar</div>
                     <div class="plan-header">
                         <h2>Agente Inicio</h2>
                         <span class="plan-badge">Básico</span>
                     </div>
                     <p class="plan-price">$499 <span>MXN/mes</span></p>
-                    <p>Una opción práctica para negocios que comienzan a automatizar su atención.</p>
+                    <p class="plan-summary">Ideal para negocios que quieren responder dudas frecuentes y mostrar información básica por WhatsApp.</p>
                     <ul class="plan-features">
-                        <li>Responde mensajes</li>
-                        <li>Comprende audios</li>
-                        <li>Envía recordatorios</li>
-                        <li>Agente personalizable</li>
-                        <li>5 millones de tokens semanales</li>
+                        <li>Respuestas a mensajes con IA</li>
+                        <li>Catálogo básico de productos o servicios</li>
+                        <li>Preguntas frecuentes y horarios</li>
+                        <li>Personalización básica del agente</li>
+                        <li>Historial conversacional básico</li>
+                        <li>Escalamiento manual a una persona</li>
                     </ul>
                     <a href="plan-start.html" class="button">Ver detalle</a>
                 </article>
 
-                <article class="plan-card plan-card-featured">
+                <article class="plan-card plan-card-plus plan-card-featured" data-category="follow-up">
+                    <div class="recommended-label">Más elegido</div>
+                    <div class="plan-tier">Para dar seguimiento</div>
                     <div class="plan-header">
                         <h2>Agente Plus</h2>
                         <span class="plan-badge">Popular</span>
                     </div>
                     <p class="plan-price">$999 <span>MXN/mes</span></p>
-                    <p>Mayor capacidad y herramientas para negocios con atención constante.</p>
+                    <p class="plan-summary">Ideal para negocios que reciben más mensajes y necesitan organizar clientes, audios y seguimientos.</p>
+                    <p class="plan-inherits">Todo lo de Agente Inicio, más:</p>
                     <ul class="plan-features">
-                        <li>Responde mensajes y audios</li>
-                        <li>Envía recordatorios</li>
-                        <li>Gestiona inventario o catálogo</li>
-                        <li>Agenda citas</li>
-                        <li>8 millones de tokens semanales</li>
+                        <li>Transcripción de audios recibidos</li>
+                        <li>Respuestas personalizadas por contexto</li>
+                        <li>Clasificación y etiquetas de clientes</li>
+                        <li>Recordatorios automáticos</li>
+                        <li>Seguimiento de conversaciones</li>
+                        <li>Reporte básico de actividad</li>
                     </ul>
                     <a href="plan-plus.html" class="button">Ver detalle</a>
                 </article>
 
-                <article class="plan-card">
+                <article class="plan-card plan-card-advanced" data-category="advanced">
+                    <div class="plan-tier">Para automatizar</div>
                     <div class="plan-header">
                         <h2>Agente Avanzado</h2>
                         <span class="plan-badge">Completo</span>
                     </div>
                     <p class="plan-price">$1,799 <span>MXN/mes</span></p>
-                    <p>La solución más completa para operaciones con diferentes canales de atención.</p>
+                    <p class="plan-summary">Ideal para negocios que quieren automatizar atención, citas, seguimiento y reportes desde WhatsApp.</p>
+                    <p class="plan-inherits">Todo lo de Agente Plus, más:</p>
                     <ul class="plan-features">
-                        <li>Responde mensajes y audios</li>
-                        <li>Gestiona inventario o catálogo</li>
-                        <li>Agenda citas</li>
-                        <li>Responde llamadas</li>
-                        <li>12 millones de tokens semanales</li>
+                        <li>Agenda y confirmación de citas</li>
+                        <li>Respuestas generadas en audio</li>
+                        <li>Reportes avanzados y alertas</li>
+                        <li>Autoaprendizaje supervisado</li>
+                        <li>Flujos por tipo de cliente</li>
+                        <li>Detección de intención y prioridad</li>
                     </ul>
                     <a href="plan-advanced.html" class="button">Ver detalle</a>
                 </article>
             </div>
 
-            <a href="index.html" class="back-link">Volver al inicio</a>
+            <div class="plans-common-note">
+                <strong>Una base sólida en todos los planes.</strong>
+                <p>Todos los planes incluyen respuesta con IA por WhatsApp, personalización del agente, catálogo de productos o servicios, preguntas frecuentes e historial conversacional básico.</p>
+            </div>
+
+            <a href="index.html" class="back-link">← Volver al inicio</a>
         </section>
     </main>
 
     <footer>
         <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
     </footer>
+    <script src="script.js"></script>
 </body>
 </html>

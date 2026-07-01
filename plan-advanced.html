@@ -8,65 +8,92 @@
 </head>
 <body>
     <header>
-        <div class="logo">
-            <h2>ECore Agents</h2>
-        </div>
-
+        <div class="logo"><h2>ECore Agents</h2></div>
         <nav aria-label="Navegación principal">
             <a href="index.html#home">Inicio</a>
             <a href="index.html#about">Nosotros</a>
-            <a href="catalogo.html">Catálogo</a>
+            <a href="catalogo.html" aria-current="page">Catálogo</a>
             <a href="index.html#contact">Contacto</a>
             <a href="register.html">Registro</a>
             <a href="login.html">Iniciar sesión</a>
         </nav>
     </header>
 
-    <main>
+    <main class="plan-page plan-page-advanced">
         <section class="plan-detail">
             <article class="plan-detail-card">
                 <div class="plan-detail-header">
                     <div>
+                        <span class="section-eyebrow">Automatización completa</span>
                         <h1>Agente Avanzado</h1>
                         <p class="plan-price">$1,799 <span>MXN/mes</span></p>
                     </div>
                     <span class="plan-badge">Completo</span>
                 </div>
 
-                <p class="plan-detail-description">
-                    Plan avanzado para negocios que quieren automatización completa de atención, citas y reportes.
-                </p>
+                <p class="plan-detail-description">Ideal para negocios que quieren automatizar atención, citas, seguimiento y reportes desde WhatsApp.</p>
+                <p class="detail-inherits"><strong>Incluye todo lo de Agente Plus</strong> y agrega automatización avanzada para tomar acción, priorizar clientes y detectar oportunidades.</p>
 
                 <div class="plan-detail-content">
                     <div>
-                        <h2>Características</h2>
+                        <h2>Qué incluye</h2>
                         <ul class="feature-list">
-                            <li>Agenda y citas</li>
-                            <li>Recordatorios</li>
-                            <li>Reportes</li>
-                            <li>Alertas avanzadas</li>
-                            <li>Configuración personalizada</li>
+                            <li>Generación de respuestas en audio</li>
+                            <li>Agenda de citas por WhatsApp</li>
+                            <li>Confirmación y recordatorios de citas</li>
+                            <li>Reportes avanzados de conversaciones</li>
+                            <li>Alertas importantes al dueño</li>
+                            <li>Autoaprendizaje supervisado</li>
+                            <li>Sugerencias automáticas para mejorar productos, respuestas o contexto</li>
+                            <li>Historial conversacional avanzado</li>
+                            <li>Flujos personalizados por tipo de cliente</li>
+                            <li>Detección de intención: compra, soporte, queja o cotización</li>
+                            <li>Prioridad de atención</li>
+                            <li>Llamadas por WhatsApp como función avanzada/futura</li>
                         </ul>
                     </div>
-
                     <aside class="ideal-for">
+                        <span class="ideal-icon" aria-hidden="true">03</span>
                         <h2>Ideal para</h2>
-                        <p>Negocios que quieren una operación más automatizada.</p>
+                        <p>Negocios con alto volumen de mensajes y citas que buscan automatizar su operación y tomar decisiones con información clara.</p>
                     </aside>
                 </div>
 
-                <button type="button" class="button quote-button" data-message-target="quote-message">
-                    Agregar a cotización
-                </button>
+                <section class="visual-examples" aria-labelledby="examples-title">
+                    <div class="section-heading-left">
+                        <span class="section-eyebrow">Tu operación en movimiento</span>
+                        <h2 id="examples-title">Ejemplos visuales</h2>
+                    </div>
+                    <div class="demo-grid demo-grid-three">
+                        <article class="demo-card calendar-demo">
+                            <div class="calendar-date" aria-hidden="true"><span>JUL</span><strong>02</strong></div>
+                            <div><span class="success-label">Cita confirmada</span><h3>Mañana 10:30 AM</h3><p>Recordatorio programado</p></div>
+                        </article>
+                        <article class="demo-card report-demo">
+                            <div class="demo-card-header"><strong>Reportes y alertas</strong><span class="live-label">En vivo</span></div>
+                            <div class="report-row"><span>12 conversaciones</span><span class="report-bar"><i style="--bar-width: 88%"></i></span></div>
+                            <div class="report-row"><span>3 clientes interesados</span><span class="report-bar"><i style="--bar-width: 58%"></i></span></div>
+                            <div class="report-row report-alert"><span>1 alerta urgente</span><span class="report-bar"><i style="--bar-width: 28%"></i></span></div>
+                        </article>
+                        <article class="demo-card call-demo">
+                            <div class="call-icon" aria-hidden="true">◖</div>
+                            <span class="audio-status">Audio listo</span>
+                            <h3>Respuesta en audio generada</h3>
+                            <p>Llamada por WhatsApp: función avanzada/futura</p>
+                        </article>
+                    </div>
+                </section>
+
+                <div class="plan-actions">
+                    <button type="button" class="button quote-button" data-message-target="quote-message">Agregar a cotización</button>
+                    <a href="catalogo.html" class="back-button">← Regresar al catálogo</a>
+                </div>
                 <p id="quote-message" class="quote-message" role="status" aria-live="polite"></p>
-                <a href="catalogo.html" class="back-button">Regresar al catálogo</a>
             </article>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
-    </footer>
+    <footer><p>&copy; 2026 ECore. Todos los derechos reservados.</p></footer>
     <script src="script.js"></script>
 </body>
 </html>
