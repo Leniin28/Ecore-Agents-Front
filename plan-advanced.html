@@ -13,6 +13,7 @@
             <a href="index.html#home">Inicio</a>
             <a href="index.html#about">Nosotros</a>
             <a href="catalogo.html" aria-current="page">Catálogo</a>
+            <a href="cart.html">Carrito <span class="cart-count" aria-label="0 agentes en el carrito">0</span></a>
             <a href="index.html#contact">Contacto</a>
             <a href="register.html">Registro</a>
             <a href="login.html">Iniciar sesión</a>
@@ -84,11 +85,17 @@
                     </div>
                 </section>
 
-                <div class="plan-actions">
-                    <button type="button" class="button quote-button" data-message-target="quote-message">Agregar a cotización</button>
-                    <a href="catalogo.html" class="back-button">← Regresar al catálogo</a>
+                <div class="plan-purchase-section" id="buy-plan">
+                    <div class="agent-quantity-field">
+                        <label for="plan-quantity">Cantidad de agentes</label>
+                        <input id="plan-quantity" type="number" min="1" step="1" value="1" inputmode="numeric">
+                    </div>
+                    <div class="plan-actions">
+                        <button type="button" class="button plan-cart-button" data-plan-name="Agente Avanzado" data-plan-price="1799" data-quantity-target="plan-quantity" data-message-target="quote-message">Agregar al carrito</button>
+                        <a href="catalogo.html" class="back-button">← Regresar al catálogo</a>
+                    </div>
+                    <p id="quote-message" class="quote-message cart-message" role="status" aria-live="polite"></p>
                 </div>
-                <p id="quote-message" class="quote-message" role="status" aria-live="polite"></p>
             </article>
         </section>
     </main>

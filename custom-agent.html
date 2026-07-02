@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea tu agente personalizado | ECore Agents</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>ECore Agents</h2></div>
+        <nav aria-label="Navegación principal">
+            <a href="index.html#home">Inicio</a>
+            <a href="index.html#about">Nosotros</a>
+            <a href="catalogo.html" aria-current="page">Catálogo</a>
+            <a href="cart.html">Carrito <span class="cart-count" aria-label="0 agentes en el carrito">0</span></a>
+            <a href="index.html#contact">Contacto</a>
+            <a href="register.html">Registro</a>
+            <a href="login.html">Iniciar sesión</a>
+        </nav>
+    </header>
+
+    <main class="custom-agent-page">
+        <section class="custom-agent-hero">
+            <span class="section-eyebrow">Configurador de servicios</span>
+            <h1>Crea tu agente personalizado</h1>
+            <p>Parte desde Agente Inicio y agrega las funciones que realmente necesita tu negocio. El precio se actualiza de forma simulada.</p>
+        </section>
+
+        <section class="custom-agent-builder" id="custom-agent-builder" data-base-price="499" aria-label="Personalizador de agente">
+            <div class="custom-agent-options">
+                <article class="base-plan-card">
+                    <div class="base-plan-heading">
+                        <div>
+                            <span class="base-required">Base obligatoria</span>
+                            <h2>Agente Inicio</h2>
+                            <p>Base obligatoria para todos los agentes personalizados.</p>
+                        </div>
+                        <p class="base-plan-price">$499 <span>MXN/mes</span></p>
+                    </div>
+                    <ul class="base-feature-list">
+                        <li>Responde mensajes con IA</li>
+                        <li>Catálogo básico de productos o servicios</li>
+                        <li>Preguntas frecuentes</li>
+                        <li>Horarios e información del negocio</li>
+                        <li>Personalización básica del agente</li>
+                        <li>Historial conversacional básico</li>
+                        <li>Escalamiento manual a humano</li>
+                    </ul>
+                </article>
+
+                <div class="module-intro">
+                    <span class="section-eyebrow">Construye tu combinación</span>
+                    <h2>Agrega módulos extra</h2>
+                    <p>Selecciona o quita funciones; el resumen se actualizará al instante.</p>
+                </div>
+
+                <fieldset class="module-group module-group-plus">
+                    <legend><span>Módulos de seguimiento</span><small>Funciones tipo Agente Plus</small></legend>
+                    <div class="module-grid">
+                        <label class="module-option" for="module-transcription">
+                            <input class="module-checkbox" id="module-transcription" type="checkbox" data-name="Transcripción de audios" data-price="75" data-tier="plus">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Transcripción de audios</span><span class="module-price">+$75/mes</span>
+                        </label>
+                        <label class="module-option" for="module-reminders">
+                            <input class="module-checkbox" id="module-reminders" type="checkbox" data-name="Recordatorios por WhatsApp" data-price="75" data-tier="plus">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Recordatorios por WhatsApp</span><span class="module-price">+$75/mes</span>
+                        </label>
+                        <label class="module-option" for="module-follow-up">
+                            <input class="module-checkbox" id="module-follow-up" type="checkbox" data-name="Seguimiento de conversaciones inconclusas" data-price="75" data-tier="plus">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Seguimiento de conversaciones inconclusas</span><span class="module-price">+$75/mes</span>
+                        </label>
+                        <label class="module-option" for="module-classification">
+                            <input class="module-checkbox" id="module-classification" type="checkbox" data-name="Clasificación de clientes" data-price="75" data-tier="plus">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Clasificación de clientes</span><span class="module-price">+$75/mes</span>
+                        </label>
+                        <label class="module-option" for="module-tags">
+                            <input class="module-checkbox" id="module-tags" type="checkbox" data-name="Etiquetas para organizar clientes" data-price="50" data-tier="plus">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Etiquetas para organizar clientes</span><span class="module-price">+$50/mes</span>
+                        </label>
+                        <label class="module-option" for="module-extended-history">
+                            <input class="module-checkbox" id="module-extended-history" type="checkbox" data-name="Historial conversacional extendido" data-price="50" data-tier="plus">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Historial conversacional extendido</span><span class="module-price">+$50/mes</span>
+                        </label>
+                        <label class="module-option" for="module-basic-report">
+                            <input class="module-checkbox" id="module-basic-report" type="checkbox" data-name="Reporte básico de actividad" data-price="50" data-tier="plus">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Reporte básico de actividad</span><span class="module-price">+$50/mes</span>
+                        </label>
+                        <label class="module-option" for="module-context-suggestions">
+                            <input class="module-checkbox" id="module-context-suggestions" type="checkbox" data-name="Sugerencias de mejora del contexto" data-price="50" data-tier="plus">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Sugerencias de mejora del contexto</span><span class="module-price">+$50/mes</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <fieldset class="module-group module-group-advanced">
+                    <legend><span>Módulos de automatización</span><small>Funciones tipo Agente Avanzado</small></legend>
+                    <div class="module-grid">
+                        <label class="module-option" for="module-appointments">
+                            <input class="module-checkbox" id="module-appointments" type="checkbox" data-name="Agenda de citas" data-price="200" data-tier="advanced">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Agenda de citas</span><span class="module-price">+$200/mes</span>
+                        </label>
+                        <label class="module-option" for="module-confirmations">
+                            <input class="module-checkbox" id="module-confirmations" type="checkbox" data-name="Confirmación de citas" data-price="150" data-tier="advanced">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Confirmación de citas</span><span class="module-price">+$150/mes</span>
+                        </label>
+                        <label class="module-option" for="module-audio-responses">
+                            <input class="module-checkbox" id="module-audio-responses" type="checkbox" data-name="Respuestas en audio" data-price="150" data-tier="advanced">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Respuestas en audio</span><span class="module-price">+$150/mes</span>
+                        </label>
+                        <label class="module-option" for="module-owner-alerts">
+                            <input class="module-checkbox" id="module-owner-alerts" type="checkbox" data-name="Alertas avanzadas al dueño" data-price="150" data-tier="advanced">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Alertas avanzadas al dueño</span><span class="module-price">+$150/mes</span>
+                        </label>
+                        <label class="module-option" for="module-advanced-reports">
+                            <input class="module-checkbox" id="module-advanced-reports" type="checkbox" data-name="Reportes avanzados" data-price="150" data-tier="advanced">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Reportes avanzados</span><span class="module-price">+$150/mes</span>
+                        </label>
+                        <label class="module-option" for="module-learning">
+                            <input class="module-checkbox" id="module-learning" type="checkbox" data-name="Autoaprendizaje supervisado" data-price="200" data-tier="advanced">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Autoaprendizaje supervisado</span><span class="module-price">+$200/mes</span>
+                        </label>
+                        <label class="module-option" for="module-flows">
+                            <input class="module-checkbox" id="module-flows" type="checkbox" data-name="Flujos personalizados" data-price="200" data-tier="advanced">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Flujos personalizados</span><span class="module-price">+$200/mes</span>
+                        </label>
+                        <label class="module-option" for="module-calls">
+                            <input class="module-checkbox" id="module-calls" type="checkbox" data-name="Llamadas por WhatsApp" data-price="100" data-tier="advanced">
+                            <span class="custom-checkbox" aria-hidden="true"></span><span class="module-name">Llamadas por WhatsApp</span><span class="module-price">+$100/mes</span>
+                        </label>
+                    </div>
+                </fieldset>
+            </div>
+
+            <aside class="custom-summary" id="custom-summary" aria-labelledby="summary-title">
+                <span class="summary-label">Tu configuración</span>
+                <h2 id="summary-title">Resumen mensual</h2>
+                <div class="summary-row"><span>Precio base</span><strong>$499</strong></div>
+                <div class="summary-row"><span>Extras seleccionados</span><strong id="extras-total">$0</strong></div>
+                <div class="summary-row"><span>Funciones Plus seleccionadas</span><strong id="plus-count">0</strong></div>
+                <div class="summary-row"><span>Funciones Avanzadas seleccionadas</span><strong id="advanced-count">0</strong></div>
+                <div class="summary-divider"></div>
+                <div class="summary-total"><span>Total mensual</span><strong><span id="monthly-total">$499</span> <small>MXN/mes</small></strong></div>
+
+                <div class="selected-modules">
+                    <div class="selected-modules-heading">
+                        <h3>Funciones seleccionadas</h3>
+                        <span id="module-count">0</span>
+                    </div>
+                    <ul id="selected-modules-list">
+                        <li class="empty-selection">Aún no has agregado funciones extra.</li>
+                    </ul>
+                </div>
+
+                <p class="recommendation-message" id="recommendation-message" data-level="start" aria-live="polite">Tu agente personalizado se mantiene como Agente Inicio. Es ideal para atención básica por WhatsApp.</p>
+                <div class="agent-quantity-field agent-quantity-field-dark">
+                    <label for="custom-agent-quantity">Cantidad de agentes personalizados</label>
+                    <input id="custom-agent-quantity" type="number" min="1" step="1" value="1" inputmode="numeric">
+                </div>
+                <button type="button" class="button custom-quote-button" id="add-custom-agent-to-cart">Agregar agente personalizado al carrito</button>
+                <p class="custom-quote-message" id="custom-quote-message" role="status" aria-live="polite"></p>
+                <a href="cart.html" class="view-cart-link" id="custom-cart-link" hidden>Ver carrito</a>
+                <p class="simulation-note">Esta configuración es una simulación académica y no genera cargos.</p>
+            </aside>
+        </section>
+
+        <a href="catalogo.html" class="custom-back-link">← Regresar al catálogo</a>
+    </main>
+
+    <footer><p>&copy; 2026 ECore. Todos los derechos reservados.</p></footer>
+    <script src="script.js"></script>
+</body>
+</html>

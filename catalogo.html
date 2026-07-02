@@ -16,6 +16,7 @@
             <a href="index.html#home">Inicio</a>
             <a href="index.html#about">Nosotros</a>
             <a href="catalogo.html" aria-current="page">Catálogo</a>
+            <a href="cart.html">Carrito <span class="cart-count" aria-label="0 agentes en el carrito">0</span></a>
             <a href="index.html#contact">Contacto</a>
             <a href="register.html">Registro</a>
             <a href="login.html">Iniciar sesión</a>
@@ -37,6 +38,7 @@
                 <button type="button" class="filter-button" data-filter="basic" aria-pressed="false">Atención básica</button>
                 <button type="button" class="filter-button" data-filter="follow-up" aria-pressed="false">Seguimiento</button>
                 <button type="button" class="filter-button" data-filter="advanced" aria-pressed="false">Automatización avanzada</button>
+                <button type="button" class="filter-button" data-filter="custom" aria-pressed="false">Personalizable</button>
             </div>
 
             <p class="catalog-filter-status" id="catalog-filter-status" aria-live="polite">Mostrando todos los planes</p>
@@ -100,6 +102,27 @@
                         <li>Detección de intención y prioridad</li>
                     </ul>
                     <a href="plan-advanced.html" class="button">Ver detalle</a>
+                </article>
+
+                <article class="plan-card plan-card-custom" data-category="custom">
+                    <div class="custom-card-content">
+                        <div class="custom-card-mark" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div>
+                            <div class="plan-tier">Una opción hecha a tu medida</div>
+                            <div class="plan-header">
+                                <h2>Personaliza tu agente</h2>
+                                <span class="plan-badge">Flexible</span>
+                            </div>
+                            <p class="plan-summary">Comienza con Agente Inicio y agrega solo las funciones que tu negocio necesita.</p>
+                        </div>
+                    </div>
+                    <div class="custom-card-action">
+                        <p class="custom-base-label">Precio base</p>
+                        <p class="plan-price"><span class="price-prefix">Desde</span> $499 <span>MXN/mes</span></p>
+                        <a href="custom-agent.html" class="button">Personalizar agente</a>
+                    </div>
                 </article>
             </div>
 

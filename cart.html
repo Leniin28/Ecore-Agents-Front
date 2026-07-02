@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito simulado | ECore Agents</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>ECore Agents</h2></div>
+        <nav aria-label="Navegación principal">
+            <a href="index.html#home">Inicio</a>
+            <a href="index.html#about">Nosotros</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="cart.html" aria-current="page">Carrito <span class="cart-count" aria-label="0 agentes en el carrito">0</span></a>
+            <a href="index.html#contact">Contacto</a>
+            <a href="register.html">Registro</a>
+            <a href="login.html">Iniciar sesión</a>
+        </nav>
+    </header>
+
+    <main class="cart-page">
+        <section class="cart-hero">
+            <span class="section-eyebrow">Selección mensual simulada</span>
+            <h1>Carrito simulado</h1>
+            <p>Revisa los agentes seleccionados para tus negocios. Este carrito es una simulación académica.</p>
+        </section>
+
+        <section class="empty-cart" id="empty-cart">
+            <div class="empty-cart-icon" aria-hidden="true">🛒</div>
+            <h2>Tu carrito está vacío.</h2>
+            <p>Explora los agentes disponibles y agrega los que necesite cada negocio.</p>
+            <a href="catalogo.html" class="button">Ver catálogo</a>
+        </section>
+
+        <section class="cart-layout" id="filled-cart" hidden>
+            <div class="cart-items-panel">
+                <h2>Agentes seleccionados</h2>
+                <ul class="cart-items" id="cart-items" aria-live="polite"></ul>
+            </div>
+
+            <aside class="cart-summary" aria-labelledby="cart-summary-title">
+                <span class="summary-label">Resumen simulado</span>
+                <h2 id="cart-summary-title">Total del carrito</h2>
+                <div class="cart-summary-row">
+                    <span>Total de agentes</span>
+                    <strong id="cart-agent-total">0</strong>
+                </div>
+                <div class="cart-summary-total">
+                    <span>Total mensual</span>
+                    <strong id="cart-total">$0 MXN/mes</strong>
+                </div>
+                <p>Los importes son mensuales y no generan ningún cargo real.</p>
+                <div class="cart-summary-actions">
+                    <a href="catalogo.html" class="back-button">Seguir viendo agentes</a>
+                    <button type="button" class="button" id="simulated-checkout">Continuar al checkout (próximamente)</button>
+                </div>
+                <p class="checkout-message" id="checkout-message" role="status" aria-live="polite"></p>
+            </aside>
+        </section>
+    </main>
+
+    <footer><p>&copy; 2026 ECore. Todos los derechos reservados.</p></footer>
+    <script src="script.js"></script>
+</body>
+</html>
