@@ -306,6 +306,39 @@ if (simulatedCheckoutButton && checkoutMessage) {
 updateCartCount();
 renderCart();
 
+const adminMenuButtons = document.querySelectorAll(".admin-menu-button");
+const adminSections = document.querySelectorAll(".admin-section");
+const adminActionMessage = document.getElementById("admin-action-message");
+const adminActionButtons = document.querySelectorAll("[data-admin-message]");
+
+if (adminMenuButtons.length > 0 && adminSections.length > 0) {
+    adminMenuButtons.forEach(function (adminMenuButton) {
+        adminMenuButton.addEventListener("click", function (event) {
+            const targetSectionId = event.currentTarget.dataset.adminSection;
+
+            adminMenuButtons.forEach(function (button) {
+                const isActive = button === event.currentTarget;
+                button.classList.toggle("is-active", isActive);
+                button.setAttribute("aria-pressed", String(isActive));
+            });
+
+            adminSections.forEach(function (adminSection) {
+                const shouldShow = adminSection.id === targetSectionId;
+                adminSection.hidden = !shouldShow;
+                adminSection.classList.toggle("is-active", shouldShow);
+            });
+        });
+    });
+}
+
+if (adminActionMessage && adminActionButtons.length > 0) {
+    adminActionButtons.forEach(function (adminActionButton) {
+        adminActionButton.addEventListener("click", function (event) {
+            adminActionMessage.textContent = event.currentTarget.dataset.adminMessage || "Acción simulada correctamente.";
+        });
+    });
+}
+
 const planCatalog = document.getElementById("plan-catalog");
 const filterButtons = document.querySelectorAll(".filter-button");
 const catalogFilterStatus = document.getElementById("catalog-filter-status");

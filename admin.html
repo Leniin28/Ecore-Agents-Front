@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de administrador | ECore Agents</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>ECore Agents</h2></div>
+        <nav aria-label="Navegación principal">
+            <a href="index.html#home">Inicio</a>
+            <a href="index.html#about">Nosotros</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="cart.html">Carrito <span class="cart-count" aria-label="0 agentes en el carrito">0</span></a>
+            <a href="admin.html" aria-current="page">Admin</a>
+            <a href="index.html#contact">Contacto</a>
+            <a href="register.html">Registro</a>
+            <a href="login.html">Iniciar sesión</a>
+        </nav>
+    </header>
+
+    <main class="admin-page">
+        <section class="admin-hero">
+            <span class="section-eyebrow">Administración académica</span>
+            <h1>Panel de administrador</h1>
+            <p>Panel visual simulado para administrar planes, pedidos y promociones.</p>
+        </section>
+
+        <section class="admin-layout" aria-label="Panel visual simulado">
+            <aside class="admin-sidebar" aria-label="Menú lateral">
+                <h2>Menú</h2>
+                <button type="button" class="admin-menu-button is-active" data-admin-section="admin-products" aria-pressed="true">Productos</button>
+                <button type="button" class="admin-menu-button" data-admin-section="admin-orders" aria-pressed="false">Pedidos</button>
+                <button type="button" class="admin-menu-button" data-admin-section="admin-promotions" aria-pressed="false">Promociones</button>
+            </aside>
+
+            <div class="admin-content">
+                <div class="admin-summary-grid" aria-label="Resumen visual con datos simulados">
+                    <article class="admin-summary-card">
+                        <span>Planes activos</span>
+                        <strong>4</strong>
+                    </article>
+                    <article class="admin-summary-card">
+                        <span>Pedidos simulados</span>
+                        <strong>5</strong>
+                    </article>
+                    <article class="admin-summary-card">
+                        <span>Agentes personalizados</span>
+                        <strong>3</strong>
+                    </article>
+                    <article class="admin-summary-card">
+                        <span>Promociones activas</span>
+                        <strong>2</strong>
+                    </article>
+                </div>
+
+                <p class="admin-action-message" id="admin-action-message" role="status" aria-live="polite"></p>
+
+                <section class="admin-section is-active" id="admin-products">
+                    <div class="admin-section-heading">
+                        <div>
+                            <span class="summary-label">Gestión visual</span>
+                            <h2>Productos</h2>
+                        </div>
+                        <p>Estos botones son simulados y no modifican datos reales.</p>
+                    </div>
+
+                    <div class="admin-product-list">
+                        <article class="admin-product-card">
+                            <div>
+                                <h3>Agente Inicio</h3>
+                                <p>$499 MXN/mes</p>
+                            </div>
+                            <span class="admin-status active">Activo</span>
+                            <div class="admin-card-actions">
+                                <button type="button" class="admin-action-button" data-admin-message="Acción simulada correctamente.">Editar</button>
+                                <button type="button" class="admin-action-button danger" data-admin-message="Acción simulada correctamente.">Eliminar</button>
+                            </div>
+                        </article>
+
+                        <article class="admin-product-card">
+                            <div>
+                                <h3>Agente Plus</h3>
+                                <p>$999 MXN/mes</p>
+                            </div>
+                            <span class="admin-status active">Activo</span>
+                            <div class="admin-card-actions">
+                                <button type="button" class="admin-action-button" data-admin-message="Acción simulada correctamente.">Editar</button>
+                                <button type="button" class="admin-action-button danger" data-admin-message="Acción simulada correctamente.">Eliminar</button>
+                            </div>
+                        </article>
+
+                        <article class="admin-product-card">
+                            <div>
+                                <h3>Agente Avanzado</h3>
+                                <p>$1,799 MXN/mes</p>
+                            </div>
+                            <span class="admin-status active">Activo</span>
+                            <div class="admin-card-actions">
+                                <button type="button" class="admin-action-button" data-admin-message="Acción simulada correctamente.">Editar</button>
+                                <button type="button" class="admin-action-button danger" data-admin-message="Acción simulada correctamente.">Eliminar</button>
+                            </div>
+                        </article>
+
+                        <article class="admin-product-card">
+                            <div>
+                                <h3>Personaliza tu agente</h3>
+                                <p>Desde $499 MXN/mes</p>
+                            </div>
+                            <span class="admin-status review">Configurable</span>
+                            <div class="admin-card-actions">
+                                <button type="button" class="admin-action-button" data-admin-message="Acción simulada correctamente.">Editar</button>
+                                <button type="button" class="admin-action-button danger" data-admin-message="Acción simulada correctamente.">Eliminar</button>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="admin-section" id="admin-orders" hidden>
+                    <div class="admin-section-heading">
+                        <div>
+                            <span class="summary-label">Seguimiento simulado</span>
+                            <h2>Pedidos</h2>
+                        </div>
+                        <p>Pedidos y cotizaciones de ejemplo para el Bloque 2.</p>
+                    </div>
+
+                    <div class="admin-order-list">
+                        <article class="admin-order-item">
+                            <strong>Pedido #1001</strong>
+                            <span>Agente Plus</span>
+                            <span class="admin-status pending">Pendiente</span>
+                        </article>
+                        <article class="admin-order-item">
+                            <strong>Pedido #1002</strong>
+                            <span>Agente personalizado</span>
+                            <span class="admin-status review">En revisión</span>
+                        </article>
+                        <article class="admin-order-item">
+                            <strong>Pedido #1003</strong>
+                            <span>Agente Avanzado</span>
+                            <span class="admin-status active">Confirmado</span>
+                        </article>
+                        <article class="admin-order-item">
+                            <strong>Pedido #1004</strong>
+                            <span>Agente Inicio</span>
+                            <span class="admin-status pending">Pendiente</span>
+                        </article>
+                        <article class="admin-order-item">
+                            <strong>Pedido #1005</strong>
+                            <span>Agente personalizado</span>
+                            <span class="admin-status active">Confirmado</span>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="admin-section" id="admin-promotions" hidden>
+                    <div class="admin-section-heading">
+                        <div>
+                            <span class="summary-label">Campañas simuladas</span>
+                            <h2>Promociones</h2>
+                        </div>
+                        <button type="button" class="button admin-create-promo" data-admin-message="Promoción creada (simulado).">Crear promoción</button>
+                    </div>
+
+                    <div class="admin-promotion-grid">
+                        <article class="admin-promotion-card">
+                            <h3>10% de descuento en Agente Plus</h3>
+                            <p>Promoción visual para campañas académicas.</p>
+                            <span class="admin-status active">Activa</span>
+                        </article>
+                        <article class="admin-promotion-card">
+                            <h3>Configuración inicial sin costo</h3>
+                            <p>Aplica de forma simulada para nuevos negocios.</p>
+                            <span class="admin-status active">Activa</span>
+                        </article>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <footer><p>&copy; 2026 ECore. Todos los derechos reservados.</p></footer>
+    <script src="script.js"></script>
+</body>
+</html>
