@@ -14,7 +14,6 @@
             <a href="index.html#about">Nosotros</a>
             <a href="catalogo.html">Catálogo</a>
             <a href="cart.html">Carrito <span class="cart-count" aria-label="0 agentes en el carrito">0</span></a>
-            <a href="admin.html" aria-current="page">Admin</a>
             <a href="index.html#contact">Contacto</a>
             <a href="register.html">Registro</a>
             <a href="login.html">Iniciar sesión</a>
@@ -25,94 +24,241 @@
         <section class="admin-hero">
             <span class="section-eyebrow">Administración académica</span>
             <h1>Panel de administrador</h1>
-            <p>Panel visual simulado para administrar planes, pedidos y promociones.</p>
+            <p>Panel visual simulado para administrar productos, pedidos, promociones, clientes y reportes. No modifica datos reales.</p>
         </section>
 
         <section class="admin-layout" aria-label="Panel visual simulado">
             <aside class="admin-sidebar" aria-label="Menú lateral">
                 <h2>Menú</h2>
-                <button type="button" class="admin-menu-button is-active" data-admin-section="admin-products" aria-pressed="true">Productos</button>
+                <button type="button" class="admin-menu-button is-active" data-admin-section="admin-dashboard" aria-pressed="true">Dashboard</button>
+                <button type="button" class="admin-menu-button" data-admin-section="admin-products" aria-pressed="false">Productos</button>
                 <button type="button" class="admin-menu-button" data-admin-section="admin-orders" aria-pressed="false">Pedidos</button>
                 <button type="button" class="admin-menu-button" data-admin-section="admin-promotions" aria-pressed="false">Promociones</button>
+                <button type="button" class="admin-menu-button" data-admin-section="admin-customers" aria-pressed="false">Clientes</button>
+                <button type="button" class="admin-menu-button" data-admin-section="admin-reports" aria-pressed="false">Reportes</button>
             </aside>
 
             <div class="admin-content">
-                <div class="admin-summary-grid" aria-label="Resumen visual con datos simulados">
-                    <article class="admin-summary-card">
-                        <span>Planes activos</span>
-                        <strong>4</strong>
-                    </article>
-                    <article class="admin-summary-card">
-                        <span>Pedidos simulados</span>
-                        <strong>5</strong>
-                    </article>
-                    <article class="admin-summary-card">
-                        <span>Agentes personalizados</span>
-                        <strong>3</strong>
-                    </article>
-                    <article class="admin-summary-card">
-                        <span>Promociones activas</span>
-                        <strong>2</strong>
-                    </article>
-                </div>
-
                 <p class="admin-action-message" id="admin-action-message" role="status" aria-live="polite"></p>
 
-                <section class="admin-section is-active" id="admin-products">
+                <section class="admin-section is-active" id="admin-dashboard">
+                    <div class="admin-section-heading">
+                        <div>
+                            <span class="summary-label">Vista general simulada</span>
+                            <h2>Dashboard</h2>
+                        </div>
+                        <p>Resumen académico con números de ejemplo para visualizar la operación del negocio.</p>
+                    </div>
+
+                    <div class="admin-summary-grid admin-dashboard-grid" aria-label="Resumen visual con datos simulados">
+                        <article class="admin-summary-card">
+                            <span>Productos publicados</span>
+                            <strong>12</strong>
+                        </article>
+                        <article class="admin-summary-card">
+                            <span>Pedidos del día</span>
+                            <strong>5</strong>
+                        </article>
+                        <article class="admin-summary-card">
+                            <span>Ventas del mes</span>
+                            <strong>$12,500</strong>
+                            <small>simulado</small>
+                        </article>
+                        <article class="admin-summary-card">
+                            <span>Clientes registrados</span>
+                            <strong>38</strong>
+                        </article>
+                        <article class="admin-summary-card">
+                            <span>Productos agotados</span>
+                            <strong>2</strong>
+                        </article>
+                    </div>
+
+                    <div class="admin-dashboard-panels">
+                        <article class="admin-quick-actions">
+                            <h3>Acciones rápidas</h3>
+                            <div>
+                                <button type="button" class="button admin-quick-action" data-admin-action="add-product">Agregar producto</button>
+                                <button type="button" class="admin-action-button admin-quick-action" data-admin-action="view-orders">Ver pedidos</button>
+                                <button type="button" class="admin-action-button admin-quick-action" data-admin-action="create-promotion">Crear promoción</button>
+                            </div>
+                        </article>
+
+                        <article class="admin-recent-activity">
+                            <h3>Actividad reciente simulada</h3>
+                            <ul>
+                                <li>Pedido #125 recibido</li>
+                                <li>Nuevo cliente registrado</li>
+                                <li>Producto actualizado</li>
+                            </ul>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="admin-section" id="admin-products" hidden>
                     <div class="admin-section-heading">
                         <div>
                             <span class="summary-label">Gestión visual</span>
                             <h2>Productos</h2>
                         </div>
-                        <p>Estos botones son simulados y no modifican datos reales.</p>
+                        <div class="admin-section-actions">
+                            <p>Productos y servicios simulados. Los cambios solo se reflejan en pantalla durante la sesión.</p>
+                            <button type="button" class="button admin-add-product-button" id="admin-add-product">Agregar producto</button>
+                        </div>
                     </div>
 
-                    <div class="admin-product-list">
-                        <article class="admin-product-card">
+                    <div class="admin-product-filters" aria-label="Filtros de productos simulados">
+                        <label for="admin-product-search">
+                            Buscar producto
+                            <input type="search" id="admin-product-search" placeholder="Ej. Agente Plus">
+                        </label>
+                        <label for="admin-category-filter">
+                            Filtrar por categoría
+                            <select id="admin-category-filter">
+                                <option value="all">Todas</option>
+                                <option value="Plan básico">Plan básico</option>
+                                <option value="Plan seguimiento">Plan seguimiento</option>
+                                <option value="Plan avanzado">Plan avanzado</option>
+                                <option value="Configurable">Configurable</option>
+                                <option value="Servicio">Servicio</option>
+                            </select>
+                        </label>
+                        <label for="admin-status-filter">
+                            Filtrar por estado
+                            <select id="admin-status-filter">
+                                <option value="all">Todos</option>
+                                <option value="Disponible">Disponible</option>
+                                <option value="Agotado">Agotado</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <form class="admin-product-form" id="admin-product-form" hidden>
+                        <h3 id="admin-product-form-title">Agregar producto simulado</h3>
+                        <div class="admin-form-grid">
+                            <label for="admin-product-name">
+                                Nombre del producto
+                                <input type="text" id="admin-product-name" name="productName" required>
+                            </label>
+                            <label for="admin-product-category">
+                                Categoría
+                                <select id="admin-product-category" name="productCategory" required>
+                                    <option value="Plan básico">Plan básico</option>
+                                    <option value="Plan seguimiento">Plan seguimiento</option>
+                                    <option value="Plan avanzado">Plan avanzado</option>
+                                    <option value="Configurable">Configurable</option>
+                                    <option value="Servicio">Servicio</option>
+                                </select>
+                            </label>
+                            <label for="admin-product-price">
+                                Precio
+                                <input type="text" id="admin-product-price" name="productPrice" required>
+                            </label>
+                            <label for="admin-product-stock">
+                                Existencia simulada
+                                <input type="number" id="admin-product-stock" name="productStock" min="0" required>
+                            </label>
+                            <label for="admin-product-status">
+                                Estado
+                                <select id="admin-product-status" name="productStatus" required>
+                                    <option value="Disponible">Disponible</option>
+                                    <option value="Agotado">Agotado</option>
+                                </select>
+                            </label>
+                            <label for="admin-product-image">
+                                Imagen
+                                <input type="text" id="admin-product-image" name="productImage" placeholder="URL o texto de placeholder">
+                            </label>
+                            <label class="admin-form-full" for="admin-product-description">
+                                Descripción
+                                <textarea id="admin-product-description" name="productDescription" rows="3" required></textarea>
+                            </label>
+                        </div>
+                        <div class="admin-image-preview" id="admin-image-preview" aria-live="polite">Vista previa simulada</div>
+                        <div class="admin-form-actions">
+                            <button type="submit" class="button">Guardar producto</button>
+                            <button type="button" class="admin-action-button" id="admin-cancel-product">Cancelar</button>
+                        </div>
+                    </form>
+
+                    <div class="admin-product-list admin-product-list-detailed" id="admin-product-list">
+                        <article class="admin-product-card" data-product-name="Agente Inicio" data-product-category="Plan básico" data-product-price="$499 MXN/mes" data-product-stock="20" data-product-status="Disponible" data-product-image="AI" data-product-description="Plan básico para responder preguntas frecuentes por WhatsApp.">
+                            <div class="admin-product-thumb" aria-hidden="true">AI</div>
                             <div>
                                 <h3>Agente Inicio</h3>
-                                <p>$499 MXN/mes</p>
+                                <p>Plan básico</p>
                             </div>
-                            <span class="admin-status active">Activo</span>
+                            <span class="admin-product-price">$499 MXN/mes</span>
+                            <span class="admin-product-stock">20</span>
+                            <span class="admin-status active">Disponible</span>
                             <div class="admin-card-actions">
-                                <button type="button" class="admin-action-button" data-admin-message="Acción simulada correctamente.">Editar</button>
-                                <button type="button" class="admin-action-button danger" data-admin-message="Acción simulada correctamente.">Eliminar</button>
+                                <button type="button" class="admin-action-button admin-detail-product">Ver detalle</button>
+                                <button type="button" class="admin-action-button admin-edit-product">Editar</button>
+                                <button type="button" class="admin-action-button danger admin-delete-product">Eliminar</button>
                             </div>
                         </article>
 
-                        <article class="admin-product-card">
+                        <article class="admin-product-card" data-product-name="Agente Plus" data-product-category="Plan seguimiento" data-product-price="$999 MXN/mes" data-product-stock="15" data-product-status="Disponible" data-product-image="AP" data-product-description="Plan de seguimiento con clasificación, recordatorios y reportes básicos simulados.">
+                            <div class="admin-product-thumb" aria-hidden="true">AP</div>
                             <div>
                                 <h3>Agente Plus</h3>
-                                <p>$999 MXN/mes</p>
+                                <p>Plan seguimiento</p>
                             </div>
-                            <span class="admin-status active">Activo</span>
+                            <span class="admin-product-price">$999 MXN/mes</span>
+                            <span class="admin-product-stock">15</span>
+                            <span class="admin-status active">Disponible</span>
                             <div class="admin-card-actions">
-                                <button type="button" class="admin-action-button" data-admin-message="Acción simulada correctamente.">Editar</button>
-                                <button type="button" class="admin-action-button danger" data-admin-message="Acción simulada correctamente.">Eliminar</button>
+                                <button type="button" class="admin-action-button admin-detail-product">Ver detalle</button>
+                                <button type="button" class="admin-action-button admin-edit-product">Editar</button>
+                                <button type="button" class="admin-action-button danger admin-delete-product">Eliminar</button>
                             </div>
                         </article>
 
-                        <article class="admin-product-card">
+                        <article class="admin-product-card" data-product-name="Agente Avanzado" data-product-category="Plan avanzado" data-product-price="$1,799 MXN/mes" data-product-stock="8" data-product-status="Disponible" data-product-image="AA" data-product-description="Plan avanzado con citas, flujos, reportes y automatización visual simulada.">
+                            <div class="admin-product-thumb" aria-hidden="true">AA</div>
                             <div>
                                 <h3>Agente Avanzado</h3>
-                                <p>$1,799 MXN/mes</p>
+                                <p>Plan avanzado</p>
                             </div>
-                            <span class="admin-status active">Activo</span>
+                            <span class="admin-product-price">$1,799 MXN/mes</span>
+                            <span class="admin-product-stock">8</span>
+                            <span class="admin-status active">Disponible</span>
                             <div class="admin-card-actions">
-                                <button type="button" class="admin-action-button" data-admin-message="Acción simulada correctamente.">Editar</button>
-                                <button type="button" class="admin-action-button danger" data-admin-message="Acción simulada correctamente.">Eliminar</button>
+                                <button type="button" class="admin-action-button admin-detail-product">Ver detalle</button>
+                                <button type="button" class="admin-action-button admin-edit-product">Editar</button>
+                                <button type="button" class="admin-action-button danger admin-delete-product">Eliminar</button>
                             </div>
                         </article>
 
-                        <article class="admin-product-card">
+                        <article class="admin-product-card" data-product-name="Personaliza tu agente" data-product-category="Configurable" data-product-price="Desde $499 MXN/mes" data-product-stock="10" data-product-status="Disponible" data-product-image="PX" data-product-description="Producto configurable con módulos Plus y Avanzados seleccionables.">
+                            <div class="admin-product-thumb" aria-hidden="true">PX</div>
                             <div>
                                 <h3>Personaliza tu agente</h3>
-                                <p>Desde $499 MXN/mes</p>
+                                <p>Configurable</p>
                             </div>
-                            <span class="admin-status review">Configurable</span>
+                            <span class="admin-product-price">Desde $499 MXN/mes</span>
+                            <span class="admin-product-stock">10</span>
+                            <span class="admin-status active">Disponible</span>
                             <div class="admin-card-actions">
-                                <button type="button" class="admin-action-button" data-admin-message="Acción simulada correctamente.">Editar</button>
-                                <button type="button" class="admin-action-button danger" data-admin-message="Acción simulada correctamente.">Eliminar</button>
+                                <button type="button" class="admin-action-button admin-detail-product">Ver detalle</button>
+                                <button type="button" class="admin-action-button admin-edit-product">Editar</button>
+                                <button type="button" class="admin-action-button danger admin-delete-product">Eliminar</button>
+                            </div>
+                        </article>
+
+                        <article class="admin-product-card" data-product-name="Implementación inicial" data-product-category="Servicio" data-product-price="$350 MXN" data-product-stock="0" data-product-status="Agotado" data-product-image="II" data-product-description="Servicio de configuración inicial mostrado como producto simulado agotado.">
+                            <div class="admin-product-thumb" aria-hidden="true">II</div>
+                            <div>
+                                <h3>Implementación inicial</h3>
+                                <p>Servicio</p>
+                            </div>
+                            <span class="admin-product-price">$350 MXN</span>
+                            <span class="admin-product-stock">0</span>
+                            <span class="admin-status pending">Agotado</span>
+                            <div class="admin-card-actions">
+                                <button type="button" class="admin-action-button admin-detail-product">Ver detalle</button>
+                                <button type="button" class="admin-action-button admin-edit-product">Editar</button>
+                                <button type="button" class="admin-action-button danger admin-delete-product">Eliminar</button>
                             </div>
                         </article>
                     </div>
@@ -162,8 +308,46 @@
                             <span class="summary-label">Campañas simuladas</span>
                             <h2>Promociones</h2>
                         </div>
-                        <button type="button" class="button admin-create-promo" data-admin-message="Promoción creada (simulado).">Crear promoción</button>
+                        <button type="button" class="button admin-create-promo" id="admin-create-promo">Crear promoción</button>
                     </div>
+
+                    <form class="admin-promotion-form" id="admin-promotion-form" hidden>
+                        <h3>Crear promoción simulada</h3>
+                        <div class="admin-form-grid">
+                            <label for="admin-promotion-name">
+                                Nombre de la promoción
+                                <input type="text" id="admin-promotion-name" name="promotionName" placeholder="Ej. 10% de descuento" required>
+                            </label>
+                            <label for="admin-promotion-plan">
+                                Plan relacionado
+                                <select id="admin-promotion-plan" name="promotionPlan" required>
+                                    <option value="Agente Inicio">Agente Inicio</option>
+                                    <option value="Agente Plus">Agente Plus</option>
+                                    <option value="Agente Avanzado">Agente Avanzado</option>
+                                    <option value="Personaliza tu agente">Personaliza tu agente</option>
+                                </select>
+                            </label>
+                            <label for="admin-promotion-discount">
+                                Descuento o beneficio
+                                <input type="text" id="admin-promotion-discount" name="promotionDiscount" placeholder="Ej. 10% o configuración gratis" required>
+                            </label>
+                            <label for="admin-promotion-status">
+                                Estado
+                                <select id="admin-promotion-status" name="promotionStatus" required>
+                                    <option value="Activa">Activa</option>
+                                    <option value="Pausada">Pausada</option>
+                                </select>
+                            </label>
+                            <label class="admin-form-full" for="admin-promotion-description">
+                                Descripción
+                                <textarea id="admin-promotion-description" name="promotionDescription" rows="3" placeholder="Describe brevemente la promoción simulada." required></textarea>
+                            </label>
+                        </div>
+                        <div class="admin-form-actions">
+                            <button type="submit" class="button">Guardar promoción</button>
+                            <button type="button" class="admin-action-button" id="admin-cancel-promotion">Cancelar</button>
+                        </div>
+                    </form>
 
                     <div class="admin-promotion-grid">
                         <article class="admin-promotion-card">
@@ -177,6 +361,90 @@
                             <span class="admin-status active">Activa</span>
                         </article>
                     </div>
+                </section>
+
+                <section class="admin-section" id="admin-customers" hidden>
+                    <div class="admin-section-heading">
+                        <div>
+                            <span class="summary-label">Relación con clientes</span>
+                            <h2>Clientes registrados</h2>
+                        </div>
+                        <p>Clientes ficticios para representar seguimiento comercial simulado.</p>
+                    </div>
+
+                    <div class="admin-customer-grid">
+                        <article class="admin-customer-card">
+                            <h3>Mariscos El Melón</h3>
+                            <p>contacto@melondemo.mx</p>
+                            <span class="admin-status active">Cliente activo</span>
+                            <button type="button" class="admin-action-button admin-customer-detail">Ver detalle</button>
+                        </article>
+                        <article class="admin-customer-card">
+                            <h3>Taller Fixop</h3>
+                            <p>449 000 1200</p>
+                            <span class="admin-status review">En seguimiento</span>
+                            <button type="button" class="admin-action-button admin-customer-detail">Ver detalle</button>
+                        </article>
+                        <article class="admin-customer-card">
+                            <h3>Electrocom</h3>
+                            <p>ventas@electrocom.demo</p>
+                            <span class="admin-status pending">Interesado</span>
+                            <button type="button" class="admin-action-button admin-customer-detail">Ver detalle</button>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="admin-section" id="admin-reports" hidden>
+                    <div class="admin-section-heading">
+                        <div>
+                            <span class="summary-label">Métricas simuladas</span>
+                            <h2>Reportes del negocio</h2>
+                        </div>
+                        <button type="button" class="button" id="admin-download-report">Descargar reporte (simulado)</button>
+                    </div>
+
+                    <div class="admin-report-grid">
+                        <article class="admin-summary-card">
+                            <span>Conversaciones atendidas</span>
+                            <strong>124</strong>
+                        </article>
+                        <article class="admin-summary-card">
+                            <span>Clientes interesados</span>
+                            <strong>18</strong>
+                        </article>
+                        <article class="admin-summary-card">
+                            <span>Agentes configurados</span>
+                            <strong>7</strong>
+                        </article>
+                        <article class="admin-summary-card">
+                            <span>Cotizaciones generadas</span>
+                            <strong>9</strong>
+                        </article>
+                    </div>
+
+                    <article class="admin-bar-chart" aria-label="Mini gráfico visual de barras">
+                        <h3>Actividad mensual simulada</h3>
+                        <div class="admin-bar-row">
+                            <span>Conversaciones</span>
+                            <div><b style="width: 92%;"></b></div>
+                            <strong>124</strong>
+                        </div>
+                        <div class="admin-bar-row">
+                            <span>Interesados</span>
+                            <div><b style="width: 52%;"></b></div>
+                            <strong>18</strong>
+                        </div>
+                        <div class="admin-bar-row">
+                            <span>Configurados</span>
+                            <div><b style="width: 36%;"></b></div>
+                            <strong>7</strong>
+                        </div>
+                        <div class="admin-bar-row">
+                            <span>Cotizaciones</span>
+                            <div><b style="width: 44%;"></b></div>
+                            <strong>9</strong>
+                        </div>
+                    </article>
                 </section>
             </div>
         </section>

@@ -310,26 +310,8 @@ const adminMenuButtons = document.querySelectorAll(".admin-menu-button");
 const adminSections = document.querySelectorAll(".admin-section");
 const adminActionMessage = document.getElementById("admin-action-message");
 const adminActionButtons = document.querySelectorAll("[data-admin-message]");
-
-if (adminMenuButtons.length > 0 && adminSections.length > 0) {
-    adminMenuButtons.forEach(function (adminMenuButton) {
-        adminMenuButton.addEventListener("click", function (event) {
-            const targetSectionId = event.currentTarget.dataset.adminSection;
-
-            adminMenuButtons.forEach(function (button) {
-                const isActive = button === event.currentTarget;
-                button.classList.toggle("is-active", isActive);
-                button.setAttribute("aria-pressed", String(isActive));
-            });
-
-            adminSections.forEach(function (adminSection) {
-                const shouldShow = adminSection.id === targetSectionId;
-                adminSection.hidden = !shouldShow;
-                adminSection.classList.toggle("is-active", shouldShow);
-            });
-        });
-    });
-}
+let activeProductCard = null;
+let activeProductFormMode = "add";
 
 if (adminActionMessage && adminActionButtons.length > 0) {
     adminActionButtons.forEach(function (adminActionButton) {
@@ -338,6 +320,433 @@ if (adminActionMessage && adminActionButtons.length > 0) {
         });
     });
 }
+
+function getStatusClass(status) {
+    const normalizedStatus = String(status || "").toLowerCase();
+
+    if (normalizedStatus.includes("revisión") || normalizedStatus.includes("seguimiento") || normalizedStatus.includes("interesado")) {
+        return "review";
+    }
+
+    if (normalizedStatus.includes("pausado") || normalizedStatus.includes("pendiente") || normalizedStatus.includes("agotado")) {
+        return "pending";
+    }
+
+    return "active";
+}
+
+function setAdminMessage(message) {
+    if (adminActionMessage) {
+        adminActionMessage.textContent = message;
+    }
+}
+
+function getProductFormElements() {
+    const productForm = document.getElementById("admin-product-form");
+
+    if (!productForm) {
+        return null;
+    }
+
+    return {
+        form: productForm,
+        title: document.getElementById("admin-product-form-title"),
+        name: document.getElementById("admin-product-name"),
+        category: document.getElementById("admin-product-category"),
+        price: document.getElementById("admin-product-price"),
+        stock: document.getElementById("admin-product-stock"),
+        status: document.getElementById("admin-product-status"),
+        image: document.getElementById("admin-product-image"),
+        imagePreview: document.getElementById("admin-image-preview"),
+        description: document.getElementById("admin-product-description")
+    };
+}
+
+function showAdminSection(sectionId) {
+    if (adminMenuButtons.length === 0 || adminSections.length === 0 || !sectionId) {
+        return;
+    }
+
+    adminMenuButtons.forEach(function (button) {
+        const isActive = button.dataset.adminSection === sectionId;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+    });
+
+    adminSections.forEach(function (adminSection) {
+        const shouldShow = adminSection.id === sectionId;
+        adminSection.hidden = !shouldShow;
+        adminSection.classList.toggle("is-active", shouldShow);
+    });
+}
+
+function openProductForm(mode, productData) {
+    const elements = getProductFormElements();
+
+    if (!elements || !elements.form || !elements.title || !elements.name || !elements.category || !elements.price || !elements.stock || !elements.status || !elements.image || !elements.description) {
+        return;
+    }
+
+    activeProductFormMode = mode === "edit" ? "edit" : "add";
+    elements.title.textContent = activeProductFormMode === "edit" ? "Editar producto simulado" : "Agregar producto simulado";
+    elements.name.value = productData && productData.name ? productData.name : "";
+    elements.category.value = productData && productData.category ? productData.category : "Plan básico";
+    elements.price.value = productData && productData.price ? productData.price : "";
+    elements.stock.value = productData && productData.stock ? productData.stock : "0";
+    elements.status.value = productData && productData.status ? productData.status : "Disponible";
+    elements.image.value = productData && productData.image ? productData.image : "";
+    elements.description.value = productData && productData.description ? productData.description : "";
+    if (elements.imagePreview) {
+        elements.imagePreview.textContent = elements.image.value.trim() || "Vista previa simulada";
+    }
+    elements.form.hidden = false;
+    elements.name.focus();
+}
+
+function closeProductForm() {
+    const elements = getProductFormElements();
+
+    if (!elements || !elements.form) {
+        return;
+    }
+
+    elements.form.reset();
+    elements.form.hidden = true;
+    activeProductCard = null;
+    activeProductFormMode = "add";
+    if (elements.imagePreview) {
+        elements.imagePreview.textContent = "Vista previa simulada";
+    }
+}
+
+function getProductDataFromCard(productCard) {
+    if (!productCard) {
+        return null;
+    }
+
+    return {
+        name: productCard.dataset.productName || "",
+        category: productCard.dataset.productCategory || "",
+        price: productCard.dataset.productPrice || "",
+        stock: productCard.dataset.productStock || "0",
+        status: productCard.dataset.productStatus || "Disponible",
+        image: productCard.dataset.productImage || "",
+        description: productCard.dataset.productDescription || ""
+    };
+}
+
+function applyProductDataToCard(productCard, productData) {
+    const title = productCard.querySelector("h3");
+    const category = productCard.querySelector("p");
+    const price = productCard.querySelector(".admin-product-price");
+    const stock = productCard.querySelector(".admin-product-stock");
+    const status = productCard.querySelector(".admin-status");
+    const thumb = productCard.querySelector(".admin-product-thumb");
+
+    productCard.dataset.productName = productData.name;
+    productCard.dataset.productCategory = productData.category;
+    productCard.dataset.productPrice = productData.price;
+    productCard.dataset.productStock = productData.stock;
+    productCard.dataset.productStatus = productData.status;
+    productCard.dataset.productImage = productData.image;
+    productCard.dataset.productDescription = productData.description;
+
+    if (title) {
+        title.textContent = productData.name;
+    }
+
+    if (category) {
+        category.textContent = productData.category;
+    }
+
+    if (price) {
+        price.textContent = productData.price;
+    }
+
+    if (stock) {
+        stock.textContent = productData.stock;
+    }
+
+    if (status) {
+        status.className = `admin-status ${getStatusClass(productData.status)}`;
+        status.textContent = productData.status;
+    }
+
+    if (thumb) {
+        thumb.textContent = productData.image || productData.name.slice(0, 2).toUpperCase();
+    }
+}
+
+function createProductCard(productData) {
+    const productCard = document.createElement("article");
+    const productThumb = document.createElement("div");
+    const productInfo = document.createElement("div");
+    const productTitle = document.createElement("h3");
+    const productCategory = document.createElement("p");
+    const productPrice = document.createElement("span");
+    const productStock = document.createElement("span");
+    const productStatus = document.createElement("span");
+    const actions = document.createElement("div");
+    const detailButton = document.createElement("button");
+    const editButton = document.createElement("button");
+    const deleteButton = document.createElement("button");
+
+    productCard.className = "admin-product-card";
+    productThumb.className = "admin-product-thumb";
+    productPrice.className = "admin-product-price";
+    productStock.className = "admin-product-stock";
+    productStatus.className = `admin-status ${getStatusClass(productData.status)}`;
+    actions.className = "admin-card-actions";
+    detailButton.type = "button";
+    detailButton.className = "admin-action-button admin-detail-product";
+    detailButton.textContent = "Ver detalle";
+    editButton.type = "button";
+    editButton.className = "admin-action-button admin-edit-product";
+    editButton.textContent = "Editar";
+    deleteButton.type = "button";
+    deleteButton.className = "admin-action-button danger admin-delete-product";
+    deleteButton.textContent = "Eliminar";
+
+    productInfo.append(productTitle, productCategory);
+    actions.append(detailButton, editButton, deleteButton);
+    productCard.append(productThumb, productInfo, productPrice, productStock, productStatus, actions);
+    applyProductDataToCard(productCard, productData);
+    return productCard;
+}
+
+function handleProductFormSubmit(event) {
+    event.preventDefault();
+
+    const elements = getProductFormElements();
+    const productList = document.getElementById("admin-product-list");
+
+    if (!elements || !productList || !elements.name || !elements.category || !elements.price || !elements.stock || !elements.status || !elements.image || !elements.description) {
+        return;
+    }
+
+    const productData = {
+        name: elements.name.value.trim(),
+        category: elements.category.value,
+        price: elements.price.value.trim(),
+        stock: String(Math.max(0, Math.floor(Number(elements.stock.value) || 0))),
+        status: elements.status.value,
+        image: elements.image.value.trim(),
+        description: elements.description.value.trim()
+    };
+
+    if (!productData.name || !productData.category || !productData.price || !productData.description) {
+        setAdminMessage("Completa todos los campos del producto simulado.");
+        return;
+    }
+
+    if (activeProductFormMode === "edit" && activeProductCard) {
+        applyProductDataToCard(activeProductCard, productData);
+        setAdminMessage("Producto actualizado correctamente (simulado).");
+    } else {
+        productList.appendChild(createProductCard(productData));
+        setAdminMessage("Producto agregado correctamente (simulado).");
+    }
+
+    closeProductForm();
+    filterProducts();
+}
+
+function handleProductDelete(productName, productCard) {
+    const confirmed = window.confirm("¿Seguro que deseas eliminar este producto? Esta acción es simulada.");
+
+    if (!confirmed) {
+        return;
+    }
+
+    if (productCard) {
+        productCard.dataset.deleted = "true";
+        productCard.hidden = true;
+    }
+
+    setAdminMessage(`Producto eliminado correctamente (simulado): ${productName}.`);
+}
+
+function showProductDetail(productCard) {
+    const productData = getProductDataFromCard(productCard);
+
+    if (!productData) {
+        return;
+    }
+
+    setAdminMessage(`Detalle simulado: ${productData.name} | ${productData.category} | ${productData.price} | Existencia: ${productData.stock} | Estado: ${productData.status}.`);
+}
+
+function filterProducts() {
+    const productList = document.getElementById("admin-product-list");
+    const searchInput = document.getElementById("admin-product-search");
+    const categoryFilter = document.getElementById("admin-category-filter");
+    const statusFilter = document.getElementById("admin-status-filter");
+
+    if (!productList) {
+        return;
+    }
+
+    const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : "";
+    const selectedCategory = categoryFilter ? categoryFilter.value : "all";
+    const selectedStatus = statusFilter ? statusFilter.value : "all";
+
+    productList.querySelectorAll(".admin-product-card").forEach(function (productCard) {
+        if (productCard.hidden && productCard.dataset.deleted === "true") {
+            return;
+        }
+
+        const name = (productCard.dataset.productName || "").toLowerCase();
+        const category = productCard.dataset.productCategory || "";
+        const status = productCard.dataset.productStatus || "";
+        const matchesSearch = !searchTerm || name.includes(searchTerm);
+        const matchesCategory = selectedCategory === "all" || category === selectedCategory;
+        const matchesStatus = selectedStatus === "all" || status === selectedStatus;
+
+        productCard.hidden = !(matchesSearch && matchesCategory && matchesStatus);
+    });
+}
+
+function initAdminProductManager() {
+    const addProductButton = document.getElementById("admin-add-product");
+    const cancelProductButton = document.getElementById("admin-cancel-product");
+    const productForm = document.getElementById("admin-product-form");
+    const productList = document.getElementById("admin-product-list");
+    const searchInput = document.getElementById("admin-product-search");
+    const categoryFilter = document.getElementById("admin-category-filter");
+    const statusFilter = document.getElementById("admin-status-filter");
+    const productImage = document.getElementById("admin-product-image");
+
+    if (!productForm || !productList) {
+        return;
+    }
+
+    if (addProductButton) {
+        addProductButton.addEventListener("click", function () {
+            activeProductCard = null;
+            showAdminSection("admin-products");
+            openProductForm("add", null);
+        });
+    }
+
+    if (cancelProductButton) {
+        cancelProductButton.addEventListener("click", closeProductForm);
+    }
+
+    productForm.addEventListener("submit", handleProductFormSubmit);
+
+    productList.addEventListener("click", function (event) {
+        const detailButton = event.target.closest(".admin-detail-product");
+        const editButton = event.target.closest(".admin-edit-product");
+        const deleteButton = event.target.closest(".admin-delete-product");
+        const productCard = event.target.closest(".admin-product-card");
+
+        if (!productCard) {
+            return;
+        }
+
+        if (detailButton) {
+            showProductDetail(productCard);
+        } else if (editButton) {
+            activeProductCard = productCard;
+            openProductForm("edit", getProductDataFromCard(productCard));
+        } else if (deleteButton) {
+            handleProductDelete(productCard.dataset.productName || "Producto", productCard);
+        }
+    });
+
+    [searchInput, categoryFilter, statusFilter].forEach(function (control) {
+        if (control) {
+            control.addEventListener("input", filterProducts);
+            control.addEventListener("change", filterProducts);
+        }
+    });
+
+    if (productImage) {
+        productImage.addEventListener("input", function () {
+            const elements = getProductFormElements();
+
+            if (elements && elements.imagePreview) {
+                elements.imagePreview.textContent = productImage.value.trim() || "Vista previa simulada";
+            }
+        });
+    }
+}
+
+function initAdminPanel() {
+    const quickActions = document.querySelectorAll(".admin-quick-action");
+    const customerButtons = document.querySelectorAll(".admin-customer-detail");
+    const reportButton = document.getElementById("admin-download-report");
+    const createPromotionButton = document.getElementById("admin-create-promo");
+    const promotionForm = document.getElementById("admin-promotion-form");
+    const cancelPromotionButton = document.getElementById("admin-cancel-promotion");
+
+    if (adminMenuButtons.length > 0 && adminSections.length > 0) {
+        adminMenuButtons.forEach(function (adminMenuButton) {
+            adminMenuButton.addEventListener("click", function (event) {
+                showAdminSection(event.currentTarget.dataset.adminSection);
+            });
+        });
+    }
+
+    quickActions.forEach(function (quickAction) {
+        quickAction.addEventListener("click", function (event) {
+            const action = event.currentTarget.dataset.adminAction;
+
+            if (action === "add-product") {
+                showAdminSection("admin-products");
+                activeProductCard = null;
+                openProductForm("add", null);
+            } else if (action === "view-orders") {
+                showAdminSection("admin-orders");
+                setAdminMessage("Mostrando pedidos simulados.");
+            } else if (action === "create-promotion") {
+                showAdminSection("admin-promotions");
+                if (promotionForm) {
+                    promotionForm.hidden = false;
+                }
+            }
+        });
+    });
+
+    if (createPromotionButton && promotionForm) {
+        createPromotionButton.addEventListener("click", function () {
+            promotionForm.hidden = false;
+            setAdminMessage("Completa el formulario para simular una promoción.");
+        });
+    }
+
+    if (promotionForm) {
+        promotionForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            setAdminMessage("Promoción guardada correctamente (simulado).");
+            promotionForm.reset();
+            promotionForm.hidden = true;
+        });
+    }
+
+    if (cancelPromotionButton && promotionForm) {
+        cancelPromotionButton.addEventListener("click", function () {
+            promotionForm.reset();
+            promotionForm.hidden = true;
+            setAdminMessage("Creación de promoción cancelada (simulado).");
+        });
+    }
+
+    customerButtons.forEach(function (customerButton) {
+        customerButton.addEventListener("click", function () {
+            setAdminMessage("Detalle de cliente disponible próximamente (simulado).");
+        });
+    });
+
+    if (reportButton) {
+        reportButton.addEventListener("click", function () {
+            setAdminMessage("Reporte generado correctamente (simulado).");
+        });
+    }
+}
+
+initAdminPanel();
+initAdminProductManager();
 
 const planCatalog = document.getElementById("plan-catalog");
 const filterButtons = document.querySelectorAll(".filter-button");
