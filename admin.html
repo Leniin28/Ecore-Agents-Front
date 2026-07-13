@@ -312,24 +312,36 @@
                     </div>
 
                     <form class="admin-promotion-form" id="admin-promotion-form" hidden>
-                        <h3>Crear promoción simulada</h3>
+                        <h3 id="admin-promotion-form-title">Crear promoción simulada</h3>
                         <div class="admin-form-grid">
                             <label for="admin-promotion-name">
                                 Nombre de la promoción
                                 <input type="text" id="admin-promotion-name" name="promotionName" placeholder="Ej. 10% de descuento" required>
                             </label>
-                            <label for="admin-promotion-plan">
-                                Plan relacionado
-                                <select id="admin-promotion-plan" name="promotionPlan" required>
+                            <label for="admin-promotion-code">
+                                Código de descuento
+                                <input type="text" id="admin-promotion-code" name="promotionCode" placeholder="Ej. PLUS15" required>
+                            </label>
+                            <label for="admin-promotion-scope">
+                                Tipo de promoción
+                                <select id="admin-promotion-scope" name="promotionScope" required>
+                                    <option value="product">Para un agente específico</option>
+                                    <option value="cart">Para el total del carrito</option>
+                                    <option value="benefit">Beneficio visual sin descuento</option>
+                                </select>
+                            </label>
+                            <label for="admin-promotion-target">
+                                Agente relacionado
+                                <select id="admin-promotion-target" name="promotionTarget" required>
                                     <option value="Agente Inicio">Agente Inicio</option>
                                     <option value="Agente Plus">Agente Plus</option>
                                     <option value="Agente Avanzado">Agente Avanzado</option>
                                     <option value="Personaliza tu agente">Personaliza tu agente</option>
                                 </select>
                             </label>
-                            <label for="admin-promotion-discount">
-                                Descuento o beneficio
-                                <input type="text" id="admin-promotion-discount" name="promotionDiscount" placeholder="Ej. 10% o configuración gratis" required>
+                            <label for="admin-promotion-percent">
+                                Porcentaje de descuento
+                                <input type="number" id="admin-promotion-percent" name="promotionPercent" min="0" max="90" value="10" required>
                             </label>
                             <label for="admin-promotion-status">
                                 Estado
@@ -344,23 +356,12 @@
                             </label>
                         </div>
                         <div class="admin-form-actions">
-                            <button type="submit" class="button">Guardar promoción</button>
+                            <button type="submit" class="button" id="admin-save-promotion">Guardar promoción</button>
                             <button type="button" class="admin-action-button" id="admin-cancel-promotion">Cancelar</button>
                         </div>
                     </form>
 
-                    <div class="admin-promotion-grid">
-                        <article class="admin-promotion-card">
-                            <h3>10% de descuento en Agente Plus</h3>
-                            <p>Promoción visual para campañas académicas.</p>
-                            <span class="admin-status active">Activa</span>
-                        </article>
-                        <article class="admin-promotion-card">
-                            <h3>Configuración inicial sin costo</h3>
-                            <p>Aplica de forma simulada para nuevos negocios.</p>
-                            <span class="admin-status active">Activa</span>
-                        </article>
-                    </div>
+                    <div class="admin-promotion-grid" id="admin-promotion-grid"></div>
                 </section>
 
                 <section class="admin-section" id="admin-customers" hidden>
@@ -450,7 +451,10 @@
         </section>
     </main>
 
-    <footer><p>&copy; 2026 ECore. Todos los derechos reservados.</p></footer>
+    <footer>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+        <p class="footer-policy"><button type="button" class="policy-link" data-policy-open>Políticas y condiciones</button></p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>

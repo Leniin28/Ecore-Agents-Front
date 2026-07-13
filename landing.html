@@ -3,50 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECore Landing</title>
-    <style>
-        html,
-        body {
-            width: 90%;
-            height: 100%;
-            margin: 0;
-            overflow: hidden;
-            background-image: url("landing.png");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        body {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            padding-bottom: 70px;
-            box-sizing: border-box;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 16px 80px;
-            border: none;
-            border-radius: 999px;
-            background-color: #57cd45;
-            color: #111111;
-            font-family: Arial, sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            text-decoration: none;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
-        }
-    </style>
+    <title>Campaña Agente Plus | ECore Agents</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <a href="index.html" class="button">Entrar</a>
+<body class="campaign-body">
+    <main class="campaign-page">
+        <section class="campaign-hero">
+            <div class="campaign-copy">
+                <span class="section-eyebrow">Campaña destacada</span>
+                <h1>Agente Plus para negocios que no quieren perder clientes</h1>
+                <p>
+                    Organiza conversaciones, clasifica clientes y da seguimiento por WhatsApp con una experiencia visual simulada para este bloque académico.
+                </p>
+                <div class="campaign-actions">
+                    <a href="catalogo.html" class="button">Comprar ahora</a>
+                    <a href="index.html" class="back-button">Volver al inicio</a>
+                </div>
+            </div>
+
+            <article class="campaign-product-card">
+                <span class="plan-badge">Producto destacado</span>
+                <h2>Agente Plus</h2>
+                <p class="plan-price">$999 <span>MXN/mes</span></p>
+                <ul>
+                    <li>Recordatorios automáticos</li>
+                    <li>Clasificación de clientes</li>
+                    <li>Seguimiento de conversaciones</li>
+                    <li>Reporte básico de actividad</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="campaign-testimonials" aria-labelledby="campaign-testimonials-title">
+            <span class="section-eyebrow">Reseñas simuladas</span>
+            <h2 id="campaign-testimonials-title">Lo que dicen negocios demo</h2>
+            <div class="testimonial-grid">
+                <article>
+                    <p>“Nos ayudó a ordenar los mensajes y responder más rápido a clientes interesados.”</p>
+                    <strong>Mariscos El Melón</strong>
+                </article>
+                <article>
+                    <p>“El seguimiento automático se siente ideal para no olvidar cotizaciones.”</p>
+                    <strong>Taller Fixop</strong>
+                </article>
+                <article>
+                    <p>“La clasificación de clientes hace que el equipo sepa a quién atender primero.”</p>
+                    <strong>Electrocom</strong>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+        <p class="footer-policy"><button type="button" class="policy-link" data-policy-open>Políticas y condiciones</button></p>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>

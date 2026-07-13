@@ -43,6 +43,15 @@
 
             <p class="catalog-filter-status" id="catalog-filter-status" aria-live="polite">Mostrando todos los planes</p>
 
+            <section class="active-promotions" aria-labelledby="active-promotions-title">
+                <div>
+                    <span class="section-eyebrow">Promociones activas</span>
+                    <h2 id="active-promotions-title">Ahorra en automatización avanzada</h2>
+                    <p>Usa el código visual <strong>AVANZADO10</strong> y obtén 10% de descuento en Agente Avanzado dentro del carrito.</p>
+                </div>
+                <a href="plan-advanced.html" class="button">Ver promoción</a>
+            </section>
+
             <div class="plan-grid" id="plan-catalog">
                 <article class="plan-card plan-card-start" data-category="basic">
                     <div class="plan-tier">Para comenzar</div>
@@ -85,12 +94,14 @@
                 </article>
 
                 <article class="plan-card plan-card-advanced" data-category="advanced">
+                    <div class="promo-ribbon">10% OFF con código AVANZADO10</div>
                     <div class="plan-tier">Para automatizar</div>
                     <div class="plan-header">
                         <h2>Agente Avanzado</h2>
                         <span class="plan-badge">Completo</span>
                     </div>
-                    <p class="plan-price">$1,799 <span>MXN/mes</span></p>
+                    <p class="plan-price has-discount"><span class="old-price">$1,799</span> $1,619.10 <span>MXN/mes</span></p>
+                    <p class="promo-code-note">Precio aplicable con código <strong>AVANZADO10</strong>.</p>
                     <p class="plan-summary">Ideal para negocios que quieren automatizar atención, citas, seguimiento y reportes desde WhatsApp.</p>
                     <p class="plan-inherits">Todo lo de Agente Plus, más:</p>
                     <ul class="plan-features">
@@ -137,6 +148,7 @@
 
     <footer>
         <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+        <p class="footer-policy"><button type="button" class="policy-link" data-policy-open>Políticas y condiciones</button></p>
     </footer>
     <script src="script.js"></script>
 </body>

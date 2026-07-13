@@ -30,7 +30,10 @@
                 Automatiza la atención inicial, gestiona conversaciones desde un inbox
                 centralizado y escala a operadores humanos cuando lo necesites.
             </p>
-            <a href="catalogo.html" class="button">Ver agentes</a>
+            <div class="hero-actions">
+                <a href="catalogo.html" class="button">Ver agentes</a>
+                <a href="landing.html" class="back-button">Campaña Agente Plus</a>
+            </div>
         </section>
 
         <section id="about" class="about">
@@ -68,6 +71,36 @@
             </p>
         </section>
 
+        <section id="community" class="community">
+            <span class="section-eyebrow">Comunidad</span>
+            <h2>Comentarios de usuarios</h2>
+            <p class="community-intro">Comparte tu opinión sobre los agentes de ECore. Esta sección es una simulación visual.</p>
+
+            <div class="community-layout">
+                <form id="comment-form" class="comment-form">
+                    <label for="comment-name">Nombre:</label>
+                    <input type="text" id="comment-name" required>
+
+                    <label for="comment-text">Comentario:</label>
+                    <textarea id="comment-text" rows="4" required></textarea>
+
+                    <button type="submit" class="button">Publicar</button>
+                    <p id="comment-message" class="form-message" role="status" aria-live="polite"></p>
+                </form>
+
+                <div class="comment-list" id="comment-list" aria-live="polite">
+                    <article class="comment-card">
+                        <p>“El catálogo se entiende fácil y el personalizador ayuda a comparar funciones.”</p>
+                        <strong>Cliente demo</strong>
+                    </article>
+                    <article class="comment-card">
+                        <p>“Me gustó ver promociones y precios antes de agregar al carrito.”</p>
+                        <strong>Negocio invitado</strong>
+                    </article>
+                </div>
+            </div>
+        </section>
+
         <section id="contact" class="contact">
             <h2>Contacto</h2>
 
@@ -98,6 +131,7 @@
 
     <footer>
         <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+        <p class="footer-policy"><button type="button" class="policy-link" data-policy-open>Políticas y condiciones</button></p>
     </footer>
     <script src="script.js"></script>
 </body>

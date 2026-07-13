@@ -47,21 +47,67 @@
                     <span>Total de agentes</span>
                     <strong id="cart-agent-total">0</strong>
                 </div>
+                <div class="cart-summary-row" id="cart-subtotal-row" hidden>
+                    <span>Subtotal mensual</span>
+                    <strong id="cart-subtotal">$0 MXN/mes</strong>
+                </div>
+                <div class="cart-summary-row discount-row" id="cart-discount-row" hidden>
+                    <span>Descuento aplicado</span>
+                    <strong id="cart-discount">-$0 MXN/mes</strong>
+                </div>
                 <div class="cart-summary-total">
                     <span>Total mensual</span>
                     <strong id="cart-total">$0 MXN/mes</strong>
                 </div>
                 <p>Los importes son mensuales y no generan ningún cargo real.</p>
+                <div class="cart-promo-box">
+                    <h3>Promociones activas</h3>
+                    <p>Código destacado: <strong>AVANZADO10</strong> para 10% de descuento en Agente Avanzado.</p>
+                    <label for="cart-promo-code">Código de descuento</label>
+                    <div class="cart-promo-control">
+                        <input type="text" id="cart-promo-code" placeholder="Ej. AVANZADO10">
+                        <button type="button" class="admin-action-button" id="apply-cart-promo">Aplicar</button>
+                    </div>
+                    <p class="promo-message" id="cart-promo-message" role="status" aria-live="polite"></p>
+                </div>
                 <div class="cart-summary-actions">
                     <a href="catalogo.html" class="back-button">Seguir viendo agentes</a>
                     <button type="button" class="button" id="simulated-checkout">Ir a pagar</button>
                 </div>
+                <p class="cart-policy-note">
+                    Al continuar aceptas
+                    <button type="button" class="policy-link" data-policy-open>nuestras políticas y condiciones</button>.
+                </p>
                 <p class="checkout-message" id="checkout-message" role="status" aria-live="polite"></p>
             </aside>
         </section>
     </main>
 
-    <footer><p>&copy; 2026 ECore. Todos los derechos reservados.</p></footer>
+    <div class="policy-modal" id="policy-modal" role="dialog" aria-modal="true" aria-labelledby="policy-modal-title" hidden>
+        <div class="policy-modal-backdrop" data-policy-close></div>
+        <section class="policy-modal-content">
+            <button type="button" class="policy-modal-close" data-policy-close aria-label="Cerrar políticas y condiciones">×</button>
+            <span class="section-eyebrow">Simulación académica</span>
+            <h2 id="policy-modal-title">Políticas y condiciones</h2>
+            <p>
+                Estas políticas son un ejemplo visual para el proyecto ECore Agents. No representan un contrato real ni generan cobros reales.
+            </p>
+            <ul>
+                <li>Los agentes mostrados son servicios simulados para fines académicos.</li>
+                <li>Los precios del carrito son mensuales y solo se usan como referencia visual.</li>
+                <li>El botón “Ir a pagar” no procesa pagos reales ni solicita datos bancarios.</li>
+                <li>La información del carrito se guarda localmente en el navegador mediante `localStorage`.</li>
+                <li>Los agentes personalizados pueden variar según las funciones seleccionadas por el usuario.</li>
+                <li>La atención, contratación y configuración real quedarían pendientes para una versión con backend.</li>
+            </ul>
+            <button type="button" class="button policy-modal-accept" data-policy-close>Entendido</button>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+        <p class="footer-policy"><button type="button" class="policy-link" data-policy-open>Políticas y condiciones</button></p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>

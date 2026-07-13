@@ -1,15 +1,194 @@
 const contactForm = document.getElementById("contact-form");
 const contactMessage = document.getElementById("contact-message");
+const commentForm = document.getElementById("comment-form");
+const commentMessage = document.getElementById("comment-message");
+const commentList = document.getElementById("comment-list");
 const CART_STORAGE_KEY = "ecoreCart";
+const PROMOTION_STORAGE_KEY = "ecorePromotions";
+const DELETED_PROMOTION_STORAGE_KEY = "ecoreDeletedPromotions";
+const APPLIED_PROMOTION_KEY = "ecoreAppliedPromotion";
+const COOKIE_CONSENT_STORAGE_KEY = "ecoreCookieConsent";
+
+const DEFAULT_PROMOTIONS = [
+    {
+        code: "AVANZADO10",
+        name: "10% de descuento en Agente Avanzado",
+        scope: "product",
+        target: "Agente Avanzado",
+        percent: 10,
+        active: true,
+        description: "Aplica 10% al Agente Avanzado dentro del carrito."
+    },
+    {
+        code: "CONFIGGRATIS",
+        name: "Configuración inicial sin costo",
+        scope: "benefit",
+        target: "Nuevos negocios",
+        percent: 0,
+        active: true,
+        description: "Beneficio visual para nuevos negocios; no modifica el total mensual."
+    }
+];
 
 function formatCurrency(amount) {
     const safeAmount = Number.isFinite(Number(amount)) ? Number(amount) : 0;
-    return `$${safeAmount.toLocaleString("es-MX")} MXN`;
+    const hasDecimals = Math.abs(safeAmount % 1) > 0;
+    return `$${safeAmount.toLocaleString("es-MX", {
+        minimumFractionDigits: hasDecimals ? 2 : 0,
+        maximumFractionDigits: 2
+    })} MXN`;
 }
 
 function normalizeQuantity(quantity) {
     const parsedQuantity = Math.floor(Number(quantity));
     return Number.isFinite(parsedQuantity) && parsedQuantity > 0 ? parsedQuantity : 1;
+}
+
+function normalizePromotion(promotion) {
+    if (!promotion || !promotion.code || !Number.isFinite(Number(promotion.percent))) {
+        return null;
+    }
+
+    const scope = ["product", "cart", "benefit"].includes(promotion.scope) ? promotion.scope : "product";
+
+    return {
+        code: String(promotion.code).trim().toUpperCase(),
+        name: String(promotion.name || "Promoción simulada"),
+        scope: scope,
+        target: scope === "cart" ? "Carrito completo" : String(promotion.target || ""),
+        percent: Math.min(90, Math.max(0, Number(promotion.percent))),
+        active: promotion.active !== false,
+        description: String(promotion.description || "")
+    };
+}
+
+function getDeletedPromotionCodes() {
+    try {
+        const storedCodes = JSON.parse(localStorage.getItem(DELETED_PROMOTION_STORAGE_KEY) || "[]");
+        return Array.isArray(storedCodes) ? storedCodes.map(function (code) {
+            return String(code).trim().toUpperCase();
+        }) : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function getStoredPromotions() {
+    try {
+        const storedPromotions = localStorage.getItem(PROMOTION_STORAGE_KEY);
+        const parsedPromotions = storedPromotions ? JSON.parse(storedPromotions) : [];
+
+        if (!Array.isArray(parsedPromotions)) {
+            return [];
+        }
+
+        return parsedPromotions.map(normalizePromotion).filter(Boolean);
+    } catch (error) {
+        return [];
+    }
+}
+
+function getPromotions() {
+    const deletedPromotionCodes = getDeletedPromotionCodes();
+    const mergedPromotions = DEFAULT_PROMOTIONS.concat(getStoredPromotions()).filter(function (promotion) {
+        return !deletedPromotionCodes.includes(String(promotion.code || "").trim().toUpperCase());
+    });
+    const uniquePromotions = [];
+
+    mergedPromotions.forEach(function (promotion) {
+        const normalizedPromotion = normalizePromotion(promotion);
+
+        if (!normalizedPromotion) {
+            return;
+        }
+
+        const existingIndex = uniquePromotions.findIndex(function (savedPromotion) {
+            return savedPromotion.code === normalizedPromotion.code;
+        });
+
+        if (existingIndex >= 0) {
+            uniquePromotions[existingIndex] = normalizedPromotion;
+        } else {
+            uniquePromotions.push(normalizedPromotion);
+        }
+    });
+
+    return uniquePromotions;
+}
+
+function savePromotion(promotion) {
+    const normalizedPromotion = normalizePromotion(promotion);
+
+    if (!normalizedPromotion) {
+        return false;
+    }
+
+    const storedPromotions = getStoredPromotions().filter(function (savedPromotion) {
+        return savedPromotion.code !== normalizedPromotion.code;
+    });
+
+    storedPromotions.push(normalizedPromotion);
+    localStorage.setItem(PROMOTION_STORAGE_KEY, JSON.stringify(storedPromotions));
+    localStorage.setItem(DELETED_PROMOTION_STORAGE_KEY, JSON.stringify(getDeletedPromotionCodes().filter(function (deletedCode) {
+        return deletedCode !== normalizedPromotion.code;
+    })));
+    return true;
+}
+
+function deletePromotion(code) {
+    const normalizedCode = String(code || "").trim().toUpperCase();
+
+    if (!normalizedCode) {
+        return false;
+    }
+
+    const remainingPromotions = getStoredPromotions().filter(function (promotion) {
+        return promotion.code !== normalizedCode;
+    });
+    const deletedPromotionCodes = getDeletedPromotionCodes();
+
+    if (!deletedPromotionCodes.includes(normalizedCode)) {
+        deletedPromotionCodes.push(normalizedCode);
+    }
+
+    localStorage.setItem(PROMOTION_STORAGE_KEY, JSON.stringify(remainingPromotions));
+    localStorage.setItem(DELETED_PROMOTION_STORAGE_KEY, JSON.stringify(deletedPromotionCodes));
+
+    if (getAppliedPromotionCode() === normalizedCode) {
+        localStorage.removeItem(APPLIED_PROMOTION_KEY);
+    }
+
+    return true;
+}
+
+function getAppliedPromotionCode() {
+    return String(localStorage.getItem(APPLIED_PROMOTION_KEY) || "").trim().toUpperCase();
+}
+
+function findPromotionByCode(code) {
+    const normalizedCode = String(code || "").trim().toUpperCase();
+
+    return getPromotions().find(function (promotion) {
+        return promotion.active && promotion.code === normalizedCode;
+    }) || null;
+}
+
+function calculateCartDiscount(cart, promotion) {
+    if (!promotion || promotion.scope === "benefit") {
+        return 0;
+    }
+
+    const discountBase = cart.reduce(function (total, item) {
+        const subtotal = item.price * item.quantity;
+
+        if (promotion.scope === "cart") {
+            return total + subtotal;
+        }
+
+        return item.name === promotion.target ? total + subtotal : total;
+    }, 0);
+
+    return discountBase * (promotion.percent / 100);
 }
 
 function getCart() {
@@ -103,6 +282,34 @@ if (contactForm && contactMessage) {
     });
 }
 
+if (commentForm && commentMessage && commentList) {
+    commentForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const nameInput = document.getElementById("comment-name");
+        const textInput = document.getElementById("comment-text");
+        const name = nameInput ? nameInput.value.trim() : "";
+        const text = textInput ? textInput.value.trim() : "";
+
+        if (!name || !text) {
+            commentMessage.textContent = "Completa tu nombre y comentario.";
+            return;
+        }
+
+        const commentCard = document.createElement("article");
+        const commentText = document.createElement("p");
+        const commentAuthor = document.createElement("strong");
+
+        commentCard.className = "comment-card";
+        commentText.textContent = `“${text}”`;
+        commentAuthor.textContent = name;
+        commentCard.append(commentText, commentAuthor);
+        commentList.prepend(commentCard);
+        commentMessage.textContent = "Comentario publicado correctamente (simulado).";
+        commentForm.reset();
+    });
+}
+
 function addPredefinedAgentToCart(event) {
     const button = event.currentTarget;
     const quantityInput = document.getElementById(button.dataset.quantityTarget);
@@ -176,6 +383,10 @@ function renderCart() {
     const filledCart = document.getElementById("filled-cart");
     const cartTotal = document.getElementById("cart-total");
     const cartAgentTotal = document.getElementById("cart-agent-total");
+    const cartSubtotal = document.getElementById("cart-subtotal");
+    const cartSubtotalRow = document.getElementById("cart-subtotal-row");
+    const cartDiscount = document.getElementById("cart-discount");
+    const cartDiscountRow = document.getElementById("cart-discount-row");
 
     if (!cartItemsList || !emptyCart || !filledCart || !cartTotal || !cartAgentTotal) {
         return;
@@ -269,7 +480,19 @@ function renderCart() {
         cartItemsList.appendChild(listItem);
     });
 
-    cartTotal.textContent = `${formatCurrency(totalMonthly)}/mes`;
+    const appliedPromotion = findPromotionByCode(getAppliedPromotionCode());
+    const discountAmount = calculateCartDiscount(cart, appliedPromotion);
+    const finalTotal = Math.max(0, totalMonthly - discountAmount);
+
+    if (cartSubtotal && cartSubtotalRow && cartDiscount && cartDiscountRow) {
+        const hasDiscount = discountAmount > 0;
+        cartSubtotalRow.hidden = !hasDiscount;
+        cartDiscountRow.hidden = !hasDiscount;
+        cartSubtotal.textContent = `${formatCurrency(totalMonthly)}/mes`;
+        cartDiscount.textContent = `-${formatCurrency(discountAmount)}/mes`;
+    }
+
+    cartTotal.textContent = `${formatCurrency(finalTotal)}/mes`;
     cartAgentTotal.textContent = String(totalAgents);
     updateCartCount();
 }
@@ -296,12 +519,334 @@ if (cartItemsList) {
 
 const simulatedCheckoutButton = document.getElementById("simulated-checkout");
 const checkoutMessage = document.getElementById("checkout-message");
+const applyCartPromoButton = document.getElementById("apply-cart-promo");
+const cartPromoCodeInput = document.getElementById("cart-promo-code");
+const cartPromoMessage = document.getElementById("cart-promo-message");
 
 if (simulatedCheckoutButton && checkoutMessage) {
     simulatedCheckoutButton.addEventListener("click", function () {
         checkoutMessage.textContent = "Checkout disponible en el siguiente bloque (simulado).";
     });
 }
+
+if (applyCartPromoButton && cartPromoCodeInput && cartPromoMessage) {
+    cartPromoCodeInput.value = getAppliedPromotionCode();
+
+    applyCartPromoButton.addEventListener("click", function () {
+        const promoCode = cartPromoCodeInput.value.trim().toUpperCase();
+        const promotion = findPromotionByCode(promoCode);
+
+        if (!promotion) {
+            localStorage.removeItem(APPLIED_PROMOTION_KEY);
+            cartPromoMessage.textContent = "Código no válido o inactivo (simulado).";
+            renderCart();
+            return;
+        }
+
+        localStorage.setItem(APPLIED_PROMOTION_KEY, promotion.code);
+        cartPromoCodeInput.value = promotion.code;
+        cartPromoMessage.textContent = "Descuento aplicado (simulado).";
+        renderCart();
+    });
+}
+
+let policyModal = document.getElementById("policy-modal");
+const policyOpenButtons = document.querySelectorAll("[data-policy-open]");
+const policyCloseButtons = document.querySelectorAll("[data-policy-close]");
+
+function createPolicyModal() {
+    const modal = document.createElement("div");
+    const backdrop = document.createElement("div");
+    const content = document.createElement("section");
+    const closeButton = document.createElement("button");
+    const eyebrow = document.createElement("span");
+    const title = document.createElement("h2");
+    const intro = document.createElement("p");
+    const list = document.createElement("ul");
+    const acceptButton = document.createElement("button");
+    const policies = [
+        "Los agentes mostrados son servicios simulados para fines académicos.",
+        "Los precios del carrito son mensuales y solo se usan como referencia visual.",
+        "El botón “Ir a pagar” no procesa pagos reales ni solicita datos bancarios.",
+        "La información del carrito se guarda localmente en el navegador mediante localStorage.",
+        "Los agentes personalizados pueden variar según las funciones seleccionadas por el usuario.",
+        "La atención, contratación y configuración real quedarían pendientes para una versión con backend."
+    ];
+
+    modal.className = "policy-modal";
+    modal.id = "policy-modal";
+    modal.hidden = true;
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-labelledby", "policy-modal-title");
+    backdrop.className = "policy-modal-backdrop";
+    content.className = "policy-modal-content";
+    closeButton.type = "button";
+    closeButton.className = "policy-modal-close";
+    closeButton.setAttribute("aria-label", "Cerrar políticas y condiciones");
+    closeButton.textContent = "×";
+    eyebrow.className = "section-eyebrow";
+    eyebrow.textContent = "Simulación académica";
+    title.id = "policy-modal-title";
+    title.textContent = "Políticas y condiciones";
+    intro.textContent = "Estas políticas son un ejemplo visual para el proyecto ECore Agents. No representan un contrato real ni generan cobros reales.";
+    acceptButton.type = "button";
+    acceptButton.className = "button policy-modal-accept";
+    acceptButton.textContent = "Entendido";
+
+    policies.forEach(function (policyText) {
+        const item = document.createElement("li");
+        item.textContent = policyText;
+        list.appendChild(item);
+    });
+
+    backdrop.addEventListener("click", closePolicyModal);
+    closeButton.addEventListener("click", closePolicyModal);
+    acceptButton.addEventListener("click", closePolicyModal);
+
+    content.append(closeButton, eyebrow, title, intro, list, acceptButton);
+    modal.append(backdrop, content);
+    document.body.appendChild(modal);
+    return modal;
+}
+
+function openPolicyModal() {
+    if (!policyModal) {
+        policyModal = createPolicyModal();
+    }
+
+    if (!policyModal) {
+        return;
+    }
+
+    policyModal.hidden = false;
+    document.body.classList.add("modal-open");
+
+    const closeButton = policyModal.querySelector(".policy-modal-close");
+    if (closeButton) {
+        closeButton.focus();
+    }
+}
+
+function closePolicyModal() {
+    if (!policyModal) {
+        return;
+    }
+
+    policyModal.hidden = true;
+    document.body.classList.remove("modal-open");
+}
+
+policyOpenButtons.forEach(function (policyOpenButton) {
+    policyOpenButton.addEventListener("click", openPolicyModal);
+});
+
+policyCloseButtons.forEach(function (policyCloseButton) {
+    policyCloseButton.addEventListener("click", closePolicyModal);
+});
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && policyModal && !policyModal.hidden) {
+        closePolicyModal();
+    }
+});
+
+function saveCookieConsent(choice, categories) {
+    const consentData = {
+        choice: choice,
+        categories: categories,
+        savedAt: new Date().toISOString()
+    };
+
+    try {
+        localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, JSON.stringify(consentData));
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+function hasCookieConsent() {
+    try {
+        const savedConsent = localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
+
+        if (!savedConsent) {
+            return false;
+        }
+
+        const parsedConsent = JSON.parse(savedConsent);
+        return Boolean(parsedConsent && parsedConsent.choice && parsedConsent.categories);
+    } catch (error) {
+        return false;
+    }
+}
+
+function initCookieConsent() {
+    if (hasCookieConsent() || !document.body) {
+        return;
+    }
+
+    const cookieCategories = [
+        {
+            id: "necessary",
+            name: "Cookies necesarias",
+            description: "Permiten la navegación básica y guardan tu decisión de privacidad.",
+            required: true
+        },
+        {
+            id: "cart",
+            name: "Carrito y agentes",
+            description: "Conservan temporalmente los agentes y cantidades seleccionadas."
+        },
+        {
+            id: "preferences",
+            name: "Preferencias del sitio",
+            description: "Recuerdan configuraciones visuales y opciones elegidas."
+        },
+        {
+            id: "analytics",
+            name: "Analítica simulada",
+            description: "Representan mediciones académicas sobre el uso de las páginas."
+        },
+        {
+            id: "marketing",
+            name: "Promociones y marketing",
+            description: "Permiten mostrar campañas y descuentos relacionados con los agentes."
+        },
+        {
+            id: "community",
+            name: "Comunidad y comentarios",
+            description: "Representan preferencias relacionadas con reseñas y comentarios simulados."
+        }
+    ];
+    const banner = document.createElement("section");
+    const header = document.createElement("div");
+    const textGroup = document.createElement("div");
+    const eyebrow = document.createElement("span");
+    const title = document.createElement("h2");
+    const description = document.createElement("p");
+    const preferences = document.createElement("div");
+    const preferencesIntro = document.createElement("p");
+    const optionsGrid = document.createElement("div");
+    const actions = document.createElement("div");
+    const rejectButton = document.createElement("button");
+    const customizeButton = document.createElement("button");
+    const acceptButton = document.createElement("button");
+    const savePreferencesButton = document.createElement("button");
+
+    banner.className = "cookie-banner";
+    banner.setAttribute("role", "dialog");
+    banner.setAttribute("aria-modal", "true");
+    banner.setAttribute("aria-labelledby", "cookie-banner-title");
+    header.className = "cookie-banner-header";
+    textGroup.className = "cookie-banner-copy";
+    eyebrow.className = "cookie-banner-eyebrow";
+    eyebrow.textContent = "Privacidad simulada";
+    title.id = "cookie-banner-title";
+    title.textContent = "Uso de cookies";
+    description.textContent = "Utilizamos cookies simuladas para recordar el carrito, tus preferencias y mejorar la experiencia académica del sitio. Puedes aceptar, rechazar o elegir qué categorías permitir.";
+    preferences.className = "cookie-preferences";
+    preferences.hidden = true;
+    preferencesIntro.textContent = "Selecciona las categorías que deseas aceptar. Las cookies necesarias permanecen activas para guardar tu elección.";
+    optionsGrid.className = "cookie-options-grid";
+    actions.className = "cookie-banner-actions";
+
+    rejectButton.type = "button";
+    rejectButton.className = "cookie-button cookie-button-secondary";
+    rejectButton.textContent = "Rechazar";
+    customizeButton.type = "button";
+    customizeButton.className = "cookie-button cookie-button-secondary";
+    customizeButton.textContent = "Personalizar";
+    acceptButton.type = "button";
+    acceptButton.className = "cookie-button cookie-button-primary";
+    acceptButton.textContent = "Aceptar";
+    savePreferencesButton.type = "button";
+    savePreferencesButton.className = "cookie-button cookie-button-primary cookie-save-preferences";
+    savePreferencesButton.textContent = "Guardar preferencias";
+    savePreferencesButton.hidden = true;
+
+    cookieCategories.forEach(function (category) {
+        const option = document.createElement("label");
+        const optionText = document.createElement("span");
+        const optionName = document.createElement("strong");
+        const optionDescription = document.createElement("small");
+        const checkbox = document.createElement("input");
+
+        option.className = "cookie-option";
+        checkbox.type = "checkbox";
+        checkbox.dataset.cookieCategory = category.id;
+        checkbox.checked = category.required;
+        checkbox.disabled = category.required;
+        optionText.className = "cookie-option-copy";
+        optionName.textContent = category.name;
+        optionDescription.textContent = category.description;
+        optionText.append(optionName, optionDescription);
+        option.append(checkbox, optionText);
+        optionsGrid.appendChild(option);
+    });
+
+    function getCategorySelection(mode) {
+        const categorySelection = {};
+
+        cookieCategories.forEach(function (category) {
+            const checkbox = optionsGrid.querySelector(`[data-cookie-category="${category.id}"]`);
+            categorySelection[category.id] = category.required
+                || mode === "all"
+                || (mode === "custom" && Boolean(checkbox && checkbox.checked));
+        });
+
+        return categorySelection;
+    }
+
+    function closeCookieBanner(choice, categories) {
+        saveCookieConsent(choice, categories);
+        banner.classList.remove("is-visible");
+        window.setTimeout(function () {
+            banner.remove();
+        }, 220);
+    }
+
+    rejectButton.addEventListener("click", function () {
+        closeCookieBanner("rejected", getCategorySelection("necessary"));
+    });
+
+    acceptButton.addEventListener("click", function () {
+        closeCookieBanner("accepted", getCategorySelection("all"));
+    });
+
+    customizeButton.addEventListener("click", function () {
+        const willOpen = preferences.hidden;
+        preferences.hidden = !willOpen;
+        savePreferencesButton.hidden = !willOpen;
+        acceptButton.hidden = willOpen;
+        customizeButton.textContent = willOpen ? "Ocultar opciones" : "Personalizar";
+
+        if (willOpen) {
+            const firstOptionalCheckbox = optionsGrid.querySelector("input:not(:disabled)");
+            if (firstOptionalCheckbox) {
+                firstOptionalCheckbox.focus();
+            }
+        }
+    });
+
+    savePreferencesButton.addEventListener("click", function () {
+        closeCookieBanner("custom", getCategorySelection("custom"));
+    });
+
+    textGroup.append(eyebrow, title, description);
+    header.appendChild(textGroup);
+    preferences.append(preferencesIntro, optionsGrid);
+    actions.append(rejectButton, customizeButton, acceptButton, savePreferencesButton);
+    banner.append(header, preferences, actions);
+    document.body.appendChild(banner);
+
+    window.requestAnimationFrame(function () {
+        banner.classList.add("is-visible");
+        acceptButton.focus();
+    });
+}
+
+initCookieConsent();
 
 updateCartCount();
 renderCart();
@@ -672,6 +1217,137 @@ function initAdminProductManager() {
     }
 }
 
+let activePromotionCode = null;
+
+function syncPromotionFormFields() {
+    const scopeInput = document.getElementById("admin-promotion-scope");
+    const targetInput = document.getElementById("admin-promotion-target");
+    const percentInput = document.getElementById("admin-promotion-percent");
+
+    if (!scopeInput || !targetInput || !percentInput) {
+        return;
+    }
+
+    const isVisualBenefit = scopeInput.value === "benefit";
+    const hasNoAgentTarget = scopeInput.value === "cart" || isVisualBenefit;
+    targetInput.disabled = hasNoAgentTarget;
+    targetInput.parentElement.classList.toggle("is-disabled", hasNoAgentTarget);
+    percentInput.disabled = isVisualBenefit;
+    percentInput.parentElement.classList.toggle("is-disabled", isVisualBenefit);
+
+    if (isVisualBenefit) {
+        percentInput.value = "0";
+    } else if (Number(percentInput.value) < 1) {
+        percentInput.value = "10";
+    }
+}
+
+function renderAdminPromotions() {
+    const promotionGrid = document.getElementById("admin-promotion-grid");
+
+    if (!promotionGrid) {
+        return;
+    }
+
+    promotionGrid.replaceChildren();
+
+    getPromotions().forEach(function (promotion) {
+        const promotionCard = document.createElement("article");
+        const title = document.createElement("h3");
+        const details = document.createElement("p");
+        const description = document.createElement("p");
+        const footer = document.createElement("div");
+        const status = document.createElement("span");
+        const actions = document.createElement("div");
+        const editButton = document.createElement("button");
+        const deleteButton = document.createElement("button");
+        const scopeLabel = promotion.scope === "cart"
+            ? "todo el carrito"
+            : promotion.scope === "benefit"
+                ? "beneficio visual"
+                : promotion.target;
+
+        promotionCard.className = "admin-promotion-card";
+        promotionCard.dataset.promotionCode = promotion.code;
+        title.textContent = promotion.name;
+        details.textContent = promotion.scope === "benefit"
+            ? `Código ${promotion.code}. Beneficio visual para ${promotion.target}.`
+            : `Código ${promotion.code}. ${promotion.percent}% de descuento para ${scopeLabel}.`;
+        description.className = "admin-promotion-description";
+        description.textContent = promotion.description || "Promoción simulada administrable desde este panel.";
+        footer.className = "admin-promotion-footer";
+        status.className = `admin-status ${promotion.active ? "active" : "pending"}`;
+        status.textContent = promotion.active ? "Activa" : "Pausada";
+        actions.className = "admin-promotion-actions";
+        editButton.type = "button";
+        editButton.className = "admin-action-button admin-edit-promotion";
+        editButton.textContent = "Editar";
+        deleteButton.type = "button";
+        deleteButton.className = "admin-action-button danger admin-delete-promotion";
+        deleteButton.textContent = "Eliminar";
+
+        actions.append(editButton, deleteButton);
+        footer.append(status, actions);
+        promotionCard.append(title, details, description, footer);
+        promotionGrid.appendChild(promotionCard);
+    });
+
+    if (promotionGrid.children.length === 0) {
+        const emptyMessage = document.createElement("p");
+        emptyMessage.className = "admin-empty-promotions";
+        emptyMessage.textContent = "No hay promociones disponibles. Puedes crear una nueva promoción simulada.";
+        promotionGrid.appendChild(emptyMessage);
+    }
+}
+
+function openAdminPromotionForm(mode, promotion) {
+    const promotionForm = document.getElementById("admin-promotion-form");
+    const formTitle = document.getElementById("admin-promotion-form-title");
+    const saveButton = document.getElementById("admin-save-promotion");
+
+    if (!promotionForm) {
+        return;
+    }
+
+    promotionForm.reset();
+    activePromotionCode = mode === "edit" && promotion ? promotion.code : null;
+
+    if (formTitle) {
+        formTitle.textContent = mode === "edit" ? "Editar promoción simulada" : "Crear promoción simulada";
+    }
+
+    if (saveButton) {
+        saveButton.textContent = mode === "edit" ? "Actualizar promoción" : "Guardar promoción";
+    }
+
+    if (promotion) {
+        document.getElementById("admin-promotion-name").value = promotion.name;
+        document.getElementById("admin-promotion-code").value = promotion.code;
+        document.getElementById("admin-promotion-scope").value = promotion.scope;
+        document.getElementById("admin-promotion-target").value = promotion.scope === "product" ? promotion.target : "Agente Inicio";
+        document.getElementById("admin-promotion-percent").value = String(promotion.percent);
+        document.getElementById("admin-promotion-status").value = promotion.active ? "Activa" : "Pausada";
+        document.getElementById("admin-promotion-description").value = promotion.description;
+    }
+
+    syncPromotionFormFields();
+    promotionForm.hidden = false;
+    promotionForm.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeAdminPromotionForm() {
+    const promotionForm = document.getElementById("admin-promotion-form");
+
+    if (!promotionForm) {
+        return;
+    }
+
+    promotionForm.reset();
+    promotionForm.hidden = true;
+    activePromotionCode = null;
+    syncPromotionFormFields();
+}
+
 function initAdminPanel() {
     const quickActions = document.querySelectorAll(".admin-quick-action");
     const customerButtons = document.querySelectorAll(".admin-customer-detail");
@@ -679,6 +1355,8 @@ function initAdminPanel() {
     const createPromotionButton = document.getElementById("admin-create-promo");
     const promotionForm = document.getElementById("admin-promotion-form");
     const cancelPromotionButton = document.getElementById("admin-cancel-promotion");
+    const promotionScope = document.getElementById("admin-promotion-scope");
+    const promotionTarget = document.getElementById("admin-promotion-target");
 
     if (adminMenuButtons.length > 0 && adminSections.length > 0) {
         adminMenuButtons.forEach(function (adminMenuButton) {
@@ -701,16 +1379,14 @@ function initAdminPanel() {
                 setAdminMessage("Mostrando pedidos simulados.");
             } else if (action === "create-promotion") {
                 showAdminSection("admin-promotions");
-                if (promotionForm) {
-                    promotionForm.hidden = false;
-                }
+                openAdminPromotionForm("add", null);
             }
         });
     });
 
     if (createPromotionButton && promotionForm) {
         createPromotionButton.addEventListener("click", function () {
-            promotionForm.hidden = false;
+            openAdminPromotionForm("add", null);
             setAdminMessage("Completa el formulario para simular una promoción.");
         });
     }
@@ -718,19 +1394,99 @@ function initAdminPanel() {
     if (promotionForm) {
         promotionForm.addEventListener("submit", function (event) {
             event.preventDefault();
-            setAdminMessage("Promoción guardada correctamente (simulado).");
-            promotionForm.reset();
-            promotionForm.hidden = true;
+            const promotionName = document.getElementById("admin-promotion-name");
+            const promotionCode = document.getElementById("admin-promotion-code");
+            const promotionPercent = document.getElementById("admin-promotion-percent");
+            const promotionStatus = document.getElementById("admin-promotion-status");
+            const promotionDescription = document.getElementById("admin-promotion-description");
+            const isEditing = Boolean(activePromotionCode);
+            const promotionData = {
+                name: promotionName ? promotionName.value.trim() : "Promoción simulada",
+                code: promotionCode ? promotionCode.value.trim().toUpperCase() : "",
+                scope: promotionScope ? promotionScope.value : "product",
+                target: promotionScope && promotionScope.value === "cart"
+                    ? "Carrito completo"
+                    : promotionScope && promotionScope.value === "benefit"
+                        ? "Nuevos negocios"
+                        : (promotionTarget ? promotionTarget.value : ""),
+                percent: promotionScope && promotionScope.value === "benefit" ? 0 : (promotionPercent ? Number(promotionPercent.value) : 10),
+                active: !promotionStatus || promotionStatus.value === "Activa",
+                description: promotionDescription ? promotionDescription.value.trim() : ""
+            };
+
+            if (!promotionData.code || !Number.isFinite(promotionData.percent)) {
+                setAdminMessage("Completa el código y porcentaje de la promoción simulada.");
+                return;
+            }
+
+            const codeBelongsToAnotherPromotion = getPromotions().some(function (promotion) {
+                return promotion.code === promotionData.code && promotion.code !== activePromotionCode;
+            });
+
+            if (codeBelongsToAnotherPromotion) {
+                setAdminMessage("Ya existe otra promoción con ese código. Usa un código diferente.");
+                return;
+            }
+
+            if (isEditing && activePromotionCode !== promotionData.code) {
+                deletePromotion(activePromotionCode);
+            }
+
+            savePromotion(promotionData);
+            renderAdminPromotions();
+            closeAdminPromotionForm();
+            setAdminMessage(isEditing
+                ? "Promoción actualizada correctamente (simulado)."
+                : "Promoción guardada correctamente (simulado). Ya puede aplicarse en el carrito.");
         });
+    }
+
+    if (promotionScope && promotionTarget) {
+        promotionScope.addEventListener("change", syncPromotionFormFields);
     }
 
     if (cancelPromotionButton && promotionForm) {
         cancelPromotionButton.addEventListener("click", function () {
-            promotionForm.reset();
-            promotionForm.hidden = true;
-            setAdminMessage("Creación de promoción cancelada (simulado).");
+            const wasEditing = Boolean(activePromotionCode);
+            closeAdminPromotionForm();
+            setAdminMessage(wasEditing
+                ? "Edición de promoción cancelada (simulado)."
+                : "Creación de promoción cancelada (simulado).");
         });
     }
+
+    const promotionGrid = document.getElementById("admin-promotion-grid");
+
+    if (promotionGrid) {
+        promotionGrid.addEventListener("click", function (event) {
+            const promotionCard = event.target.closest(".admin-promotion-card");
+
+            if (!promotionCard) {
+                return;
+            }
+
+            const promotionCode = promotionCard.dataset.promotionCode;
+            const promotion = getPromotions().find(function (savedPromotion) {
+                return savedPromotion.code === promotionCode;
+            });
+
+            if (event.target.closest(".admin-edit-promotion") && promotion) {
+                openAdminPromotionForm("edit", promotion);
+                setAdminMessage(`Editando ${promotion.name} (simulado).`);
+            } else if (event.target.closest(".admin-delete-promotion") && promotion) {
+                const confirmed = window.confirm("¿Seguro que deseas eliminar esta promoción? Esta acción es simulada.");
+
+                if (confirmed) {
+                    deletePromotion(promotion.code);
+                    renderAdminPromotions();
+                    closeAdminPromotionForm();
+                    setAdminMessage("Promoción eliminada correctamente (simulado).");
+                }
+            }
+        });
+    }
+
+    renderAdminPromotions();
 
     customerButtons.forEach(function (customerButton) {
         customerButton.addEventListener("click", function () {
