@@ -23,6 +23,10 @@ const DEFAULT_AUCTION_OFFERS = {
     ]
 };
 
+document.querySelectorAll("form").forEach(function (form) {
+    form.noValidate = true;
+});
+
 const DEFAULT_PROMOTIONS = [
     {
         code: "AVANZADO10",
@@ -305,18 +309,13 @@ if (commentForm && commentMessage && commentList) {
         const name = nameInput ? nameInput.value.trim() : "";
         const text = textInput ? textInput.value.trim() : "";
 
-        if (!name || !text) {
-            commentMessage.textContent = "Completa tu nombre y comentario.";
-            return;
-        }
-
         const commentCard = document.createElement("article");
         const commentText = document.createElement("p");
         const commentAuthor = document.createElement("strong");
 
         commentCard.className = "comment-card";
-        commentText.textContent = `“${text}”`;
-        commentAuthor.textContent = name;
+        commentText.textContent = `“${text || "Comentario simulado"}”`;
+        commentAuthor.textContent = name || "Usuario invitado";
         commentCard.append(commentText, commentAuthor);
         commentList.prepend(commentCard);
         commentMessage.textContent = "Comentario publicado correctamente (simulado).";
@@ -539,7 +538,7 @@ const cartPromoMessage = document.getElementById("cart-promo-message");
 
 if (simulatedCheckoutButton && checkoutMessage) {
     simulatedCheckoutButton.addEventListener("click", function () {
-        checkoutMessage.textContent = "Checkout disponible en el siguiente bloque (simulado).";
+        window.location.href = "checkout.html";
     });
 }
 
@@ -563,6 +562,207 @@ if (applyCartPromoButton && cartPromoCodeInput && cartPromoMessage) {
         renderCart();
     });
 }
+
+function getCheckoutTotals() {
+    const cart = getCart();
+    const subtotal = cart.reduce(function (total, item) {
+        return total + item.price * item.quantity;
+    }, 0);
+    const appliedPromotion = findPromotionByCode(getAppliedPromotionCode());
+    const discount = calculateCartDiscount(cart, appliedPromotion);
+
+    return {
+        cart: cart,
+        subtotal: subtotal,
+        discount: discount,
+        total: Math.max(0, subtotal - discount)
+    };
+}
+
+function initCheckout() {
+    const checkoutContent = document.getElementById("checkout-content");
+    const emptyCheckout = document.getElementById("checkout-empty");
+
+    if (!checkoutContent || !emptyCheckout) {
+        return;
+    }
+
+    const checkoutTotals = getCheckoutTotals();
+    const summaryItems = document.getElementById("checkout-summary-items");
+    const summarySubtotalRow = document.getElementById("checkout-summary-subtotal-row");
+    const summarySubtotal = document.getElementById("checkout-summary-subtotal");
+    const summaryDiscountRow = document.getElementById("checkout-summary-discount-row");
+    const summaryDiscount = document.getElementById("checkout-summary-discount");
+    const summaryTotal = document.getElementById("checkout-summary-total");
+
+    if (checkoutTotals.cart.length === 0) {
+        checkoutContent.hidden = true;
+        emptyCheckout.hidden = false;
+        return;
+    }
+
+    checkoutTotals.cart.forEach(function (item) {
+        const itemElement = document.createElement("li");
+        const name = document.createElement("span");
+        const price = document.createElement("strong");
+
+        name.textContent = `${item.name} × ${item.quantity}`;
+        price.textContent = `${formatCurrency(item.price * item.quantity)}/mes`;
+        itemElement.append(name, price);
+        summaryItems.appendChild(itemElement);
+    });
+
+    if (summaryTotal) {
+        summaryTotal.textContent = `${formatCurrency(checkoutTotals.total)}/mes`;
+    }
+
+    if (summarySubtotalRow && summarySubtotal && summaryDiscountRow && summaryDiscount) {
+        const hasDiscount = checkoutTotals.discount > 0;
+        summarySubtotalRow.hidden = !hasDiscount;
+        summaryDiscountRow.hidden = !hasDiscount;
+        summarySubtotal.textContent = `${formatCurrency(checkoutTotals.subtotal)}/mes`;
+        summaryDiscount.textContent = `-${formatCurrency(checkoutTotals.discount)}/mes`;
+    }
+
+    const addressForm = document.getElementById("checkout-address-form");
+    const paymentForm = document.getElementById("checkout-payment-form");
+    const confirmationStep = document.getElementById("checkout-confirmation-step");
+    const successStep = document.getElementById("checkout-success");
+    const stepElements = document.querySelectorAll("[data-checkout-step]");
+    const stepIndicators = document.querySelectorAll("[data-checkout-indicator]");
+    const paymentMethodInputs = document.querySelectorAll("input[name='paymentMethod']");
+    const paymentDetails = document.querySelectorAll("[data-payment-detail]");
+    const backToAddressButton = document.getElementById("checkout-back-to-address");
+    const backToPaymentButton = document.getElementById("checkout-back-to-payment");
+    const payButton = document.getElementById("checkout-pay-button");
+    let selectedPaymentMethod = "card";
+
+    function showCheckoutStep(step) {
+        stepElements.forEach(function (stepElement) {
+            const isCurrentStep = Number(stepElement.dataset.checkoutStep) === step;
+            stepElement.hidden = !isCurrentStep;
+            stepElement.classList.toggle("is-active", isCurrentStep);
+        });
+
+        stepIndicators.forEach(function (indicator) {
+            const indicatorStep = Number(indicator.dataset.checkoutIndicator);
+            indicator.classList.toggle("is-active", indicatorStep === step);
+            indicator.classList.toggle("is-complete", indicatorStep < step);
+        });
+    }
+
+    function updatePaymentDetails(method) {
+        selectedPaymentMethod = method;
+
+        paymentDetails.forEach(function (detail) {
+            const isSelected = detail.dataset.paymentDetail === method;
+            detail.hidden = !isSelected;
+            detail.classList.toggle("is-active", isSelected);
+            detail.querySelectorAll("input").forEach(function (input) {
+                input.disabled = !isSelected;
+            });
+        });
+
+        document.querySelectorAll(".payment-method").forEach(function (methodElement) {
+            const methodInput = methodElement.querySelector("input");
+            methodElement.classList.toggle("is-selected", Boolean(methodInput && methodInput.checked));
+        });
+    }
+
+    function getPaymentLabel() {
+        const labels = {
+            card: "Tarjeta (simulado)",
+            transfer: "Transferencia (simulada)",
+            wallet: "E-wallet con saldo simulado"
+        };
+        return labels[selectedPaymentMethod] || labels.card;
+    }
+
+    if (addressForm) {
+        addressForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            showCheckoutStep(2);
+        });
+    }
+
+    paymentMethodInputs.forEach(function (methodInput) {
+        methodInput.addEventListener("change", function () {
+            updatePaymentDetails(methodInput.value);
+        });
+    });
+
+    if (paymentForm) {
+        paymentForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const contact = document.getElementById("confirmation-contact");
+            const address = document.getElementById("confirmation-address");
+            const payment = document.getElementById("confirmation-payment");
+
+            if (contact) {
+                contact.textContent = `${document.getElementById("checkout-name").value.trim()} · ${document.getElementById("checkout-email").value.trim()}`;
+            }
+
+            if (address) {
+                address.textContent = `${document.getElementById("checkout-address").value.trim()}, ${document.getElementById("checkout-city").value.trim()} · C.P. ${document.getElementById("checkout-postal-code").value.trim()}`;
+            }
+
+            if (payment) {
+                payment.textContent = getPaymentLabel();
+            }
+
+            showCheckoutStep(3);
+        });
+    }
+
+    if (backToAddressButton) {
+        backToAddressButton.addEventListener("click", function () {
+            showCheckoutStep(1);
+        });
+    }
+
+    if (backToPaymentButton) {
+        backToPaymentButton.addEventListener("click", function () {
+            showCheckoutStep(2);
+        });
+    }
+
+    if (payButton && successStep && confirmationStep) {
+        payButton.addEventListener("click", function () {
+            const orderNumber = `ECORE-${Date.now().toString().slice(-8)}`;
+            const orderNumberElement = document.getElementById("checkout-order-number");
+            const successSummary = document.getElementById("checkout-success-summary");
+
+            if (orderNumberElement) {
+                orderNumberElement.textContent = orderNumber;
+            }
+
+            if (successSummary) {
+                successSummary.replaceChildren();
+                checkoutTotals.cart.forEach(function (item) {
+                    const itemElement = document.createElement("p");
+                    itemElement.textContent = `${item.name} × ${item.quantity} — ${formatCurrency(item.price * item.quantity)}/mes`;
+                    successSummary.appendChild(itemElement);
+                });
+                const totalElement = document.createElement("strong");
+                totalElement.textContent = `Total mensual simulado: ${formatCurrency(checkoutTotals.total)}/mes`;
+                successSummary.appendChild(totalElement);
+            }
+
+            confirmationStep.hidden = true;
+            successStep.hidden = false;
+            stepIndicators.forEach(function (indicator) {
+                indicator.classList.remove("is-active");
+                indicator.classList.add("is-complete");
+            });
+        });
+    }
+
+    updatePaymentDetails(selectedPaymentMethod);
+}
+
+initCheckout();
 
 let policyModal = document.getElementById("policy-modal");
 const policyOpenButtons = document.querySelectorAll("[data-policy-open]");
@@ -981,11 +1181,6 @@ function renderAuctionCard(auctionCard) {
         priceElement.textContent = formatCurrency(currentPrice);
     }
 
-    if (bidInput) {
-        const step = Math.max(1, Number(bidInput.step) || 1);
-        bidInput.min = String(currentPrice + step);
-    }
-
     if (!offerList) {
         return;
     }
@@ -1039,14 +1234,7 @@ function initAuctionPage() {
         if (bidForm && bidInput && bidMessage) {
             bidForm.addEventListener("submit", function (event) {
                 event.preventDefault();
-                const bidAmount = Number(bidInput.value);
-                const minimumBid = Number(bidInput.min);
-
-                if (!Number.isFinite(bidAmount) || bidAmount < minimumBid) {
-                    bidMessage.textContent = `La oferta debe ser de al menos ${formatCurrency(minimumBid)}.`;
-                    bidMessage.classList.add("is-error");
-                    return;
-                }
+                const bidAmount = Number.isFinite(Number(bidInput.value)) ? Number(bidInput.value) : 0;
 
                 const allOffers = getAuctionOffers();
                 const productOffers = Array.isArray(allOffers[auctionId]) ? allOffers[auctionId] : [];
@@ -1325,11 +1513,6 @@ function handleProductFormSubmit(event) {
         image: elements.image.value.trim(),
         description: elements.description.value.trim()
     };
-
-    if (!productData.name || !productData.category || !productData.price || !productData.description) {
-        setAdminMessage("Completa todos los campos del producto simulado.");
-        return;
-    }
 
     if (activeProductFormMode === "edit" && activeProductCard) {
         applyProductDataToCard(activeProductCard, productData);
@@ -1661,19 +1844,8 @@ function initAdminPanel() {
                 description: promotionDescription ? promotionDescription.value.trim() : ""
             };
 
-            if (!promotionData.code || !Number.isFinite(promotionData.percent)) {
-                setAdminMessage("Completa el código y porcentaje de la promoción simulada.");
-                return;
-            }
-
-            const codeBelongsToAnotherPromotion = getPromotions().some(function (promotion) {
-                return promotion.code === promotionData.code && promotion.code !== activePromotionCode;
-            });
-
-            if (codeBelongsToAnotherPromotion) {
-                setAdminMessage("Ya existe otra promoción con ese código. Usa un código diferente.");
-                return;
-            }
+            promotionData.code = promotionData.code || `SIM-${Date.now()}`;
+            promotionData.percent = Number.isFinite(promotionData.percent) ? promotionData.percent : 0;
 
             if (isEditing && activePromotionCode !== promotionData.code) {
                 deletePromotion(activePromotionCode);
@@ -2046,14 +2218,6 @@ function handleRegister(event) {
     const user = { name, email };
     const registeredUsers = getRegisteredUsers();
 
-    if (registeredUsers.some(function (registeredUser) {
-        return registeredUser.email === email;
-    })) {
-        registerMessage.textContent = "Ya existe un usuario registrado con ese correo.";
-        registerMessage.classList.add("message-error");
-        return;
-    }
-
     registeredUsers.push(user);
     localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(registeredUsers));
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
@@ -2149,7 +2313,7 @@ function handleRecovery(event) {
     const recoveryMessage = document.getElementById("recovery-message");
     const recoveryModal = document.getElementById("recovery-modal");
 
-    if (!recoveryEmail || !recoveryMessage || !recoveryEmail.value.trim()) {
+    if (!recoveryMessage) {
         return;
     }
 
@@ -2540,11 +2704,6 @@ function initServicePublicationForm() {
             return checkbox.value;
         });
 
-        if (capabilities.length === 0) {
-            message.textContent = "Selecciona por lo menos una opción de personalización.";
-            return;
-        }
-
         try {
             if (photoInput.files[0]) {
                 currentPhoto = await readServicePhoto(photoInput.files[0]);
@@ -2554,21 +2713,16 @@ function initServicePublicationForm() {
             return;
         }
 
-        if (!currentPhoto) {
-            message.textContent = "Selecciona una foto para la publicación.";
-            return;
-        }
-
         const publicationData = normalizeServicePublication({
             id: editingPublication ? editingPublication.id : `service-${Date.now()}`,
             ownerEmail: sessionUser.email,
             ownerName: sessionUser.name,
-            title: document.getElementById("service-title").value.trim(),
-            price: Number(document.getElementById("service-price").value),
-            description: document.getElementById("service-description").value.trim(),
+            title: document.getElementById("service-title").value.trim() || "Servicio de personalización simulado",
+            price: Number(document.getElementById("service-price").value) || 0,
+            description: document.getElementById("service-description").value.trim() || "Publicación simulada sin descripción.",
             category: document.getElementById("service-category").value,
             delivery: document.getElementById("service-delivery").value,
-            photo: currentPhoto,
+            photo: currentPhoto || "landing.png",
             capabilities: capabilities,
             createdAt: editingPublication ? editingPublication.createdAt : new Date().toISOString()
         });

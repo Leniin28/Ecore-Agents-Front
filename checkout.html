@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout simulado | ECore Agents</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>ECore Agents</h2></div>
+        <nav aria-label="Navegación principal">
+            <a href="index.html#home">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="services.html">Servicios</a>
+            <a href="auction.html">Subasta</a>
+            <a href="cart.html">Carrito <span class="cart-count" aria-label="0 agentes en el carrito">0</span></a>
+            <a href="index.html#contact">Contacto</a>
+        </nav>
+    </header>
+
+    <main class="checkout-page">
+        <section class="checkout-hero">
+            <span class="section-eyebrow">Compra académica simulada</span>
+            <h1>Finaliza tu selección</h1>
+            <p>No se procesan pagos reales ni se comparte información financiera.</p>
+        </section>
+
+        <section class="checkout-empty" id="checkout-empty" hidden>
+            <h2>No hay agentes en tu carrito</h2>
+            <p>Agrega un agente antes de iniciar el checkout simulado.</p>
+            <a href="catalogo.html" class="button">Ver catálogo</a>
+        </section>
+
+        <section class="checkout-layout" id="checkout-content">
+            <div class="checkout-main">
+                <ol class="checkout-steps" aria-label="Pasos del checkout">
+                    <li class="is-active" data-checkout-indicator="1"><span>1</span> Dirección</li>
+                    <li data-checkout-indicator="2"><span>2</span> Pago</li>
+                    <li data-checkout-indicator="3"><span>3</span> Confirmación</li>
+                </ol>
+
+                <form class="checkout-panel checkout-step is-active" id="checkout-address-form" data-checkout-step="1">
+                    <span class="summary-label">Paso 1</span>
+                    <h2>Dirección de contacto</h2>
+                    <p class="checkout-panel-intro">Estos datos son solo un ejemplo visual y no se envían a ningún servicio.</p>
+                    <div class="checkout-form-grid">
+                        <label class="checkout-form-full">Nombre completo
+                            <input type="text" id="checkout-name" autocomplete="name">
+                        </label>
+                        <label>Correo electrónico
+                            <input type="email" id="checkout-email" autocomplete="email">
+                        </label>
+                        <label>Teléfono
+                            <input type="tel" id="checkout-phone" autocomplete="tel">
+                        </label>
+                        <label class="checkout-form-full">Dirección
+                            <input type="text" id="checkout-address" autocomplete="street-address" placeholder="Calle y número">
+                        </label>
+                        <label>Ciudad
+                            <input type="text" id="checkout-city" autocomplete="address-level2">
+                        </label>
+                        <label>Código postal
+                            <input type="text" id="checkout-postal-code" inputmode="numeric" autocomplete="postal-code">
+                        </label>
+                    </div>
+                    <div class="checkout-actions">
+                        <a href="cart.html" class="back-button">Volver al carrito</a>
+                        <button type="submit" class="button">Continuar al pago</button>
+                    </div>
+                </form>
+
+                <form class="checkout-panel checkout-step" id="checkout-payment-form" data-checkout-step="2" hidden>
+                    <span class="summary-label">Paso 2</span>
+                    <h2>Método de pago</h2>
+                    <p class="checkout-panel-intro">Elige un método para continuar con la simulación.</p>
+
+                    <div class="payment-method-list" role="radiogroup" aria-label="Métodos de pago">
+                        <label class="payment-method is-selected">
+                            <input type="radio" name="paymentMethod" value="card" checked>
+                            <span><strong>Tarjeta</strong><small>Pago con tarjeta simulado.</small></span>
+                        </label>
+                        <label class="payment-method">
+                            <input type="radio" name="paymentMethod" value="transfer">
+                            <span><strong>Transferencia</strong><small>Muestra datos bancarios de ejemplo.</small></span>
+                        </label>
+                        <label class="payment-method">
+                            <input type="radio" name="paymentMethod" value="wallet">
+                            <span><strong>E-wallet</strong><small>Usa saldo simulado.</small></span>
+                        </label>
+                    </div>
+
+                    <div class="payment-detail is-active" data-payment-detail="card">
+                        <div class="checkout-form-grid">
+                            <label class="checkout-form-full">Nombre en la tarjeta
+                                <input type="text" id="card-name" autocomplete="cc-name">
+                            </label>
+                            <label class="checkout-form-full">Número de tarjeta
+                                <input type="text" id="card-number" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000">
+                            </label>
+                            <label>Fecha de vencimiento
+                                <input type="text" id="card-expiry" autocomplete="cc-exp" placeholder="MM/AA">
+                            </label>
+                            <label>CVV
+                                <input type="password" id="card-cvv" inputmode="numeric" autocomplete="cc-csc" placeholder="123">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="payment-detail" data-payment-detail="transfer" hidden>
+                        <p class="payment-notice">Datos de transferencia simulados</p>
+                        <dl class="payment-data-list">
+                            <dt>Banco</dt><dd>Banco ECore</dd>
+                            <dt>Cuenta</dt><dd>0123456789</dd>
+                            <dt>CLABE</dt><dd>000 123 456 789 012 345</dd>
+                            <dt>Referencia</dt><dd id="transfer-reference">ECORE-SIM</dd>
+                        </dl>
+                    </div>
+
+                    <div class="payment-detail" data-payment-detail="wallet" hidden>
+                        <p class="payment-notice">Saldo disponible simulado</p>
+                        <p class="wallet-balance">$25,000 MXN</p>
+                        <p class="checkout-panel-intro">El saldo no se descuenta; solo permite completar esta demostración.</p>
+                    </div>
+
+                    <div class="checkout-actions">
+                        <button type="button" class="back-button" id="checkout-back-to-address">Volver a dirección</button>
+                        <button type="submit" class="button">Revisar confirmación</button>
+                    </div>
+                </form>
+
+                <section class="checkout-panel checkout-step" id="checkout-confirmation-step" data-checkout-step="3" hidden>
+                    <span class="summary-label">Paso 3</span>
+                    <h2>Confirma tu compra</h2>
+                    <p class="checkout-panel-intro">Revisa los datos antes de confirmar el pago simulado.</p>
+                    <div class="checkout-confirmation-data">
+                        <div><span>Contacto</span><strong id="confirmation-contact">—</strong></div>
+                        <div><span>Dirección</span><strong id="confirmation-address">—</strong></div>
+                        <div><span>Método de pago</span><strong id="confirmation-payment">—</strong></div>
+                    </div>
+                    <div class="checkout-actions">
+                        <button type="button" class="back-button" id="checkout-back-to-payment">Volver al pago</button>
+                        <button type="button" class="button" id="checkout-pay-button">Pagar</button>
+                    </div>
+                </section>
+
+                <section class="checkout-success" id="checkout-success" hidden>
+                    <span class="checkout-success-icon" aria-hidden="true">✓</span>
+                    <span class="section-eyebrow">Compra simulada confirmada</span>
+                    <h2>Pago aprobado</h2>
+                    <p>Tu pago fue aprobado de manera simulada. No se realizó ningún cobro real.</p>
+                    <p class="checkout-order-number">Número de pedido: <strong id="checkout-order-number">—</strong></p>
+                    <div class="checkout-success-summary" id="checkout-success-summary"></div>
+                    <a href="catalogo.html" class="button">Seguir explorando agentes</a>
+                </section>
+            </div>
+
+            <aside class="checkout-order-summary" aria-labelledby="checkout-summary-title">
+                <span class="summary-label">Resumen de compra</span>
+                <h2 id="checkout-summary-title">Tu selección</h2>
+                <ul id="checkout-summary-items" class="checkout-summary-items"></ul>
+                <div class="checkout-summary-row" id="checkout-summary-subtotal-row" hidden><span>Subtotal</span><strong id="checkout-summary-subtotal">$0 MXN/mes</strong></div>
+                <div class="checkout-summary-row checkout-summary-discount" id="checkout-summary-discount-row" hidden><span>Descuento</span><strong id="checkout-summary-discount">-$0 MXN/mes</strong></div>
+                <div class="checkout-summary-total"><span>Total mensual</span><strong id="checkout-summary-total">$0 MXN/mes</strong></div>
+                <p>Importes mensuales y solo de referencia académica.</p>
+            </aside>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+        <p class="footer-policy"><button type="button" class="policy-link" data-policy-open>Políticas y condiciones</button></p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

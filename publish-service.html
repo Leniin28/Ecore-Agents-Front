@@ -30,15 +30,15 @@
                 <div class="service-form-grid">
                     <label>
                         Nombre del servicio
-                        <input type="text" id="service-title" maxlength="80" placeholder="Ej. Configuración completa para restaurantes" required>
+                        <input type="text" id="service-title" placeholder="Ej. Configuración completa para restaurantes">
                     </label>
                     <label>
                         Precio del servicio
-                        <input type="number" id="service-price" min="1" max="99999" step="1" placeholder="Ej. 850" required>
+                        <input type="number" id="service-price" step="1" placeholder="Ej. 850">
                     </label>
                     <label>
                         Especialidad principal
-                        <select id="service-category" required>
+                        <select id="service-category">
                             <option value="context">Contexto del negocio</option>
                             <option value="automation">Automatización</option>
                             <option value="whatsapp">WhatsApp y seguimiento</option>
@@ -47,7 +47,7 @@
                     </label>
                     <label>
                         Tiempo estimado de entrega
-                        <select id="service-delivery" required>
+                        <select id="service-delivery">
                             <option value="1 a 2 días">1 a 2 días</option>
                             <option value="3 a 5 días">3 a 5 días</option>
                             <option value="1 semana">1 semana</option>
@@ -56,7 +56,7 @@
                     </label>
                     <label class="service-form-full">
                         Descripción
-                        <textarea id="service-description" rows="5" maxlength="700" placeholder="Describe tu proceso, experiencia y qué recibirá el cliente." required></textarea>
+                        <textarea id="service-description" rows="5" placeholder="Describe tu proceso, experiencia y qué recibirá el cliente."></textarea>
                     </label>
                     <label class="service-form-full">
                         Foto de la publicación

@@ -138,11 +138,11 @@
                         <div class="admin-form-grid">
                             <label for="admin-product-name">
                                 Nombre del producto
-                                <input type="text" id="admin-product-name" name="productName" required>
+                                <input type="text" id="admin-product-name" name="productName">
                             </label>
                             <label for="admin-product-category">
                                 Categoría
-                                <select id="admin-product-category" name="productCategory" required>
+                                <select id="admin-product-category" name="productCategory">
                                     <option value="Plan básico">Plan básico</option>
                                     <option value="Plan seguimiento">Plan seguimiento</option>
                                     <option value="Plan avanzado">Plan avanzado</option>
@@ -152,15 +152,15 @@
                             </label>
                             <label for="admin-product-price">
                                 Precio
-                                <input type="text" id="admin-product-price" name="productPrice" required>
+                                <input type="text" id="admin-product-price" name="productPrice">
                             </label>
                             <label for="admin-product-stock">
                                 Existencia simulada
-                                <input type="number" id="admin-product-stock" name="productStock" min="0" required>
+                                <input type="number" id="admin-product-stock" name="productStock">
                             </label>
                             <label for="admin-product-status">
                                 Estado
-                                <select id="admin-product-status" name="productStatus" required>
+                                <select id="admin-product-status" name="productStatus">
                                     <option value="Disponible">Disponible</option>
                                     <option value="Agotado">Agotado</option>
                                 </select>
@@ -171,7 +171,7 @@
                             </label>
                             <label class="admin-form-full" for="admin-product-description">
                                 Descripción
-                                <textarea id="admin-product-description" name="productDescription" rows="3" required></textarea>
+                                <textarea id="admin-product-description" name="productDescription" rows="3"></textarea>
                             </label>
                         </div>
                         <div class="admin-image-preview" id="admin-image-preview" aria-live="polite">Vista previa simulada</div>
@@ -316,15 +316,15 @@
                         <div class="admin-form-grid">
                             <label for="admin-promotion-name">
                                 Nombre de la promoción
-                                <input type="text" id="admin-promotion-name" name="promotionName" placeholder="Ej. 10% de descuento" required>
+                                <input type="text" id="admin-promotion-name" name="promotionName" placeholder="Ej. 10% de descuento">
                             </label>
                             <label for="admin-promotion-code">
                                 Código de descuento
-                                <input type="text" id="admin-promotion-code" name="promotionCode" placeholder="Ej. PLUS15" required>
+                                <input type="text" id="admin-promotion-code" name="promotionCode" placeholder="Ej. PLUS15">
                             </label>
                             <label for="admin-promotion-scope">
                                 Tipo de promoción
-                                <select id="admin-promotion-scope" name="promotionScope" required>
+                                <select id="admin-promotion-scope" name="promotionScope">
                                     <option value="product">Para un agente específico</option>
                                     <option value="cart">Para el total del carrito</option>
                                     <option value="benefit">Beneficio visual sin descuento</option>
@@ -332,7 +332,7 @@
                             </label>
                             <label for="admin-promotion-target">
                                 Agente relacionado
-                                <select id="admin-promotion-target" name="promotionTarget" required>
+                                <select id="admin-promotion-target" name="promotionTarget">
                                     <option value="Agente Inicio">Agente Inicio</option>
                                     <option value="Agente Plus">Agente Plus</option>
                                     <option value="Agente Avanzado">Agente Avanzado</option>
@@ -341,18 +341,18 @@
                             </label>
                             <label for="admin-promotion-percent">
                                 Porcentaje de descuento
-                                <input type="number" id="admin-promotion-percent" name="promotionPercent" min="0" max="90" value="10" required>
+                                <input type="number" id="admin-promotion-percent" name="promotionPercent" value="10">
                             </label>
                             <label for="admin-promotion-status">
                                 Estado
-                                <select id="admin-promotion-status" name="promotionStatus" required>
+                                <select id="admin-promotion-status" name="promotionStatus">
                                     <option value="Activa">Activa</option>
                                     <option value="Pausada">Pausada</option>
                                 </select>
                             </label>
                             <label class="admin-form-full" for="admin-promotion-description">
                                 Descripción
-                                <textarea id="admin-promotion-description" name="promotionDescription" rows="3" placeholder="Describe brevemente la promoción simulada." required></textarea>
+                                <textarea id="admin-promotion-description" name="promotionDescription" rows="3" placeholder="Describe brevemente la promoción simulada."></textarea>
                             </label>
                         </div>
                         <div class="admin-form-actions">
