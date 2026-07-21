@@ -884,6 +884,26 @@ function addAuctionNavigationLink() {
     });
 }
 
+function addAdminNavigationLink() {
+    document.querySelectorAll('nav[aria-label="Navegación principal"]').forEach(function (navigation) {
+        if (navigation.querySelector('a[href="admin.html"]')) {
+            return;
+        }
+
+        const adminLink = document.createElement("a");
+        const auctionLink = navigation.querySelector('a[href="auction.html"]');
+
+        adminLink.href = "admin.html";
+        adminLink.textContent = "Admin Simulado";
+
+        if (auctionLink) {
+            auctionLink.insertAdjacentElement("afterend", adminLink);
+        } else {
+            navigation.appendChild(adminLink);
+        }
+    });
+}
+
 function getAuctionOffers() {
     try {
         const storedValue = localStorage.getItem(AUCTION_OFFERS_STORAGE_KEY);
@@ -1072,6 +1092,7 @@ function initAuctionPage() {
 }
 
 addAuctionNavigationLink();
+addAdminNavigationLink();
 initAuctionPage();
 
 updateCartCount();
