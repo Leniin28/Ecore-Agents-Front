@@ -2199,6 +2199,7 @@ const USER_STORAGE_KEY = "ecoreUser";
 const USERS_STORAGE_KEY = "ecoreUsers";
 const SESSION_STORAGE_KEY = "ecoreSession";
 const SERVICE_PUBLICATIONS_STORAGE_KEY = "ecoreServicePublications";
+const DEFAULT_SERVICE_OWNERS_STORAGE_KEY = "ecoreDefaultServiceOwners";
 
 function readStoredUser(storageKey) {
     const storedUser = localStorage.getItem(storageKey);
@@ -2267,6 +2268,7 @@ function handleRegister(event) {
     localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(registeredUsers));
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user));
+    ensureDefaultServicePublication(user);
 
     registerMessage.classList.remove("message-error");
     registerMessage.textContent = "Registro exitoso (simulado). Iniciando sesión...";
@@ -2290,6 +2292,7 @@ function handleLogin(event) {
     };
 
     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionUser));
+    ensureDefaultServicePublication(sessionUser);
     loginMessage.classList.remove("message-error");
     window.location.href = getAuthRedirect("profile.html");
 }
@@ -2503,6 +2506,70 @@ function saveServicePublications(publications) {
     } catch (error) {
         return false;
     }
+}
+
+function getDefaultServiceOwners() {
+    try {
+        const storedOwners = JSON.parse(localStorage.getItem(DEFAULT_SERVICE_OWNERS_STORAGE_KEY) || "[]");
+        return Array.isArray(storedOwners) ? storedOwners.map(function (email) {
+            return String(email).trim().toLowerCase();
+        }) : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function markDefaultServiceOwner(ownerEmail) {
+    const normalizedEmail = String(ownerEmail || "").trim().toLowerCase();
+    const owners = getDefaultServiceOwners();
+
+    if (!owners.includes(normalizedEmail)) {
+        owners.push(normalizedEmail);
+        localStorage.setItem(DEFAULT_SERVICE_OWNERS_STORAGE_KEY, JSON.stringify(owners));
+    }
+}
+
+function ensureDefaultServicePublication(sessionUser) {
+    if (!sessionUser) {
+        return;
+    }
+
+    const ownerEmail = String(sessionUser.email || "").trim().toLowerCase();
+    const publicationId = `default-service-${encodeURIComponent(ownerEmail || "usuario")}`;
+    const publications = getStoredServicePublications();
+    const defaultPublicationExists = publications.some(function (publication) {
+        return publication.id === publicationId;
+    });
+
+    if (getDefaultServiceOwners().includes(ownerEmail)) {
+        return;
+    }
+
+    if (!defaultPublicationExists) {
+        publications.push(normalizeServicePublication({
+            id: publicationId,
+            ownerEmail: ownerEmail,
+            ownerName: String(sessionUser.name || "Usuario de ECore"),
+            title: "Configuración inicial de agentes para negocios",
+            price: 650,
+            description: "Personalizo el contexto del agente con tus servicios, costos, horarios, forma de trabajo, preguntas frecuentes y reglas básicas de atención.",
+            category: "context",
+            delivery: "3 a 5 días",
+            photo: "landing.png",
+            capabilities: [
+                "Servicios, costos, horarios y forma de trabajo",
+                "Contexto, preguntas frecuentes y tono de atención",
+                "Seguimiento por WhatsApp y clasificación de clientes"
+            ],
+            createdAt: new Date().toISOString()
+        }));
+
+        if (!saveServicePublications(publications)) {
+            return;
+        }
+    }
+
+    markDefaultServiceOwner(ownerEmail);
 }
 
 function getAllServicePublications() {
@@ -2821,6 +2888,7 @@ function initMyPublications() {
         return;
     }
 
+    ensureDefaultServicePublication(sessionUser);
     const message = document.getElementById("my-publications-message");
     renderMyPublications(sessionUser);
 
