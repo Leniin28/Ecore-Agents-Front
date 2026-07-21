@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicar servicio | ECore Agents</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>ECore Agents</h2></div>
+        <nav aria-label="Navegación principal">
+            <a href="index.html#home">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="services.html">Servicios</a>
+            <a href="my-publications.html">Mis publicaciones</a>
+            <a href="profile.html">Perfil</a>
+        </nav>
+    </header>
+
+    <main class="service-form-page">
+        <section class="service-form-container">
+            <div class="service-form-heading">
+                <span class="section-eyebrow">Publicación simulada</span>
+                <h1 id="service-form-title">Publica tu servicio</h1>
+                <p>Explica cómo puedes configurar, entrenar o dar contexto de negocio a un agente.</p>
+            </div>
+
+            <form class="service-publication-form" id="service-publication-form">
+                <div class="service-form-grid">
+                    <label>
+                        Nombre del servicio
+                        <input type="text" id="service-title" maxlength="80" placeholder="Ej. Configuración completa para restaurantes" required>
+                    </label>
+                    <label>
+                        Precio del servicio
+                        <input type="number" id="service-price" min="1" max="99999" step="1" placeholder="Ej. 850" required>
+                    </label>
+                    <label>
+                        Especialidad principal
+                        <select id="service-category" required>
+                            <option value="context">Contexto del negocio</option>
+                            <option value="automation">Automatización</option>
+                            <option value="whatsapp">WhatsApp y seguimiento</option>
+                            <option value="training">Entrenamiento y mejora</option>
+                        </select>
+                    </label>
+                    <label>
+                        Tiempo estimado de entrega
+                        <select id="service-delivery" required>
+                            <option value="1 a 2 días">1 a 2 días</option>
+                            <option value="3 a 5 días">3 a 5 días</option>
+                            <option value="1 semana">1 semana</option>
+                            <option value="A convenir">A convenir</option>
+                        </select>
+                    </label>
+                    <label class="service-form-full">
+                        Descripción
+                        <textarea id="service-description" rows="5" maxlength="700" placeholder="Describe tu proceso, experiencia y qué recibirá el cliente." required></textarea>
+                    </label>
+                    <label class="service-form-full">
+                        Foto de la publicación
+                        <input type="file" id="service-photo" accept="image/png,image/jpeg,image/webp">
+                        <small>Imagen JPG, PNG o WebP de máximo 1 MB. Es obligatoria al crear una publicación.</small>
+                    </label>
+                    <div class="service-photo-preview service-form-full" id="service-photo-preview" hidden>
+                        <img id="service-photo-preview-image" alt="Vista previa de la publicación">
+                    </div>
+                </div>
+
+                <fieldset class="service-capabilities">
+                    <legend>¿Qué puedes personalizar?</legend>
+                    <p>Selecciona por lo menos una opción.</p>
+                    <div class="service-capability-grid">
+                        <label><input type="checkbox" name="serviceCapability" value="Servicios, costos, horarios y forma de trabajo"> Servicios, costos, horarios y forma de trabajo</label>
+                        <label><input type="checkbox" name="serviceCapability" value="Contexto, preguntas frecuentes y tono de atención"> Contexto, preguntas frecuentes y tono de atención</label>
+                        <label><input type="checkbox" name="serviceCapability" value="Historial conversacional y sugerencias de contexto"> Historial conversacional y sugerencias de contexto</label>
+                        <label><input type="checkbox" name="serviceCapability" value="Transcripción, respuestas en audio y llamadas"> Transcripción, respuestas en audio y llamadas</label>
+                        <label><input type="checkbox" name="serviceCapability" value="Recordatorios y seguimiento por WhatsApp"> Recordatorios y seguimiento por WhatsApp</label>
+                        <label><input type="checkbox" name="serviceCapability" value="Clasificación y etiquetas de clientes"> Clasificación y etiquetas de clientes</label>
+                        <label><input type="checkbox" name="serviceCapability" value="Agenda y confirmación de citas"> Agenda y confirmación de citas</label>
+                        <label><input type="checkbox" name="serviceCapability" value="Alertas y reportes de actividad"> Alertas y reportes de actividad</label>
+                        <label><input type="checkbox" name="serviceCapability" value="Autoaprendizaje supervisado"> Autoaprendizaje supervisado</label>
+                        <label><input type="checkbox" name="serviceCapability" value="Flujos personalizados y automatizaciones"> Flujos personalizados y automatizaciones</label>
+                    </div>
+                </fieldset>
+
+                <p class="service-action-message" id="service-form-message" role="status" aria-live="polite"></p>
+                <div class="service-form-actions">
+                    <button type="submit" class="button" id="service-publish-button">Publicar</button>
+                    <a href="my-publications.html" class="back-button">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+        <p class="footer-policy"><button type="button" class="policy-link" data-policy-open>Políticas y condiciones</button></p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

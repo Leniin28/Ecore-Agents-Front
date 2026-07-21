@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subasta simulada | ECore Agents</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>ECore Agents</h2></div>
+        <nav aria-label="Navegación principal">
+            <a href="index.html#home">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="services.html">Servicios</a>
+            <a href="auction.html" aria-current="page">Subasta</a>
+            <a href="cart.html">Carrito <span class="cart-count" aria-label="0 agentes en el carrito">0</span></a>
+            <a href="index.html#contact">Contacto</a>
+        </nav>
+    </header>
+
+    <main class="auction-page">
+        <section class="auction-hero">
+            <span class="section-eyebrow">Actividad académica</span>
+            <h1>Subasta simulada de tecnología</h1>
+            <p>Selecciona un producto y registra una oferta. No se realiza ningún cobro, compra ni envío real.</p>
+        </section>
+
+        <section class="auction-section" aria-labelledby="auction-products-title">
+            <div class="auction-heading">
+                <div>
+                    <span class="section-eyebrow">Productos disponibles</span>
+                    <h2 id="auction-products-title">Haz tu mejor oferta</h2>
+                </div>
+                <span class="auction-simulation-label">Todo es simulado</span>
+            </div>
+
+            <div class="auction-grid">
+                <article class="auction-card" data-auction-id="gaming-pc" data-starting-price="12500" data-duration="17835">
+                    <img src="assets/auction/gaming-pc.png" alt="Computadora de escritorio para gaming" class="auction-product-image">
+                    <div class="auction-card-content">
+                        <span class="auction-product-type">Equipo de cómputo</span>
+                        <h3>PC Gamer de escritorio</h3>
+                        <p>Equipo de demostración con gabinete moderno, iluminación azul y componentes para tareas exigentes.</p>
+
+                        <div class="auction-price-panel">
+                            <span>Oferta actual</span>
+                            <strong class="auction-current-price">$12,500 MXN</strong>
+                        </div>
+
+                        <div class="auction-timer" aria-live="polite">
+                            <span>La subasta termina en</span>
+                            <strong class="auction-countdown">04:57:15</strong>
+                        </div>
+
+                        <form class="auction-bid-form">
+                            <label for="gaming-pc-bid">Hacer oferta</label>
+                            <div class="auction-bid-control">
+                                <input type="number" id="gaming-pc-bid" class="auction-bid-input" min="12600" step="100" placeholder="Ej. 13000" required>
+                                <button type="submit" class="button">Ofertar</button>
+                            </div>
+                            <p class="auction-bid-message" role="status" aria-live="polite"></p>
+                        </form>
+
+                        <div class="auction-offers">
+                            <h4>Ofertas recientes</h4>
+                            <ul class="auction-offer-list"></ul>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="auction-card" data-auction-id="monitor" data-starting-price="3200" data-duration="25410">
+                    <img src="assets/auction/monitor.png" alt="Pantalla de computadora de 27 pulgadas" class="auction-product-image">
+                    <div class="auction-card-content">
+                        <span class="auction-product-type">Accesorio visual</span>
+                        <h3>Pantalla de 27 pulgadas</h3>
+                        <p>Monitor moderno con marco delgado, base estable y tamaño ideal para trabajo, estudio o entretenimiento.</p>
+
+                        <div class="auction-price-panel">
+                            <span>Oferta actual</span>
+                            <strong class="auction-current-price">$3,200 MXN</strong>
+                        </div>
+
+                        <div class="auction-timer" aria-live="polite">
+                            <span>La subasta termina en</span>
+                            <strong class="auction-countdown">07:03:30</strong>
+                        </div>
+
+                        <form class="auction-bid-form">
+                            <label for="monitor-bid">Hacer oferta</label>
+                            <div class="auction-bid-control">
+                                <input type="number" id="monitor-bid" class="auction-bid-input" min="3300" step="100" placeholder="Ej. 3500" required>
+                                <button type="submit" class="button">Ofertar</button>
+                            </div>
+                            <p class="auction-bid-message" role="status" aria-live="polite"></p>
+                        </form>
+
+                        <div class="auction-offers">
+                            <h4>Ofertas recientes</h4>
+                            <ul class="auction-offer-list"></ul>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="auction-card" data-auction-id="keyboard" data-starting-price="850" data-duration="11295">
+                    <img src="assets/auction/keyboard.png" alt="Teclado mecánico negro con iluminación azul" class="auction-product-image">
+                    <div class="auction-card-content">
+                        <span class="auction-product-type">Periférico</span>
+                        <h3>Teclado mecánico compacto</h3>
+                        <p>Teclado negro de tamaño compacto con iluminación azul y diseño cómodo para trabajo o videojuegos.</p>
+
+                        <div class="auction-price-panel">
+                            <span>Oferta actual</span>
+                            <strong class="auction-current-price">$850 MXN</strong>
+                        </div>
+
+                        <div class="auction-timer" aria-live="polite">
+                            <span>La subasta termina en</span>
+                            <strong class="auction-countdown">03:08:15</strong>
+                        </div>
+
+                        <form class="auction-bid-form">
+                            <label for="keyboard-bid">Hacer oferta</label>
+                            <div class="auction-bid-control">
+                                <input type="number" id="keyboard-bid" class="auction-bid-input" min="950" step="50" placeholder="Ej. 1000" required>
+                                <button type="submit" class="button">Ofertar</button>
+                            </div>
+                            <p class="auction-bid-message" role="status" aria-live="polite"></p>
+                        </form>
+
+                        <div class="auction-offers">
+                            <h4>Ofertas recientes</h4>
+                            <ul class="auction-offer-list"></ul>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+        <p class="footer-policy"><button type="button" class="policy-link" data-policy-open>Políticas y condiciones</button></p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

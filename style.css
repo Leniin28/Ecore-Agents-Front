@@ -26,6 +26,21 @@
             margin-left: 20px;
         }
 
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            white-space: nowrap;
+        }
+
+        .user-nav-name {
+            padding-left: 11px;
+            color: #dce9ff;
+            border-left: 1px solid rgba(255, 255, 255, 0.48);
+            font-size: 0.86rem;
+            font-weight: 800;
+        }
+
         .nav-link-disabled {
             opacity: 0.65;
             cursor: not-allowed;
@@ -346,6 +361,92 @@
             color: #b42318;
         }
 
+        .recovery-intro {
+            margin: -4px 0 20px;
+            color: var(--muted);
+            line-height: 1.55;
+            text-align: center;
+        }
+
+        .recovery-message {
+            color: #087f5b;
+        }
+
+        .recovery-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1500;
+            display: grid;
+            place-items: center;
+            padding: 22px;
+        }
+
+        .recovery-modal[hidden] {
+            display: none;
+        }
+
+        .recovery-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 18, 32, 0.68);
+            backdrop-filter: blur(4px);
+        }
+
+        .recovery-modal-content {
+            position: relative;
+            width: min(460px, 100%);
+            padding: 32px;
+            box-sizing: border-box;
+            background: white;
+            border: 1px solid #dce5f0;
+            border-radius: 18px;
+            box-shadow: 0 28px 80px rgba(8, 20, 40, 0.32);
+            text-align: center;
+        }
+
+        .recovery-modal-content h2 {
+            margin: 8px 0 10px;
+            color: var(--blue-dark);
+        }
+
+        .recovery-modal-content p:not(.recovery-success-text) {
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .recovery-success-text {
+            margin: 16px 0 8px;
+            color: #087f5b;
+            font-size: 1.08rem;
+            font-weight: 900;
+        }
+
+        .recovery-modal-content .button {
+            margin-top: 14px;
+        }
+
+        .recovery-modal-close {
+            position: absolute;
+            top: 13px;
+            right: 13px;
+            width: 36px;
+            height: 36px;
+            color: var(--blue-dark);
+            background: #edf4ff;
+            border: 1px solid #cdddf5;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.35rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .recovery-modal-close:hover,
+        .recovery-modal-close:focus-visible {
+            color: white;
+            background: var(--blue);
+        }
+
         .auth-link {
             margin: 20px 0 0;
             text-align: center;
@@ -439,6 +540,11 @@
             nav a,
             .nav-link-disabled {
                 margin-left: 0;
+            }
+
+            .logo {
+                flex-wrap: wrap;
+                justify-content: center;
             }
 
             .about-content,
@@ -3551,6 +3657,734 @@
             .admin-product-thumb {
                 width: 100%;
                 height: 46px;
+            }
+        }
+
+        /* Subasta académica simulada */
+        .auction-page {
+            min-height: 100vh;
+            padding-top: 72px;
+            background: #f4f7fb;
+        }
+
+        .auction-hero,
+        .auction-section {
+            max-width: 1160px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .auction-hero {
+            padding: 68px 28px 58px;
+            background:
+                radial-gradient(circle at top right, rgba(255, 173, 115, 0.28), transparent 36%),
+                linear-gradient(135deg, #eaf2ff, #ffffff);
+            border-right: 1px solid #dce6f3;
+            border-bottom: 1px solid #dce6f3;
+            border-left: 1px solid #dce6f3;
+            border-radius: 0 0 24px 24px;
+            text-align: center;
+        }
+
+        .auction-hero h1 {
+            margin: 10px 0 14px;
+            color: var(--blue-dark);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.08;
+        }
+
+        .auction-hero p {
+            max-width: 720px;
+            margin: 0 auto;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .auction-section {
+            padding: 58px 28px 84px;
+        }
+
+        .auction-heading {
+            margin-bottom: 27px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .auction-heading h2 {
+            margin: 8px 0 0;
+            color: var(--blue-dark);
+            font-size: clamp(1.8rem, 4vw, 2.55rem);
+        }
+
+        .auction-simulation-label {
+            padding: 8px 12px;
+            color: #8a3a00;
+            background: #fff0d9;
+            border: 1px solid #ffd49b;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .auction-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+            align-items: start;
+        }
+
+        .auction-card {
+            min-width: 0;
+            overflow: hidden;
+            background: white;
+            border: 1px solid #dce5f0;
+            border-radius: 18px;
+            box-shadow: 0 16px 42px rgba(39, 67, 111, 0.1);
+        }
+
+        .auction-product-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            display: block;
+            object-fit: cover;
+            background: #e6eef8;
+        }
+
+        .auction-card-content {
+            padding: 22px;
+        }
+
+        .auction-product-type {
+            width: max-content;
+            padding: 6px 9px;
+            display: inline-block;
+            color: #075f58;
+            background: #e8faf4;
+            border: 1px solid #bdebdc;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 900;
+        }
+
+        .auction-card h3 {
+            margin: 14px 0 8px;
+            color: var(--blue-dark);
+            font-size: 1.3rem;
+        }
+
+        .auction-card-content > p {
+            min-height: 66px;
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        .auction-price-panel,
+        .auction-timer {
+            margin-top: 17px;
+            padding: 14px;
+            display: grid;
+            gap: 5px;
+            border-radius: 11px;
+        }
+
+        .auction-price-panel {
+            background: #edf4ff;
+            border: 1px solid #d0e0f8;
+        }
+
+        .auction-timer {
+            color: white;
+            background: #13233d;
+            border: 1px solid #253b5d;
+        }
+
+        .auction-price-panel span,
+        .auction-timer span {
+            font-size: 0.76rem;
+            font-weight: 800;
+        }
+
+        .auction-price-panel span {
+            color: #64748b;
+        }
+
+        .auction-price-panel strong {
+            color: var(--blue);
+            font-size: 1.25rem;
+        }
+
+        .auction-timer strong {
+            color: #8af0bd;
+            font-size: 1.35rem;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.06em;
+        }
+
+        .auction-bid-form {
+            margin-top: 19px;
+        }
+
+        .auction-bid-form label {
+            display: block;
+            margin-bottom: 7px;
+            color: #35445d;
+            font-size: 0.86rem;
+            font-weight: 900;
+        }
+
+        .auction-bid-control {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 8px;
+        }
+
+        .auction-bid-control input {
+            width: 100%;
+            padding: 11px;
+            box-sizing: border-box;
+            color: var(--ink);
+            border: 1px solid #c6d4e5;
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        .auction-bid-control input:focus {
+            border-color: var(--blue);
+            outline: 3px solid rgba(34, 110, 232, 0.14);
+        }
+
+        .auction-bid-control .button {
+            margin: 0;
+            padding: 10px 16px;
+        }
+
+        .auction-bid-message {
+            min-height: 18px;
+            margin: 9px 0 0;
+            color: #087f5b;
+            font-size: 0.8rem;
+            font-weight: 900;
+        }
+
+        .auction-bid-message.is-error {
+            color: #b42318;
+        }
+
+        .auction-offers {
+            margin-top: 17px;
+            padding-top: 16px;
+            border-top: 1px solid #e1e7ef;
+        }
+
+        .auction-offers h4 {
+            margin: 0 0 10px;
+            color: var(--blue-dark);
+            font-size: 0.92rem;
+        }
+
+        .auction-offer-list {
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 7px;
+            list-style: none;
+        }
+
+        .auction-offer-list li {
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            color: #526176;
+            background: #f7f9fc;
+            border-radius: 7px;
+            font-size: 0.78rem;
+        }
+
+        .auction-offer-list strong {
+            color: var(--blue-dark);
+            white-space: nowrap;
+        }
+
+        .auction-offer-list .auction-offer-empty {
+            display: block;
+            color: #7a8799;
+            font-style: italic;
+            text-align: center;
+        }
+
+        @media (max-width: 1000px) {
+            .auction-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .auction-page {
+                padding-top: 0;
+            }
+
+            .auction-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .auction-hero,
+            .auction-section {
+                padding-right: 18px;
+                padding-left: 18px;
+            }
+
+            .auction-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .auction-bid-control {
+                grid-template-columns: 1fr;
+            }
+
+            .auction-bid-control .button {
+                width: 100%;
+            }
+        }
+
+        /* Servicios de personalización C2C simulados */
+        .service-marketplace-page,
+        .service-form-page,
+        .my-publications-page {
+            min-height: 100vh;
+            padding-top: 72px;
+            background: #f5f8fc;
+        }
+
+        .services-hero,
+        .service-marketplace,
+        .service-form-container,
+        .my-publications-container {
+            max-width: 1120px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .services-hero {
+            padding: 72px 28px 56px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 32px;
+            background: linear-gradient(135deg, #eaf2ff, #fff6ed);
+            border-right: 1px solid #dce6f3;
+            border-bottom: 1px solid #dce6f3;
+            border-left: 1px solid #dce6f3;
+            border-radius: 0 0 24px 24px;
+        }
+
+        .services-hero h1,
+        .service-form-heading h1,
+        .my-publications-container h1 {
+            margin: 10px 0 14px;
+            color: var(--blue-dark);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.08;
+        }
+
+        .services-hero p,
+        .service-form-heading p,
+        .my-publications-container p {
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .services-hero-actions,
+        .service-form-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .services-hero-actions .button,
+        .services-hero-actions .back-button,
+        .service-form-actions .button,
+        .service-form-actions .back-button {
+            margin: 0;
+        }
+
+        .service-marketplace,
+        .my-publications-container {
+            padding: 58px 28px 80px;
+        }
+
+        .service-section-heading {
+            margin-bottom: 28px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .service-section-heading h1,
+        .service-section-heading h2 {
+            margin: 8px 0 6px;
+            color: var(--blue-dark);
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+        }
+
+        .service-section-heading .button {
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .service-filter {
+            min-width: 235px;
+            display: grid;
+            gap: 7px;
+            color: #35445d;
+            font-size: 0.84rem;
+            font-weight: 900;
+        }
+
+        .service-filter select,
+        .service-form-grid input,
+        .service-form-grid select,
+        .service-form-grid textarea {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            color: var(--ink);
+            background: white;
+            border: 1px solid #cbd8e8;
+            border-radius: 9px;
+            font: inherit;
+        }
+
+        .service-filter select:focus,
+        .service-form-grid input:focus,
+        .service-form-grid select:focus,
+        .service-form-grid textarea:focus {
+            border-color: var(--blue);
+            outline: 3px solid rgba(34, 110, 232, 0.14);
+        }
+
+        .service-publication-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .service-publication-card {
+            min-width: 0;
+            display: flex;
+            overflow: hidden;
+            flex-direction: column;
+            background: white;
+            border: 1px solid #dce5f0;
+            border-radius: 17px;
+            box-shadow: 0 14px 36px rgba(39, 67, 111, 0.09);
+        }
+
+        .service-publication-image {
+            width: 100%;
+            height: 190px;
+            display: block;
+            object-fit: cover;
+            background: #dce8fa;
+        }
+
+        .service-publication-content {
+            min-height: 0;
+            padding: 21px;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+        }
+
+        .service-category-label {
+            width: max-content;
+            max-width: 100%;
+            padding: 6px 9px;
+            color: #075f58;
+            background: #e8faf4;
+            border: 1px solid #bdebdc;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 900;
+        }
+
+        .service-publication-card h3 {
+            margin: 14px 0 7px;
+            color: var(--blue-dark);
+            font-size: 1.22rem;
+            line-height: 1.28;
+        }
+
+        .service-provider {
+            margin: 0 0 13px;
+            color: #64748b;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        .service-publication-description {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .service-publication-details {
+            margin: 17px 0 13px;
+            display: grid;
+            gap: 5px;
+        }
+
+        .service-publication-details strong {
+            color: var(--blue);
+            font-size: 1rem;
+        }
+
+        .service-publication-details span {
+            color: #64748b;
+            font-size: 0.82rem;
+        }
+
+        .service-capability-tags {
+            margin-bottom: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .service-capability-tags span {
+            padding: 5px 7px;
+            color: #44546b;
+            background: #f0f4f9;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            line-height: 1.35;
+        }
+
+        .service-publication-actions {
+            margin-top: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .service-publication-actions .admin-action-button {
+            margin: 0;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .service-action-message {
+            min-height: 22px;
+            margin: 20px 0 0;
+            color: #087f5b !important;
+            font-weight: 900;
+        }
+
+        .service-empty-state {
+            margin: 24px 0 0;
+            padding: 36px;
+            color: var(--muted);
+            background: white;
+            border: 1px dashed #b9cbe1;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .service-empty-state[hidden],
+        .service-photo-preview[hidden] {
+            display: none;
+        }
+
+        .service-empty-state .button {
+            margin-top: 10px;
+        }
+
+        .service-form-container {
+            padding: 70px 28px 80px;
+        }
+
+        .service-form-heading {
+            max-width: 760px;
+            margin-bottom: 28px;
+        }
+
+        .service-publication-form {
+            padding: 30px;
+            background: white;
+            border: 1px solid #dce5f0;
+            border-radius: 18px;
+            box-shadow: 0 18px 48px rgba(39, 67, 111, 0.09);
+        }
+
+        .service-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .service-form-grid label {
+            display: grid;
+            align-content: start;
+            gap: 7px;
+            color: #35445d;
+            font-weight: 900;
+        }
+
+        .service-form-grid label small {
+            color: #718096;
+            font-size: 0.76rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .service-form-full {
+            grid-column: 1 / -1;
+        }
+
+        .service-photo-preview {
+            width: min(360px, 100%);
+            overflow: hidden;
+            border: 1px solid #d5dfec;
+            border-radius: 12px;
+        }
+
+        .service-photo-preview img {
+            width: 100%;
+            max-height: 220px;
+            display: block;
+            object-fit: cover;
+        }
+
+        .service-capabilities {
+            margin: 28px 0 0;
+            padding: 22px;
+            border: 1px solid #dce5f0;
+            border-radius: 14px;
+        }
+
+        .service-capabilities legend {
+            padding: 0 7px;
+            color: var(--blue-dark);
+            font-size: 1.05rem;
+            font-weight: 900;
+        }
+
+        .service-capabilities > p {
+            margin: 0 0 15px;
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .service-capability-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+        }
+
+        .service-capability-grid label {
+            padding: 11px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: #35445d;
+            background: #f7faff;
+            border: 1px solid #e0e8f3;
+            border-radius: 9px;
+            font-size: 0.84rem;
+            line-height: 1.4;
+        }
+
+        .service-capability-grid input {
+            width: 17px;
+            height: 17px;
+            margin: 1px 0 0;
+            flex: 0 0 auto;
+            accent-color: var(--blue);
+        }
+
+        .service-form-actions {
+            margin-top: 22px;
+        }
+
+        @media (max-width: 940px) {
+            .service-publication-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .services-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .service-marketplace-page,
+            .service-form-page,
+            .my-publications-page {
+                padding-top: 0;
+            }
+
+            .services-hero,
+            .service-section-heading {
+                align-items: flex-start;
+            }
+
+            .service-section-heading {
+                flex-direction: column;
+            }
+
+            .service-filter {
+                width: 100%;
+            }
+
+            .service-form-grid,
+            .service-capability-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-form-full {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .services-hero,
+            .service-marketplace,
+            .service-form-container,
+            .my-publications-container {
+                padding-right: 18px;
+                padding-left: 18px;
+            }
+
+            .service-publication-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-publication-form {
+                padding: 20px;
+            }
+
+            .services-hero-actions,
+            .services-hero-actions .button,
+            .services-hero-actions .back-button,
+            .service-form-actions,
+            .service-form-actions .button,
+            .service-form-actions .back-button {
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
             }
         }
 

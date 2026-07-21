@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios de personalización | ECore Agents</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>ECore Agents</h2></div>
+        <nav aria-label="Navegación principal">
+            <a href="index.html#home">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="services.html" aria-current="page">Servicios</a>
+            <a href="cart.html">Carrito <span class="cart-count" aria-label="0 agentes en el carrito">0</span></a>
+            <a href="index.html#contact">Contacto</a>
+            <a href="login.html">Iniciar sesión</a>
+        </nav>
+    </header>
+
+    <main class="service-marketplace-page">
+        <section class="services-hero">
+            <div>
+                <span class="section-eyebrow">Comunidad C2C simulada</span>
+                <h1>Expertos que adaptan tu agente a tu negocio</h1>
+                <p>Encuentra ayuda para cargar servicios, costos, horarios, reglas de atención y automatizaciones en tu agente.</p>
+            </div>
+            <div class="services-hero-actions">
+                <a class="button" href="publish-service.html">Publicar servicio</a>
+                <a class="back-button" href="my-publications.html">Mis publicaciones</a>
+            </div>
+        </section>
+
+        <section class="service-marketplace" aria-labelledby="services-title">
+            <div class="service-section-heading">
+                <div>
+                    <span class="section-eyebrow">Publicaciones de la comunidad</span>
+                    <h2 id="services-title">Servicios disponibles</h2>
+                </div>
+                <label class="service-filter" for="service-category-filter">
+                    Filtrar por especialidad
+                    <select id="service-category-filter">
+                        <option value="all">Todas las especialidades</option>
+                        <option value="context">Contexto del negocio</option>
+                        <option value="automation">Automatización</option>
+                        <option value="whatsapp">WhatsApp y seguimiento</option>
+                        <option value="training">Entrenamiento y mejora</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="service-publication-grid" id="service-publication-list"></div>
+            <p class="service-empty-state" id="service-publication-empty" hidden>No hay servicios en esta categoría.</p>
+            <p class="service-action-message" id="service-marketplace-message" role="status" aria-live="polite"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+        <p class="footer-policy"><button type="button" class="policy-link" data-policy-open>Políticas y condiciones</button></p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

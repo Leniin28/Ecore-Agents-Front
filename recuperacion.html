@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecore Recuperacion</title>
+    <title>Recuperación de contraseña | ECore Agents</title>
     <link rel="stylesheet" href="style.css">
 
 
@@ -19,6 +19,7 @@
             <a href="index.html#home">Inicio</a>
             <a href="index.html#about">Nosotros</a>
             <a href="catalogo.html">Catálogo</a>
+            <a href="services.html">Servicios</a>
             <a href="cart.html">Carrito <span class="cart-count" aria-label="0 agentes en el carrito">0</span></a>
             <a href="index.html#contact">Contacto</a>
             <a href="register.html">Registro</a>
@@ -30,19 +31,30 @@
     <main>
         <section class="auth-page">
             <div class="auth-card">
-                <h1>Recuperacion</h1>
-                <form id="login-form" class="auth-form">
-                    <label for="login-email">Correo:</label>
-                    <input type="email" id="login-email" name="email" autocomplete="email" required>
+                <h1>Recuperación de contraseña</h1>
+                <p class="recovery-intro">Ingresa tu correo para simular el envío de instrucciones de recuperación.</p>
+                <form id="recovery-form" class="auth-form">
+                    <label for="recovery-email">Correo:</label>
+                    <input type="email" id="recovery-email" name="email" autocomplete="email" required>
 
-                    <button href="login.html" class="button" type="submit">Enviar contraseña</button>
-                    
+                    <button class="button" type="submit">Enviar contraseña</button>
+                    <p id="recovery-message" class="auth-message recovery-message" role="status" aria-live="polite"></p>
                 </form>
-
-            
             </div>
         </section>
     </main>
+
+    <div class="recovery-modal" id="recovery-modal" hidden role="dialog" aria-modal="true" aria-labelledby="recovery-modal-title">
+        <div class="recovery-modal-backdrop" data-recovery-close></div>
+        <section class="recovery-modal-content">
+            <button type="button" class="recovery-modal-close" data-recovery-close aria-label="Cerrar confirmación">×</button>
+            <span class="section-eyebrow">Simulación académica</span>
+            <h2 id="recovery-modal-title">Correo enviado</h2>
+            <p class="recovery-success-text">Contraseña enviada a correo (simulado).</p>
+            <p>En una aplicación real recibirías instrucciones para crear una nueva contraseña.</p>
+            <a href="login.html" class="button">Ir a iniciar sesión</a>
+        </section>
+    </div>
 
     <footer>
         <p>&copy; 2026 ECore. Todos los derechos reservados.</p>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis publicaciones | ECore Agents</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>ECore Agents</h2></div>
+        <nav aria-label="Navegación principal">
+            <a href="index.html#home">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="services.html">Servicios</a>
+            <a href="my-publications.html" aria-current="page">Mis publicaciones</a>
+            <a href="profile.html">Perfil</a>
+        </nav>
+    </header>
+
+    <main class="my-publications-page">
+        <section class="my-publications-container">
+            <div class="service-section-heading">
+                <div>
+                    <span class="section-eyebrow">Área del usuario</span>
+                    <h1>Mis publicaciones</h1>
+                    <p>Administra los servicios de personalización asociados a tu sesión.</p>
+                </div>
+                <a class="button" href="publish-service.html">Nueva publicación</a>
+            </div>
+
+            <p class="service-action-message" id="my-publications-message" role="status" aria-live="polite"></p>
+            <div class="service-publication-grid" id="my-publication-list"></div>
+            <div class="service-empty-state" id="my-publication-empty" hidden>
+                <h2>Aún no tienes publicaciones</h2>
+                <p>Crea tu primer servicio para que aparezca en el escaparate de la comunidad.</p>
+                <a class="button" href="publish-service.html">Publicar servicio</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ECore. Todos los derechos reservados.</p>
+        <p class="footer-policy"><button type="button" class="policy-link" data-policy-open>Políticas y condiciones</button></p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

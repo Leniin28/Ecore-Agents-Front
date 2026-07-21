@@ -8,6 +8,20 @@ const PROMOTION_STORAGE_KEY = "ecorePromotions";
 const DELETED_PROMOTION_STORAGE_KEY = "ecoreDeletedPromotions";
 const APPLIED_PROMOTION_KEY = "ecoreAppliedPromotion";
 const COOKIE_CONSENT_STORAGE_KEY = "ecoreCookieConsent";
+const AUCTION_OFFERS_STORAGE_KEY = "ecoreAuctionOffers";
+const AUCTION_DEADLINES_STORAGE_KEY = "ecoreAuctionDeadlines";
+
+const DEFAULT_AUCTION_OFFERS = {
+    "gaming-pc": [
+        { user: "Mariana G.", amount: 12500, createdAt: "2026-07-16T10:00:00.000Z" }
+    ],
+    monitor: [
+        { user: "Luis R.", amount: 3200, createdAt: "2026-07-16T10:05:00.000Z" }
+    ],
+    keyboard: [
+        { user: "Andrea M.", amount: 850, createdAt: "2026-07-16T10:10:00.000Z" }
+    ]
+};
 
 const DEFAULT_PROMOTIONS = [
     {
@@ -847,6 +861,218 @@ function initCookieConsent() {
 }
 
 initCookieConsent();
+
+function addAuctionNavigationLink() {
+    document.querySelectorAll('nav[aria-label="Navegación principal"]').forEach(function (navigation) {
+        if (navigation.querySelector('a[href="auction.html"]')) {
+            return;
+        }
+
+        const auctionLink = document.createElement("a");
+        const servicesLink = navigation.querySelector('a[href="services.html"]');
+        const catalogLink = navigation.querySelector('a[href="catalogo.html"]');
+        const referenceLink = servicesLink || catalogLink;
+
+        auctionLink.href = "auction.html";
+        auctionLink.textContent = "Subasta";
+
+        if (referenceLink) {
+            referenceLink.insertAdjacentElement("afterend", auctionLink);
+        } else {
+            navigation.appendChild(auctionLink);
+        }
+    });
+}
+
+function getAuctionOffers() {
+    try {
+        const storedValue = localStorage.getItem(AUCTION_OFFERS_STORAGE_KEY);
+
+        if (!storedValue) {
+            return JSON.parse(JSON.stringify(DEFAULT_AUCTION_OFFERS));
+        }
+
+        const storedOffers = JSON.parse(storedValue);
+        return storedOffers && typeof storedOffers === "object" ? storedOffers : {};
+    } catch (error) {
+        return JSON.parse(JSON.stringify(DEFAULT_AUCTION_OFFERS));
+    }
+}
+
+function saveAuctionOffers(offers) {
+    try {
+        localStorage.setItem(AUCTION_OFFERS_STORAGE_KEY, JSON.stringify(offers));
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+function getAuctionDeadlines() {
+    try {
+        const storedDeadlines = JSON.parse(localStorage.getItem(AUCTION_DEADLINES_STORAGE_KEY) || "{}");
+        return storedDeadlines && typeof storedDeadlines === "object" ? storedDeadlines : {};
+    } catch (error) {
+        return {};
+    }
+}
+
+function saveAuctionDeadlines(deadlines) {
+    try {
+        localStorage.setItem(AUCTION_DEADLINES_STORAGE_KEY, JSON.stringify(deadlines));
+    } catch (error) {
+        return;
+    }
+}
+
+function getAuctionUserName() {
+    try {
+        const sessionUser = JSON.parse(localStorage.getItem("ecoreSession") || "null");
+        return sessionUser && sessionUser.name ? String(sessionUser.name) : "Usuario invitado";
+    } catch (error) {
+        return "Usuario invitado";
+    }
+}
+
+function formatAuctionTime(seconds) {
+    const safeSeconds = Math.max(0, Math.floor(seconds));
+    const hours = Math.floor(safeSeconds / 3600);
+    const minutes = Math.floor((safeSeconds % 3600) / 60);
+    const remainingSeconds = safeSeconds % 60;
+
+    return [hours, minutes, remainingSeconds].map(function (value) {
+        return String(value).padStart(2, "0");
+    }).join(":");
+}
+
+function renderAuctionCard(auctionCard) {
+    const auctionId = auctionCard.dataset.auctionId;
+    const startingPrice = Number(auctionCard.dataset.startingPrice);
+    const allOffers = getAuctionOffers();
+    const productOffers = Array.isArray(allOffers[auctionId]) ? allOffers[auctionId] : [];
+    const currentPrice = productOffers.reduce(function (highestPrice, offer) {
+        return Math.max(highestPrice, Number(offer.amount) || 0);
+    }, startingPrice);
+    const priceElement = auctionCard.querySelector(".auction-current-price");
+    const bidInput = auctionCard.querySelector(".auction-bid-input");
+    const offerList = auctionCard.querySelector(".auction-offer-list");
+
+    if (priceElement) {
+        priceElement.textContent = formatCurrency(currentPrice);
+    }
+
+    if (bidInput) {
+        const step = Math.max(1, Number(bidInput.step) || 1);
+        bidInput.min = String(currentPrice + step);
+    }
+
+    if (!offerList) {
+        return;
+    }
+
+    offerList.replaceChildren();
+
+    if (productOffers.length === 0) {
+        const emptyItem = document.createElement("li");
+        emptyItem.className = "auction-offer-empty";
+        emptyItem.textContent = "Todavía no hay ofertas registradas.";
+        offerList.appendChild(emptyItem);
+        return;
+    }
+
+    productOffers.slice().reverse().slice(0, 5).forEach(function (offer) {
+        const offerItem = document.createElement("li");
+        const userName = document.createElement("span");
+        const amount = document.createElement("strong");
+
+        userName.textContent = String(offer.user || "Usuario invitado");
+        amount.textContent = formatCurrency(Number(offer.amount));
+        offerItem.append(userName, amount);
+        offerList.appendChild(offerItem);
+    });
+}
+
+function initAuctionPage() {
+    const auctionCards = document.querySelectorAll(".auction-card[data-auction-id]");
+
+    if (auctionCards.length === 0) {
+        return;
+    }
+
+    const deadlines = getAuctionDeadlines();
+    const now = Date.now();
+
+    auctionCards.forEach(function (auctionCard) {
+        const auctionId = auctionCard.dataset.auctionId;
+        const duration = Math.max(60, Number(auctionCard.dataset.duration) || 3600);
+
+        if (!Number.isFinite(Number(deadlines[auctionId])) || Number(deadlines[auctionId]) <= now) {
+            deadlines[auctionId] = now + duration * 1000;
+        }
+
+        renderAuctionCard(auctionCard);
+
+        const bidForm = auctionCard.querySelector(".auction-bid-form");
+        const bidInput = auctionCard.querySelector(".auction-bid-input");
+        const bidMessage = auctionCard.querySelector(".auction-bid-message");
+
+        if (bidForm && bidInput && bidMessage) {
+            bidForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const bidAmount = Number(bidInput.value);
+                const minimumBid = Number(bidInput.min);
+
+                if (!Number.isFinite(bidAmount) || bidAmount < minimumBid) {
+                    bidMessage.textContent = `La oferta debe ser de al menos ${formatCurrency(minimumBid)}.`;
+                    bidMessage.classList.add("is-error");
+                    return;
+                }
+
+                const allOffers = getAuctionOffers();
+                const productOffers = Array.isArray(allOffers[auctionId]) ? allOffers[auctionId] : [];
+                productOffers.push({
+                    user: getAuctionUserName(),
+                    amount: bidAmount,
+                    createdAt: new Date().toISOString()
+                });
+                allOffers[auctionId] = productOffers;
+
+                if (!saveAuctionOffers(allOffers)) {
+                    bidMessage.textContent = "No fue posible registrar la oferta simulada.";
+                    bidMessage.classList.add("is-error");
+                    return;
+                }
+
+                bidInput.value = "";
+                bidMessage.textContent = "Oferta registrada (simulado).";
+                bidMessage.classList.remove("is-error");
+                renderAuctionCard(auctionCard);
+            });
+        }
+    });
+
+    saveAuctionDeadlines(deadlines);
+
+    function updateAuctionTimers() {
+        const currentTime = Date.now();
+
+        auctionCards.forEach(function (auctionCard) {
+            const auctionId = auctionCard.dataset.auctionId;
+            const countdown = auctionCard.querySelector(".auction-countdown");
+            const remainingSeconds = Math.max(0, Math.floor((Number(deadlines[auctionId]) - currentTime) / 1000));
+
+            if (countdown) {
+                countdown.textContent = remainingSeconds > 0 ? formatAuctionTime(remainingSeconds) : "Finalizada";
+            }
+        });
+    }
+
+    updateAuctionTimers();
+    window.setInterval(updateAuctionTimers, 1000);
+}
+
+addAuctionNavigationLink();
+initAuctionPage();
 
 updateCartCount();
 renderCart();
@@ -1732,7 +1958,9 @@ if (customAgentBuilder) {
 }
 
 const USER_STORAGE_KEY = "ecoreUser";
+const USERS_STORAGE_KEY = "ecoreUsers";
 const SESSION_STORAGE_KEY = "ecoreSession";
+const SERVICE_PUBLICATIONS_STORAGE_KEY = "ecoreServicePublications";
 
 function readStoredUser(storageKey) {
     const storedUser = localStorage.getItem(storageKey);
@@ -1749,6 +1977,45 @@ function readStoredUser(storageKey) {
     }
 }
 
+function getRegisteredUsers() {
+    try {
+        const storedUsers = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) || "[]");
+        const users = Array.isArray(storedUsers) ? storedUsers : [];
+        const legacyUser = readStoredUser(USER_STORAGE_KEY);
+
+        if (legacyUser && legacyUser.email && !users.some(function (user) {
+            return user.email === legacyUser.email;
+        })) {
+            users.push(legacyUser);
+            localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+        }
+
+        return users;
+    } catch (error) {
+        return [];
+    }
+}
+
+function getAuthRedirect(defaultPage) {
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+    const allowedPages = ["profile.html", "publish-service.html", "my-publications.html", "services.html"];
+    const redirectPage = redirect ? redirect.split("?")[0] : "";
+    return allowedPages.includes(redirectPage) ? redirect : defaultPage;
+}
+
+function preserveAuthRedirectLinks() {
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+
+    if (!redirect) {
+        return;
+    }
+
+    document.querySelectorAll('a[href="register.html"], a[href="login.html"]').forEach(function (authLink) {
+        const targetPage = authLink.getAttribute("href");
+        authLink.href = `${targetPage}?redirect=${encodeURIComponent(redirect)}`;
+    });
+}
+
 function handleRegister(event) {
     event.preventDefault();
 
@@ -1756,12 +2023,26 @@ function handleRegister(event) {
     const email = document.getElementById("register-email").value.trim().toLowerCase();
     const registerMessage = document.getElementById("register-message");
     const user = { name, email };
+    const registeredUsers = getRegisteredUsers();
 
+    if (registeredUsers.some(function (registeredUser) {
+        return registeredUser.email === email;
+    })) {
+        registerMessage.textContent = "Ya existe un usuario registrado con ese correo.";
+        registerMessage.classList.add("message-error");
+        return;
+    }
+
+    registeredUsers.push(user);
+    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(registeredUsers));
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
-    localStorage.removeItem(SESSION_STORAGE_KEY);
+    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user));
 
-    registerMessage.textContent = "Registro exitoso (simulado).";
-    event.currentTarget.reset();
+    registerMessage.classList.remove("message-error");
+    registerMessage.textContent = "Registro exitoso (simulado). Iniciando sesión...";
+    window.setTimeout(function () {
+        window.location.href = getAuthRedirect("profile.html");
+    }, 650);
 }
 
 function handleLogin(event) {
@@ -1769,13 +2050,9 @@ function handleLogin(event) {
 
     const email = document.getElementById("login-email").value.trim().toLowerCase();
     const loginMessage = document.getElementById("login-message");
-    const registeredUser = readStoredUser(USER_STORAGE_KEY);
-
-    if (registeredUser && registeredUser.email !== email) {
-        loginMessage.textContent = "El correo no coincide con el usuario registrado.";
-        loginMessage.classList.add("message-error");
-        return;
-    }
+    const registeredUser = getRegisteredUsers().find(function (user) {
+        return user.email === email;
+    });
 
     const sessionUser = registeredUser || {
         name: "Usuario demo",
@@ -1783,7 +2060,8 @@ function handleLogin(event) {
     };
 
     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionUser));
-    window.location.href = "profile.html";
+    loginMessage.classList.remove("message-error");
+    window.location.href = getAuthRedirect("profile.html");
 }
 
 function loadProfile() {
@@ -1805,14 +2083,85 @@ function loadProfile() {
     profileEmail.textContent = sessionUser.email;
 }
 
+function updateAuthNavigation() {
+    const sessionUser = readStoredUser(SESSION_STORAGE_KEY);
+
+    if (!sessionUser) {
+        return;
+    }
+
+    document.querySelectorAll(".logo").forEach(function (logo) {
+        let userName = logo.querySelector(".user-nav-name");
+
+        if (!userName) {
+            userName = document.createElement("span");
+            userName.className = "user-nav-name";
+            logo.appendChild(userName);
+        }
+
+        userName.textContent = String(sessionUser.name || "Usuario");
+    });
+
+    document.querySelectorAll('nav[aria-label="Navegación principal"]').forEach(function (navigation) {
+        navigation.querySelectorAll('a[href^="register.html"], a[href^="login.html"]').forEach(function (authLink) {
+            authLink.remove();
+        });
+
+        if (!navigation.querySelector('a[href="profile.html"]')) {
+            const profileLink = document.createElement("a");
+            profileLink.href = "profile.html";
+            profileLink.textContent = "Perfil";
+            navigation.appendChild(profileLink);
+        }
+    });
+}
+
 function handleLogout() {
     localStorage.removeItem(SESSION_STORAGE_KEY);
     window.location.href = "index.html";
 }
 
+function handleRecovery(event) {
+    event.preventDefault();
+
+    const recoveryEmail = document.getElementById("recovery-email");
+    const recoveryMessage = document.getElementById("recovery-message");
+    const recoveryModal = document.getElementById("recovery-modal");
+
+    if (!recoveryEmail || !recoveryMessage || !recoveryEmail.value.trim()) {
+        return;
+    }
+
+    recoveryMessage.textContent = "Contraseña enviada a correo (simulado).";
+    recoveryMessage.classList.remove("message-error");
+
+    if (recoveryModal) {
+        recoveryModal.hidden = false;
+        document.body.classList.add("modal-open");
+
+        const loginLink = recoveryModal.querySelector("a[href=\"login.html\"]");
+        if (loginLink) {
+            loginLink.focus();
+        }
+    }
+}
+
+function closeRecoveryModal() {
+    const recoveryModal = document.getElementById("recovery-modal");
+
+    if (!recoveryModal) {
+        return;
+    }
+
+    recoveryModal.hidden = true;
+    document.body.classList.remove("modal-open");
+}
+
 const registerForm = document.getElementById("register-form");
 const loginForm = document.getElementById("login-form");
 const logoutButton = document.getElementById("logout-button");
+const recoveryForm = document.getElementById("recovery-form");
+const recoveryCloseButtons = document.querySelectorAll("[data-recovery-close]");
 
 if (registerForm) {
     registerForm.addEventListener("submit", handleRegister);
@@ -1826,4 +2175,458 @@ if (logoutButton) {
     logoutButton.addEventListener("click", handleLogout);
 }
 
+if (recoveryForm) {
+    recoveryForm.addEventListener("submit", handleRecovery);
+}
+
+recoveryCloseButtons.forEach(function (recoveryCloseButton) {
+    recoveryCloseButton.addEventListener("click", closeRecoveryModal);
+});
+
+document.addEventListener("keydown", function (event) {
+    const recoveryModal = document.getElementById("recovery-modal");
+
+    if (event.key === "Escape" && recoveryModal && !recoveryModal.hidden) {
+        closeRecoveryModal();
+    }
+});
+
+preserveAuthRedirectLinks();
 loadProfile();
+updateAuthNavigation();
+
+const DEFAULT_SERVICE_PUBLICATIONS = [
+    {
+        id: "demo-context",
+        ownerEmail: "ana.demo@ecore.mx",
+        ownerName: "Ana Torres",
+        title: "Contexto completo para negocios de servicios",
+        price: 750,
+        description: "Configuro servicios, precios, horarios, políticas, preguntas frecuentes y tono de atención para que el agente responda como tu negocio.",
+        category: "context",
+        delivery: "3 a 5 días",
+        photo: "landing.png",
+        capabilities: ["Servicios, costos, horarios y forma de trabajo", "Contexto, preguntas frecuentes y tono de atención", "Historial conversacional y sugerencias de contexto"],
+        createdAt: "2026-07-01T12:00:00.000Z"
+    },
+    {
+        id: "demo-whatsapp",
+        ownerEmail: "carlos.demo@ecore.mx",
+        ownerName: "Carlos Méndez",
+        title: "Automatización de citas y seguimiento por WhatsApp",
+        price: 1100,
+        description: "Organizo agenda, confirmaciones, recordatorios y seguimiento de conversaciones para reducir citas perdidas.",
+        category: "whatsapp",
+        delivery: "1 semana",
+        photo: "landing.png",
+        capabilities: ["Recordatorios y seguimiento por WhatsApp", "Agenda y confirmación de citas", "Alertas y reportes de actividad"],
+        createdAt: "2026-07-02T12:00:00.000Z"
+    },
+    {
+        id: "demo-training",
+        ownerEmail: "sofia.demo@ecore.mx",
+        ownerName: "Sofía Ramírez",
+        title: "Entrenamiento y flujos avanzados del agente",
+        price: 1450,
+        description: "Reviso conversaciones, mejoro el contexto y preparo flujos personalizados con supervisión para automatizaciones avanzadas.",
+        category: "training",
+        delivery: "1 semana",
+        photo: "landing.png",
+        capabilities: ["Autoaprendizaje supervisado", "Flujos personalizados y automatizaciones", "Transcripción, respuestas en audio y llamadas"],
+        createdAt: "2026-07-03T12:00:00.000Z"
+    }
+];
+
+function normalizeServicePublication(publication) {
+    if (!publication || !publication.id || !publication.ownerEmail || !publication.title) {
+        return null;
+    }
+
+    return {
+        id: String(publication.id),
+        ownerEmail: String(publication.ownerEmail).trim().toLowerCase(),
+        ownerName: String(publication.ownerName || "Usuario de ECore"),
+        title: String(publication.title),
+        price: Math.max(1, Number(publication.price) || 1),
+        description: String(publication.description || ""),
+        category: ["context", "automation", "whatsapp", "training"].includes(publication.category) ? publication.category : "context",
+        delivery: String(publication.delivery || "A convenir"),
+        photo: String(publication.photo || "landing.png"),
+        capabilities: Array.isArray(publication.capabilities) ? publication.capabilities.map(String) : [],
+        createdAt: String(publication.createdAt || new Date().toISOString())
+    };
+}
+
+function getStoredServicePublications() {
+    try {
+        const storedPublications = JSON.parse(localStorage.getItem(SERVICE_PUBLICATIONS_STORAGE_KEY) || "[]");
+        return Array.isArray(storedPublications) ? storedPublications.map(normalizeServicePublication).filter(Boolean) : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveServicePublications(publications) {
+    try {
+        localStorage.setItem(SERVICE_PUBLICATIONS_STORAGE_KEY, JSON.stringify(publications));
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+function getAllServicePublications() {
+    return DEFAULT_SERVICE_PUBLICATIONS.concat(getStoredServicePublications());
+}
+
+function getServiceCategoryLabel(category) {
+    const categoryLabels = {
+        context: "Contexto del negocio",
+        automation: "Automatización",
+        whatsapp: "WhatsApp y seguimiento",
+        training: "Entrenamiento y mejora"
+    };
+    return categoryLabels[category] || categoryLabels.context;
+}
+
+function createServicePublicationCard(publication, editable) {
+    const card = document.createElement("article");
+    const image = document.createElement("img");
+    const content = document.createElement("div");
+    const category = document.createElement("span");
+    const title = document.createElement("h3");
+    const provider = document.createElement("p");
+    const description = document.createElement("p");
+    const details = document.createElement("div");
+    const price = document.createElement("strong");
+    const delivery = document.createElement("span");
+    const capabilityList = document.createElement("div");
+    const actions = document.createElement("div");
+
+    card.className = "service-publication-card";
+    card.dataset.serviceCategory = publication.category;
+    card.dataset.publicationId = publication.id;
+    image.className = "service-publication-image";
+    image.src = publication.photo || "landing.png";
+    image.alt = `Imagen de ${publication.title}`;
+    content.className = "service-publication-content";
+    category.className = "service-category-label";
+    category.textContent = getServiceCategoryLabel(publication.category);
+    title.textContent = publication.title;
+    provider.className = "service-provider";
+    provider.textContent = `Publicado por ${publication.ownerName}`;
+    description.className = "service-publication-description";
+    description.textContent = publication.description;
+    details.className = "service-publication-details";
+    price.textContent = `${formatCurrency(publication.price)} por servicio`;
+    delivery.textContent = `Entrega: ${publication.delivery}`;
+    capabilityList.className = "service-capability-tags";
+
+    publication.capabilities.slice(0, 3).forEach(function (capability) {
+        const tag = document.createElement("span");
+        tag.textContent = capability;
+        capabilityList.appendChild(tag);
+    });
+
+    if (publication.capabilities.length > 3) {
+        const extraTag = document.createElement("span");
+        extraTag.textContent = `+${publication.capabilities.length - 3} opciones`;
+        capabilityList.appendChild(extraTag);
+    }
+
+    actions.className = "service-publication-actions";
+
+    if (editable) {
+        const editLink = document.createElement("a");
+        const deleteButton = document.createElement("button");
+        editLink.className = "admin-action-button";
+        editLink.href = `publish-service.html?id=${encodeURIComponent(publication.id)}`;
+        editLink.textContent = "Editar";
+        deleteButton.type = "button";
+        deleteButton.className = "admin-action-button danger service-delete-publication";
+        deleteButton.textContent = "Eliminar";
+        actions.append(editLink, deleteButton);
+    } else {
+        const contactButton = document.createElement("button");
+        contactButton.type = "button";
+        contactButton.className = "admin-action-button service-contact-provider";
+        contactButton.textContent = "Solicitar información";
+        actions.appendChild(contactButton);
+    }
+
+    details.append(price, delivery);
+    content.append(category, title, provider, description, details, capabilityList, actions);
+    card.append(image, content);
+    return card;
+}
+
+function renderServiceMarketplace() {
+    const publicationList = document.getElementById("service-publication-list");
+    const emptyState = document.getElementById("service-publication-empty");
+    const categoryFilter = document.getElementById("service-category-filter");
+
+    if (!publicationList || !emptyState) {
+        return;
+    }
+
+    const selectedCategory = categoryFilter ? categoryFilter.value : "all";
+    const publications = getAllServicePublications().filter(function (publication) {
+        return selectedCategory === "all" || publication.category === selectedCategory;
+    });
+    publicationList.replaceChildren();
+    publications.forEach(function (publication) {
+        publicationList.appendChild(createServicePublicationCard(publication, false));
+    });
+    emptyState.hidden = publications.length > 0;
+}
+
+function initServiceMarketplace() {
+    const publicationList = document.getElementById("service-publication-list");
+    const categoryFilter = document.getElementById("service-category-filter");
+    const message = document.getElementById("service-marketplace-message");
+
+    if (!publicationList) {
+        return;
+    }
+
+    renderServiceMarketplace();
+
+    if (categoryFilter) {
+        categoryFilter.addEventListener("change", renderServiceMarketplace);
+    }
+
+    publicationList.addEventListener("click", function (event) {
+        const contactButton = event.target.closest(".service-contact-provider");
+        const card = event.target.closest(".service-publication-card");
+
+        if (contactButton && card && message) {
+            const publication = getAllServicePublications().find(function (item) {
+                return item.id === card.dataset.publicationId;
+            });
+            message.textContent = publication
+                ? `Solicitud enviada a ${publication.ownerName} (simulado).`
+                : "Solicitud enviada correctamente (simulado).";
+        }
+    });
+}
+
+function getServicePageSession() {
+    const sessionUser = readStoredUser(SESSION_STORAGE_KEY);
+
+    if (sessionUser) {
+        return sessionUser;
+    }
+
+    const currentPage = `${window.location.pathname.split("/").pop()}${window.location.search}`;
+    window.location.replace(`login.html?redirect=${encodeURIComponent(currentPage)}`);
+    return null;
+}
+
+function readServicePhoto(file) {
+    return new Promise(function (resolve, reject) {
+        if (!file) {
+            resolve("");
+            return;
+        }
+
+        if (file.size > 1024 * 1024) {
+            reject(new Error("La imagen debe pesar máximo 1 MB."));
+            return;
+        }
+
+        if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+            reject(new Error("Selecciona una imagen JPG, PNG o WebP válida."));
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.addEventListener("load", function () {
+            resolve(String(reader.result || ""));
+        });
+        reader.addEventListener("error", function () {
+            reject(new Error("No fue posible leer la imagen seleccionada."));
+        });
+        reader.readAsDataURL(file);
+    });
+}
+
+function initServicePublicationForm() {
+    const form = document.getElementById("service-publication-form");
+
+    if (!form) {
+        return;
+    }
+
+    const sessionUser = getServicePageSession();
+
+    if (!sessionUser) {
+        return;
+    }
+
+    const publicationId = new URLSearchParams(window.location.search).get("id");
+    const editingPublication = publicationId ? getStoredServicePublications().find(function (publication) {
+        return publication.id === publicationId && publication.ownerEmail === sessionUser.email;
+    }) : null;
+    const formTitle = document.getElementById("service-form-title");
+    const publishButton = document.getElementById("service-publish-button");
+    const photoInput = document.getElementById("service-photo");
+    const preview = document.getElementById("service-photo-preview");
+    const previewImage = document.getElementById("service-photo-preview-image");
+    const message = document.getElementById("service-form-message");
+    let currentPhoto = editingPublication ? editingPublication.photo : "";
+
+    if (publicationId && !editingPublication) {
+        message.textContent = "No se encontró una publicación editable asociada a tu usuario.";
+        form.querySelectorAll("input, select, textarea, button").forEach(function (control) {
+            control.disabled = true;
+        });
+        return;
+    }
+
+    if (editingPublication) {
+        formTitle.textContent = "Editar servicio publicado";
+        publishButton.textContent = "Guardar cambios";
+        document.getElementById("service-title").value = editingPublication.title;
+        document.getElementById("service-price").value = String(editingPublication.price);
+        document.getElementById("service-category").value = editingPublication.category;
+        document.getElementById("service-delivery").value = editingPublication.delivery;
+        document.getElementById("service-description").value = editingPublication.description;
+        form.querySelectorAll("[name='serviceCapability']").forEach(function (checkbox) {
+            checkbox.checked = editingPublication.capabilities.includes(checkbox.value);
+        });
+        previewImage.src = editingPublication.photo;
+        preview.hidden = false;
+    }
+
+    photoInput.addEventListener("change", async function () {
+        try {
+            currentPhoto = await readServicePhoto(photoInput.files[0]);
+            if (currentPhoto) {
+                previewImage.src = currentPhoto;
+                preview.hidden = false;
+                message.textContent = "Vista previa de la foto cargada.";
+            }
+        } catch (error) {
+            photoInput.value = "";
+            currentPhoto = editingPublication ? editingPublication.photo : "";
+            message.textContent = error.message;
+        }
+    });
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const capabilities = Array.from(form.querySelectorAll("[name='serviceCapability']:checked")).map(function (checkbox) {
+            return checkbox.value;
+        });
+
+        if (capabilities.length === 0) {
+            message.textContent = "Selecciona por lo menos una opción de personalización.";
+            return;
+        }
+
+        try {
+            if (photoInput.files[0]) {
+                currentPhoto = await readServicePhoto(photoInput.files[0]);
+            }
+        } catch (error) {
+            message.textContent = error.message;
+            return;
+        }
+
+        if (!currentPhoto) {
+            message.textContent = "Selecciona una foto para la publicación.";
+            return;
+        }
+
+        const publicationData = normalizeServicePublication({
+            id: editingPublication ? editingPublication.id : `service-${Date.now()}`,
+            ownerEmail: sessionUser.email,
+            ownerName: sessionUser.name,
+            title: document.getElementById("service-title").value.trim(),
+            price: Number(document.getElementById("service-price").value),
+            description: document.getElementById("service-description").value.trim(),
+            category: document.getElementById("service-category").value,
+            delivery: document.getElementById("service-delivery").value,
+            photo: currentPhoto,
+            capabilities: capabilities,
+            createdAt: editingPublication ? editingPublication.createdAt : new Date().toISOString()
+        });
+        const nextPublications = getStoredServicePublications().filter(function (publication) {
+            return publication.id !== publicationData.id;
+        });
+        nextPublications.push(publicationData);
+
+        if (!saveServicePublications(nextPublications)) {
+            message.textContent = "No fue posible guardar la publicación. Intenta usar una imagen más pequeña.";
+            return;
+        }
+
+        message.textContent = editingPublication
+            ? "Publicación actualizada correctamente (simulado)."
+            : "Publicado (simulado). Ya aparece en Mis publicaciones.";
+        window.setTimeout(function () {
+            window.location.href = "my-publications.html";
+        }, 900);
+    });
+}
+
+function renderMyPublications(sessionUser) {
+    const publicationList = document.getElementById("my-publication-list");
+    const emptyState = document.getElementById("my-publication-empty");
+
+    if (!publicationList || !emptyState) {
+        return;
+    }
+
+    const publications = getStoredServicePublications().filter(function (publication) {
+        return publication.ownerEmail === sessionUser.email;
+    });
+    publicationList.replaceChildren();
+    publications.forEach(function (publication) {
+        publicationList.appendChild(createServicePublicationCard(publication, true));
+    });
+    emptyState.hidden = publications.length > 0;
+}
+
+function initMyPublications() {
+    const publicationList = document.getElementById("my-publication-list");
+
+    if (!publicationList) {
+        return;
+    }
+
+    const sessionUser = getServicePageSession();
+
+    if (!sessionUser) {
+        return;
+    }
+
+    const message = document.getElementById("my-publications-message");
+    renderMyPublications(sessionUser);
+
+    publicationList.addEventListener("click", function (event) {
+        const deleteButton = event.target.closest(".service-delete-publication");
+        const card = event.target.closest(".service-publication-card");
+
+        if (!deleteButton || !card) {
+            return;
+        }
+
+        const confirmed = window.confirm("¿Seguro que deseas eliminar esta publicación? Esta acción es simulada.");
+
+        if (!confirmed) {
+            return;
+        }
+
+        const remainingPublications = getStoredServicePublications().filter(function (publication) {
+            return publication.id !== card.dataset.publicationId || publication.ownerEmail !== sessionUser.email;
+        });
+        saveServicePublications(remainingPublications);
+        renderMyPublications(sessionUser);
+        message.textContent = "Publicación eliminada correctamente (simulado).";
+    });
+}
+
+initServiceMarketplace();
+initServicePublicationForm();
+initMyPublications();
