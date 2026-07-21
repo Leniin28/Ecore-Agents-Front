@@ -1062,6 +1062,50 @@ function initCookieConsent() {
 
 initCookieConsent();
 
+function syncMainNavigation() {
+    const currentPage = window.location.pathname.split("/").pop() || "index.html";
+    const catalogPages = ["catalogo.html", "custom-agent.html", "plan-start.html", "plan-plus.html", "plan-advanced.html"];
+
+    const navigationLinks = [
+        { href: "index.html#home", label: "Inicio", active: currentPage === "index.html" },
+        { href: "index.html#about", label: "Nosotros" },
+        { href: "catalogo.html", label: "Catálogo", active: catalogPages.includes(currentPage) },
+        { href: "services.html", label: "Servicios", active: ["services.html", "publish-service.html", "my-publications.html"].includes(currentPage) },
+        { href: "auction.html", label: "Subasta", active: currentPage === "auction.html" },
+        { href: "cart.html", label: "Carrito", active: currentPage === "cart.html", cart: true },
+        { href: "index.html#contact", label: "Contacto" },
+        { href: "register.html", label: "Registro", active: currentPage === "register.html" },
+        { href: "login.html", label: "Iniciar sesión", active: ["login.html", "recuperacion.html"].includes(currentPage) },
+        { href: "admin.html", label: "Admin Simulado", active: currentPage === "admin.html" }
+    ];
+
+    document.querySelectorAll("nav[aria-label]").forEach(function (navigation) {
+        const fragment = document.createDocumentFragment();
+
+        navigationLinks.forEach(function (linkData) {
+            const link = document.createElement("a");
+            link.href = linkData.href;
+            link.textContent = linkData.label;
+
+            if (linkData.active) {
+                link.setAttribute("aria-current", "page");
+            }
+
+            if (linkData.cart) {
+                const cartCount = document.createElement("span");
+                cartCount.className = "cart-count";
+                cartCount.setAttribute("aria-label", "0 agentes en el carrito");
+                cartCount.textContent = "0";
+                link.append(" ", cartCount);
+            }
+
+            fragment.appendChild(link);
+        });
+
+        navigation.replaceChildren(fragment);
+    });
+}
+
 function addAuctionNavigationLink() {
     document.querySelectorAll('nav[aria-label="Navegación principal"]').forEach(function (navigation) {
         if (navigation.querySelector('a[href="auction.html"]')) {
@@ -1279,6 +1323,7 @@ function initAuctionPage() {
     window.setInterval(updateAuctionTimers, 1000);
 }
 
+syncMainNavigation();
 addAuctionNavigationLink();
 addAdminNavigationLink();
 initAuctionPage();
